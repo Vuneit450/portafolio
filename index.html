@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jonathan — Portafolio</title>
+<meta name="description" content="Portafolio de Jonathan (Vuneit450): apps personales, automatizaciones y tableros de BI.">
+<style>
+  :root { --bg:#0f1115; --card:#171a21; --text:#e8eaf0; --muted:#9aa3b2; --accent:#e3262b; --line:#262b36; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; line-height:1.6; }
+  header { max-width:880px; margin:0 auto; padding:64px 20px 32px; }
+  header h1 { font-size:2.4rem; margin:0 0 8px; }
+  header p { color:var(--muted); margin:0; max-width:640px; }
+  main { max-width:880px; margin:0 auto; padding:0 20px 64px; display:grid; gap:20px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:24px; }
+  .card h2 { margin:0 0 4px; font-size:1.35rem; }
+  .badge { display:inline-block; font-size:.78rem; font-weight:600; padding:2px 10px; border-radius:999px; margin-bottom:10px; }
+  .badge.publica { background:#123f22; color:#7ee2a0; }
+  .badge.llave { background:#3d2f10; color:#f2c14e; }
+  .badge.login { background:#1d2f4d; color:#8db8f2; }
+  .card p { margin:8px 0; }
+  .tech { color:var(--muted); font-size:.92rem; }
+  .tech strong { color:var(--text); }
+  .card a.visit { display:inline-block; margin-top:12px; color:#fff; background:var(--accent); text-decoration:none; font-weight:600; padding:9px 16px; border-radius:9px; }
+  .card a.visit:hover { opacity:.88; }
+  .note { font-size:.88rem; color:var(--muted); margin-top:8px; }
+  footer { max-width:880px; margin:0 auto; padding:0 20px 48px; color:var(--muted); font-size:.9rem; }
+  footer a { color:var(--text); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Jonathan</h1>
+  <p>Construyo herramientas que uso todos los días: apps personales, automatizaciones y tableros de inteligencia de negocios. Esto es una muestra de lo que está en producción.</p>
+</header>
+<main>
+
+  <section class="card">
+    <span class="badge publica">Pública — abre para cualquiera</span>
+    <h2>Tanz</h2>
+    <p><strong>Problema:</strong> ensayar coreografías con la música, la letra y cada instrumento a la mano, desde el teléfono y sin depender de varias apps.</p>
+    <p class="tech"><strong>Hecho con:</strong> Cloudflare Workers, almacenamiento en R2, separación de instrumentos por Demucs, PWA instalable.</p>
+    <p>App de música para ensayos: biblioteca compartida por carpetas, letras con karaoke, mezclador de instrumentos (voz, batería, bajo y otros) y reproductor con velocidad y loop.</p>
+    <a class="visit" href="https://musica-tanz.jesusjonathan171.workers.dev/">Abrir Tanz ↗</a>
+  </section>
+
+  <section class="card">
+    <span class="badge llave">Pide llave maestra</span>
+    <h2>Centro de Control</h2>
+    <p><strong>Problema:</strong> lanzar y ejecutar scripts y automatizaciones del día a día desde un solo lugar, sin abrir la consola ni recordar dónde vive cada uno.</p>
+    <p class="tech"><strong>Hecho con:</strong> Google Apps Script, app web (Mi Biblioteca) y Cloudflare Workers.</p>
+    <p>Lanzador y ejecutor de scripts y automatizaciones: las rutinas se disparan desde la app y se ve el resultado real de cada ejecución.</p>
+    <a class="visit" href="https://biblioteca.jesusjonathan171.workers.dev/">Abrir Mi Biblioteca ↗</a>
+    <p class="note">El Centro de Control vive dentro de Mi Biblioteca y pide la llave maestra para entrar.</p>
+  </section>
+
+  <section class="card">
+    <span class="badge llave">Pide llave maestra</span>
+    <h2>Bolsillo / Finanzas</h2>
+    <p><strong>Problema:</strong> llevar el dinero personal — saldos, movimientos y categorías — en el teléfono, sin cuentas y con los datos bajo control propio.</p>
+    <p class="tech"><strong>Hecho con:</strong> app web progresiva (PWA), datos locales en el navegador, sincronización opcional en la nube con Cloudflare Workers.</p>
+    <p>App de dinero: saldos y movimientos por categoría, seguimiento de hábitos y bóveda personal, con sincronización entre dispositivos cuando se configura.</p>
+    <a class="visit" href="https://mi-balance.jesusjonathan171.workers.dev/">Abrir Bolsillo ↗</a>
+    <p class="note">Pide la llave maestra para entrar.</p>
+  </section>
+
+  <section class="card">
+    <span class="badge login">Pide inicio de sesión</span>
+    <h2>Tableros de Tableau</h2>
+    <p><strong>Problema:</strong> seguir la operación de un call center — campañas, cobranza, ventas y retenciones — con reportes claros y actualizados para decidir a tiempo.</p>
+    <p class="tech"><strong>Hecho con:</strong> Tableau Cloud, extractos programados y fuentes de datos empresariales.</p>
+    <p>Reportes de inteligencia de negocios y gestión de fuerza laboral: tableros por campaña con los indicadores de la operación.</p>
+    <a class="visit" href="https://us-east-1.online.tableau.com/#/site/grupogabssa">Ver en Tableau Cloud ↗</a>
+    <p class="note">El sitio pide iniciar sesión; los tableros son internos y no son públicos.</p>
+  </section>
+
+  <section class="card">
+    <span class="badge llave">Skill — no es una página pública</span>
+    <h2>Skill de tableros</h2>
+    <p><strong>Problema:</strong> armar tableros de campañas de call center siempre con el mismo estilo y las mismas reglas, sin empezar de cero ni improvisar el diseño en cada proyecto.</p>
+    <p class="tech"><strong>Hecho con:</strong> skill para Claude (BINATSA), con guías de datos, diseño, publicación y video manual.</p>
+    <p>Skill que guía la creación, revisión y publicación de tableros en Tableau Cloud: una campaña, un libro, un tablero, con estilo fijo y documentación incluida. Se usa dentro de Mi Biblioteca y de Claude; no es una página pública con demo.</p>
+    <a class="visit" href="https://biblioteca.jesusjonathan171.workers.dev/">Abrir Mi Biblioteca ↗</a>
+    <p class="note">El enlace lleva a Mi Biblioteca, donde vive el skill; pide la llave maestra.</p>
+  </section>
+
+</main>
+<footer>
+  <p>Jonathan (Vuneit450) — <a href="https://github.com/Vuneit450">github.com/Vuneit450</a></p>
+</footer>
+</body>
+</html>
