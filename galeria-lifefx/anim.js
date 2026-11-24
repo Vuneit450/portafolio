@@ -1,4 +1,4 @@
-// LifeFX v1.1 · build 2026-11-24 23:07 · generado por construir.py — no editar a mano; editar nucleo.js y efectos/*.js
+// LifeFX v1.1 · build 2026-11-24 23:20 · generado por construir.py — no editar a mano; editar nucleo.js y efectos/*.js
 // ===== LifeFX · biblioteca de animaciones para data apps (BINATSA) =====
 // Núcleo: utilidades, motor de partículas, registro de efectos, clasificación de gráficas y ciclo de animación.
 // Cada efecto vive en efectos/*.js y se registra con LifeFX.efecto(nombre, { para, descripcion, costo, aplicar(ctx) }).
@@ -18,10 +18,15 @@
     mapa: {
       flujo: 'particulas-flujo', 'barras-v': ['liquido', 'meta-pulso'], 'barras-h': 'franjas', cascada: 'gota-cascada', embudo: 'goteo-embudo',
       burbujas: 'ondas', dispersion: 'nube-dispersion', histograma: 'conteo-histograma', arcos: 'reflector', radial: ['reflector', 'radar'], treemap: 'reflector', calor: 'calor-onda', lineas: 'cometa', radar: 'telarana', medidor: 'aguja-medidor',
-      cifras: 'contador'
+      cifras: 'contador', tarjetas: 'texto-curvo'
     },
     selector: '.panel .body > svg',
     vivo: { maxMinutos: 60, intervaloMs: 60000 },
+    // Defaults de texto-curvo (título de tarjeta en bucle): velocidad base en px/s
+    // (negativo = hacia la izquierda, como la tarjeta INTER ATC), profundidad del
+    // arco en px, tope de velocidad al arrastrar y tasa de vuelta a la base (1/s).
+    // Se cambian con LifeFX.config({ textoCurvo: {...} }); los data-* por título mandan.
+    textoCurvo: { velocidad: -28, curva: 18, maxArrastre: 420, decaimiento: 2.5 },
     // Umbrales OFICIALES del semáforo (Decisión 2, Jonathan 2026-11-24: se adoptan
     // como oficiales los valores de ejemplo de la galería). Son los DEFAULTS:
     // LifeFX.config({ umbrales: {...} }) los cambia por KPI y los data-* por
@@ -43,7 +48,7 @@
     tickers: [],
     efecto: function (nombre, def) { def.nombre = nombre; FX.efectos[nombre] = def; },
     global: function (nombre, def) { def.nombre = nombre; FX.globales[nombre] = def; },
-    config: function (o) { if (o && o.mapa) for (var k in o.mapa) FX.mapa[k] = o.mapa[k]; if (o && o.selector) FX.selector = o.selector; if (o && o.vivo) for (var v in o.vivo) FX.vivo[v] = o.vivo[v]; if (o && o.umbrales) for (var k in o.umbrales) FX.umbrales[k] = Object.assign({}, FX.umbrales[k] || {}, o.umbrales[k]); },
+    config: function (o) { if (o && o.mapa) for (var k in o.mapa) FX.mapa[k] = o.mapa[k]; if (o && o.selector) FX.selector = o.selector; if (o && o.vivo) for (var v in o.vivo) FX.vivo[v] = o.vivo[v]; if (o && o.textoCurvo) for (var t in o.textoCurvo) FX.textoCurvo[t] = o.textoCurvo[t]; if (o && o.umbrales) for (var k in o.umbrales) FX.umbrales[k] = Object.assign({}, FX.umbrales[k] || {}, o.umbrales[k]); },
     tick: function (fn) { FX.tickers.push(fn); }
   };
 
@@ -1240,7 +1245,15 @@ LifeFX.global('entrada', { descripcion: 'Animación de entrada de cada gráfica 
 
   var CNT = '.kpi .v,.scv,.gv .v,.big,.kv';
   function scan(node) {
-    if (node.nodeType !== 1 || quiet()) return;
+    if (node.nodeType !== 1) return;
+    // Títulos con texto curvo: se activan aunque haya reduced-motion (el efecto
+    // nace estático en offset 0 y el motor retoma solo al quitarse; si el scan
+    // los saltara por quiet(), un título ya dibujado nunca arrancaría).
+    if (FX.textoCurvo) {
+      if (node.matches && node.matches('[data-texto-curvo]')) FX.textoCurvo(node);
+      if (node.querySelectorAll) [].forEach.call(node.querySelectorAll('[data-texto-curvo]'), function (h) { FX.textoCurvo(h); });
+    }
+    if (quiet()) return;
     if (node.namespaceURI === NS && node.tagName.toLowerCase() === 'svg') animSvg(node);
     if (node.querySelectorAll) {
       [].forEach.call(node.querySelectorAll('svg'), animSvg);
@@ -2454,6 +2467,173 @@ LifeFX.efecto('semaforo', { titulo: 'Semáforo de umbrales', para: ['cifras'], c
       });
     }
   });
+})();
+
+// ---- efectos/texto-curvo.js ----
+// Texto curvo en bucle — el título de una tarjeta de KPI corre en bucle sobre
+// un arco SVG (el de la tarjeta INTER ATC). El texto NUNCA se hardcodea: sale
+// del propio elemento (su textContent o data-fx-texto); si el elemento viene
+// vacío, usa el segmento genérico "TÍTULO • ". El separador " • " forma parte
+// del segmento repetido. Sin librerías externas.
+//
+// Uso en la app: <h2 data-texto-curvo data-velocidad="-28" data-curva="18">
+//   NIVEL DE SERVICIO • META 90 % • NOV 2026</h2>
+// El scan de entrada.js lo activa solo (como a las cifras); también vale
+// LifeFX.textoCurvo(host) directo. Config: data-velocidad (px/s, default −28,
+// negativo = hacia la izquierda), data-curva (profundidad del arco en px,
+// default 18, como la tarjeta), o LifeFX.config({ textoCurvo: {...} }).
+// Arrastre por puntero: la velocidad sigue a la mano (máx. 420 px/s, suavizado
+// 0.55/0.45) y al soltar decae suave a la base (2.5/s). Con prefers-reduced-motion
+// queda curvo pero ESTÁTICO (offset 0), también si se activa a mitad de sesión.
+// El título sigue siendo texto legible (SVG <text>): no tapa ni cambia el dato;
+// el contenedor no crece ni desborda (overflow hidden).
+(function () {
+  'use strict';
+  var NS = 'http://www.w3.org/2000/svg';
+  var DEF_SEGMENTO = 'T\u00cdTULO \u2022 '; // genérico, solo si el elemento viene vacío
+  var instances = [], uid = 0;
+
+  function cfgGlobal() {
+    var b = (typeof LifeFX !== 'undefined' && LifeFX.textoCurvo) || {};
+    return { velocidad: b.velocidad != null ? b.velocidad : -28, curva: b.curva != null ? b.curva : 18,
+      maxArrastre: b.maxArrastre != null ? b.maxArrastre : 420, decaimiento: b.decaimiento != null ? b.decaimiento : 2.5 };
+  }
+  function numAttr(el, name, fb) { var v = parseFloat(el.getAttribute(name)); return isFinite(v) ? v : fb; }
+  function reducido() {
+    try { if (typeof LifeFX !== 'undefined' && LifeFX.reducido) return true; } catch (e) { /* sin LifeFX */ }
+    try { return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); } catch (e) { return false; }
+  }
+  // Texto del elemento → segmento repetido (con " • " al final, sin duplicarlo).
+  function segmentoDe(host) {
+    var t = host.getAttribute('data-fx-texto');
+    if (t == null || !String(t).trim()) t = host.textContent;
+    t = String(t || '').replace(/\s+/g, ' ').trim().replace(/[\u2022\s]+$/, '');
+    return t ? t + ' \u2022 ' : DEF_SEGMENTO;
+  }
+  function wrap(v, segLen) { var r = v % segLen; if (r > 0) r -= segLen; return r; }
+
+  function layout(inst, force) {
+    var host = inst.host, W = host.clientWidth || inst.W || 324;
+    if (W < 120) W = 324; // host aún sin ancho (oculto): no se mide en vacío
+    if (!force && W === inst.W && inst.segLen) return;
+    inst.W = W;
+    inst.svg.setAttribute('width', W); inst.svg.setAttribute('height', 30);
+    inst.svg.setAttribute('viewBox', '0 0 ' + W + ' 30');
+    inst.path.setAttribute('d', 'M 0 22 Q ' + (W / 2) + ' ' + (22 - inst.curva) + ' ' + W + ' 22');
+    var probe = document.createElementNS(NS, 'text');
+    probe.textContent = inst.segmento;
+    inst.svg.appendChild(probe);
+    var len = 0; try { len = probe.getComputedTextLength(); } catch (e) { len = 0; }
+    probe.remove();
+    inst.segLen = (len && len > 0) ? len : 400;
+    var repeats = Math.ceil((W + 30 + inst.segLen) / inst.segLen) + 1, full = '';
+    for (var i = 0; i < repeats; i++) full += inst.segmento;
+    inst.textPath.textContent = full;
+    inst.offset = wrap(inst.offset, inst.segLen);
+    render(inst);
+  }
+  function render(inst) { inst.textPath.setAttribute('startOffset', inst.offset.toFixed(2)); }
+
+  function init(host) {
+    if (!host || host.nodeType !== 1) return null;
+    if (host.__fxCurvo) return host.__fxCurvo;
+    if (host.querySelector('*')) return null; // el título es solo texto; un contenedor con hijos no es un título
+    var g = cfgGlobal();
+    var inst = { host: host, segmento: segmentoDe(host), base: numAttr(host, 'data-velocidad', g.velocidad),
+      curva: numAttr(host, 'data-curva', g.curva), maxArrastre: g.maxArrastre, decaimiento: g.decaimiento,
+      offset: 0, velocity: numAttr(host, 'data-velocidad', g.velocidad), dragging: false, W: 0, segLen: 0 };
+    host.setAttribute('aria-label', inst.segmento.replace(/[\u2022\s]+$/, ''));
+    host.classList.add('fx-texto-curvo');
+    host.textContent = '';
+    var id = 'fx-curva-' + (++uid);
+    var svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('aria-hidden', 'true');
+    var defs = document.createElementNS(NS, 'defs');
+    var path = document.createElementNS(NS, 'path');
+    path.setAttribute('id', id); path.setAttribute('fill', 'none');
+    defs.appendChild(path); svg.appendChild(defs);
+    var text = document.createElementNS(NS, 'text');
+    text.setAttribute('fill', 'currentColor');
+    var tp = document.createElementNS(NS, 'textPath');
+    tp.setAttribute('href', '#' + id);
+    tp.setAttribute('startOffset', '0');
+    text.appendChild(tp); svg.appendChild(text);
+    host.appendChild(svg);
+    inst.svg = svg; inst.path = path; inst.textPath = tp;
+    layout(inst);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { layout(inst, true); });
+    var lastX = 0, lastT = 0;
+    host.addEventListener('pointerdown', function (e) {
+      if (reducido()) return;
+      inst.dragging = true; host.classList.add('fx-arrastrando');
+      lastX = e.clientX; lastT = performance.now(); inst.velocity = 0;
+      try { host.setPointerCapture(e.pointerId); } catch (err) { /* sin captura */ }
+      e.preventDefault();
+    });
+    host.addEventListener('pointermove', function (e) {
+      if (!inst.dragging) return;
+      var now = performance.now(), dt = (now - lastT) / 1000;
+      if (dt > 0) {
+        var v = (e.clientX - lastX) / dt;
+        if (v > inst.maxArrastre) v = inst.maxArrastre;
+        if (v < -inst.maxArrastre) v = -inst.maxArrastre;
+        inst.velocity = inst.velocity * 0.55 + v * 0.45; // suavizado: sigue a la mano sin saltos
+      }
+      lastX = e.clientX; lastT = now;
+    });
+    function endDrag() { if (!inst.dragging) return; inst.dragging = false; host.classList.remove('fx-arrastrando'); }
+    host.addEventListener('pointerup', endDrag);
+    host.addEventListener('pointercancel', endDrag);
+    instances.push(inst);
+    var dbg = { get offset() { return inst.offset; }, get velocity() { return inst.velocity; },
+      get base() { return inst.base; }, get segLen() { return inst.segLen; },
+      get dragging() { return inst.dragging; }, get running() { return !reducido(); },
+      get texto() { return inst.textPath.textContent; }, host: host };
+    host.__fxCurvo = dbg;
+    if (typeof window !== 'undefined') { window.__fxTextoCurvo = window.__fxTextoCurvo || []; window.__fxTextoCurvo.push(dbg); }
+    return dbg;
+  }
+
+  // Movimiento por cuadro (corre dentro del loop del núcleo: se pausa con la
+  // pestaña oculta y con body.noanim; la velocidad decae a la base al soltar).
+  LifeFX.tick(function (dt) {
+    for (var i = instances.length - 1; i >= 0; i--) {
+      var inst = instances[i];
+      if (!inst.host.isConnected) { instances.splice(i, 1); continue; }
+      if (!inst.host.getClientRects().length) continue;
+      if (!inst.dragging) {
+        inst.velocity += (inst.base - inst.velocity) * (1 - Math.exp(-inst.decaimiento * dt));
+        if (Math.abs(inst.velocity - inst.base) < 0.5) inst.velocity = inst.base;
+      }
+      inst.offset = wrap(inst.offset + inst.velocity * dt, inst.segLen);
+      render(inst);
+    }
+  });
+  // prefers-reduced-motion a mitad de sesión: estático (offset 0). Al quitarse,
+  // el loop del núcleo retoma solo (nucleo.js arranca el motor si nunca arrancó).
+  if (window.matchMedia) {
+    var mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var onRM = function () { if (!mq.matches) return; instances.forEach(function (inst) { inst.offset = 0; inst.velocity = inst.base; inst.dragging = false; render(inst); }); };
+    if (mq.addEventListener) mq.addEventListener('change', onRM); else if (mq.addListener) mq.addListener(onRM);
+  }
+  if (typeof window !== 'undefined') window.addEventListener('resize', function () { instances.forEach(function (inst) { layout(inst); }); });
+
+  LifeFX.textoCurvo = init;
+  LifeFX.textoCurvoInstancias = instances;
+  // Registro en el catálogo (titulo/para/costo/descripcion en la misma línea del registro).
+  LifeFX.efecto('texto-curvo', { titulo: 'Texto curvo en bucle', para: ['tarjetas'], costo: 'bajo', descripcion: 'El título de la tarjeta corre en bucle sobre un arco SVG; el texto sale del propio elemento y el arrastre cambia la velocidad.', aplicar: function (c) {
+    var root = (c && c.svg && c.svg.closest) ? (c.svg.closest('.panel') || document) : document;
+    [].forEach.call(root.querySelectorAll('[data-texto-curvo], [data-fx="texto-curvo"]'), function (host) { init(host); });
+  } });
+  if (typeof document !== 'undefined') {
+    var s = document.createElement('style');
+    s.textContent =
+      '.fx-texto-curvo{overflow:hidden;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}' +
+      '.fx-texto-curvo.fx-arrastrando{cursor:grabbing}' +
+      '.fx-texto-curvo svg{display:block}' +
+      'body.noanim .fx-texto-curvo{cursor:default}';
+    document.head.appendChild(s);
+  }
 })();
 
 // ---- efectos/transicion-vista.js ----
