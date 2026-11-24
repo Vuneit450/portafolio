@@ -235,16 +235,34 @@
   /* ---------- Cuerpo ---------- */
   .card-body {
     border-top: 1px solid #e4e4e7;
-    padding: 16px;
+    padding: 14px 16px 14px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
   }
-  .card-body h3 {
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 1.3;
-    color: #000000;
+  /* Curved Text Loop (recreación del componente de 21st.dev) */
+  .curve-loop {
+    width: 324px;
+    height: 30px;
+    overflow: hidden;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .curve-loop.dragging {
+    cursor: grabbing;
+  }
+  .curve-loop svg {
+    display: block;
+    width: 324px;
+    height: 30px;
+  }
+  .curve-text {
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    fill: #ff6900;
   }
   .card-body p {
     font-size: 14px;
@@ -320,7 +338,14 @@
     </div>
 
     <div class="card-body">
-      <h3>Nivel de servicio</h3>
+      <div class="curve-loop" id="curveLoop" role="img" aria-label="Nivel de servicio, meta 90 %, noviembre 2026">
+        <svg id="curveSvg" width="324" height="30" viewBox="0 0 324 30" aria-hidden="true">
+          <defs>
+            <path id="curvePath" d="M 0 22 Q 162 4 324 22" fill="none"></path>
+          </defs>
+          <text class="curve-text"><textPath id="curveTextPath" href="#curvePath" startOffset="0"></textPath></text>
+        </svg>
+      </div>
       <p>89,6&nbsp;% de llamadas atendidas en &le;20&nbsp;s &middot; meta 90&nbsp;% &middot; nov 2026</p>
     </div>
   </div>
@@ -358,6 +383,140 @@
 
   overlay.addEventListener('mouseenter', enterHover);
   overlay.addEventListener('mouseleave', leaveHover);
+})();
+</script>
+
+<script>
+/* Curved Text Loop — recreación en SVG/JS plano del componente de 21st.dev
+   (marquesina de texto en arco, bucle infinito, arrastre manipula la
+   velocidad y la dirección en tiempo real). Sin librerías externas. */
+(function () {
+  var loop = document.getElementById('curveLoop');
+  var textPath = document.getElementById('curveTextPath');
+  var SEGMENT = 'NIVEL DE SERVICIO \u2022 META 90 % \u2022 NOV 2026 \u2022 ';
+  var BASE_SPEED = -28; /* px/s, negativo = hacia la izquierda */
+  var MAX_DRAG_SPEED = 420; /* px/s */
+  var DECAY_RATE = 2.5; /* 1/s, vuelta a la velocidad base al soltar */
+
+  /* Medir el ancho exacto de un segmento con la misma fuente del texto */
+  var probe = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  probe.setAttribute('class', 'curve-text');
+  probe.textContent = SEGMENT;
+  probe.style.visibility = 'hidden';
+  document.getElementById('curveSvg').appendChild(probe);
+  var segLen = probe.getComputedTextLength();
+  probe.remove();
+  if (!segLen || segLen <= 0) { segLen = 400; }
+
+  /* Repetir el segmento hasta cubrir el arco (324 px) + un segmento extra */
+  var repeats = Math.ceil((330 + segLen) / segLen) + 1;
+  var full = '';
+  for (var i = 0; i < repeats; i++) { full += SEGMENT; }
+  textPath.textContent = full;
+
+  var offset = 0;
+  var velocity = BASE_SPEED;
+  var dragging = false;
+  var lastX = 0;
+  var lastT = 0;
+  var rafId = null;
+  var lastFrameT = 0;
+
+  function wrap(v) {
+    var r = v % segLen;
+    if (r > 0) { r -= segLen; }
+    return r;
+  }
+
+  function render() {
+    textPath.setAttribute('startOffset', offset.toFixed(2));
+  }
+
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function frame(t) {
+    if (lastFrameT === 0) { lastFrameT = t; }
+    var dt = Math.min((t - lastFrameT) / 1000, 0.05);
+    lastFrameT = t;
+    if (!dragging) {
+      /* Vuelta suave a la velocidad base tras soltar */
+      velocity += (BASE_SPEED - velocity) * (1 - Math.exp(-DECAY_RATE * dt));
+      if (Math.abs(velocity - BASE_SPEED) < 0.5) { velocity = BASE_SPEED; }
+    }
+    offset = wrap(offset + velocity * dt);
+    render();
+    rafId = requestAnimationFrame(frame);
+  }
+
+  function start() {
+    if (rafId === null && !reduced.matches) {
+      lastFrameT = 0;
+      rafId = requestAnimationFrame(frame);
+    }
+  }
+
+  function stop() {
+    if (rafId !== null) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+    offset = 0;
+    render();
+  }
+
+  /* prefers-reduced-motion: título curvo pero ESTÁTICO */
+  function applyMotionPref() {
+    if (reduced.matches) { stop(); } else { start(); }
+  }
+  if (typeof reduced.addEventListener === 'function') {
+    reduced.addEventListener('change', applyMotionPref);
+  } else if (typeof reduced.addListener === 'function') {
+    reduced.addListener(applyMotionPref);
+  }
+
+  loop.addEventListener('pointerdown', function (e) {
+    dragging = true;
+    loop.classList.add('dragging');
+    lastX = e.clientX;
+    lastT = performance.now();
+    velocity = 0;
+    try { loop.setPointerCapture(e.pointerId); } catch (err) {}
+    e.preventDefault();
+  });
+
+  loop.addEventListener('pointermove', function (e) {
+    if (!dragging) { return; }
+    var now = performance.now();
+    var dt = (now - lastT) / 1000;
+    if (dt > 0) {
+      var v = (e.clientX - lastX) / dt;
+      if (v > MAX_DRAG_SPEED) { v = MAX_DRAG_SPEED; }
+      if (v < -MAX_DRAG_SPEED) { v = -MAX_DRAG_SPEED; }
+      /* Suavizado: la velocidad sigue a la mano sin saltos */
+      velocity = velocity * 0.55 + v * 0.45;
+    }
+    lastX = e.clientX;
+    lastT = now;
+  });
+
+  function endDrag() {
+    if (!dragging) { return; }
+    dragging = false;
+    loop.classList.remove('dragging');
+  }
+  loop.addEventListener('pointerup', endDrag);
+  loop.addEventListener('pointercancel', endDrag);
+
+  /* Hook de depuración para la verificación automatizada */
+  window.__curveLoop = {
+    get offset() { return offset; },
+    get velocity() { return velocity; },
+    get segLen() { return segLen; },
+    get dragging() { return dragging; },
+    get running() { return rafId !== null; }
+  };
+
+  applyMotionPref();
 })();
 </script>
 </body>
