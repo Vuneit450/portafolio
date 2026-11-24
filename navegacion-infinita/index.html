@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Navegación infinita — Demo</title>
+<style>
+  :root {
+    --red: #e3262b;          /* rojo de Mi Biblioteca */
+    --red-soft: #fdeceb;     /* fondo rojo suave para el botón activo */
+    --ink: #1c1c1c;
+    --muted: #6b6b6b;
+    --line: #e3e3e3;
+    --bg: #fafafa;
+    --card: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+  .page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 32px 20px 24px;
+  }
+  header h1 {
+    font-size: 24px;
+    margin: 0 0 4px;
+    font-weight: 700;
+  }
+  header p {
+    margin: 0 0 24px;
+    color: var(--muted);
+  }
+  .demo {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 20px 0 16px;
+  }
+  .demo-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    padding: 0 20px 12px;
+  }
+  /* Tira: la ventana recorta; la pista desfila dentro */
+  .marquee {
+    overflow: hidden;
+    width: 100%;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 12px 0;
+    cursor: default;
+  }
+  .track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+  }
+  .track-set {
+    display: flex;
+    gap: 12px;
+    padding-right: 12px; /* el hueco entre conjuntos es igual al gap */
+  }
+  .nav-btn {
+    appearance: none;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink);
+    font: inherit;
+    font-size: 15px;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+    flex: 0 0 auto;
+  }
+  .nav-btn:hover { border-color: #c9c9c9; background: #f6f6f6; }
+  .nav-btn:focus-visible {
+    outline: 2px solid var(--red);
+    outline-offset: 2px;
+  }
+  .nav-btn.active {
+    background: var(--red-soft);
+    color: var(--red);
+    font-weight: 700;
+    border-color: var(--red);
+    box-shadow: inset 0 -2px 0 var(--red); /* subrayado rojo */
+  }
+  .active-line {
+    padding: 16px 20px 0;
+    font-size: 15px;
+  }
+  .active-line strong { color: var(--red); }
+  .hint {
+    padding: 8px 20px 0;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  footer {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  /* Movimiento reducido: fila estática, sin bucle, 5 botones visibles */
+  @media (prefers-reduced-motion: reduce) {
+    .track { transform: none !important; }
+    .track-set--dup { display: none; }
+    .marquee { overflow: visible; }
+    .track { flex-wrap: wrap; width: 100%; }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>Navegación infinita</h1>
+      <p>Los botones del menú Personal de Mi Biblioteca, en una tira que desfila en bucle. Pasa el puntero por encima para frenarla y tocar el botón que quieras.</p>
+    </header>
+
+    <main class="demo">
+      <div class="demo-label">Menú Personal</div>
+
+      <div class="marquee" id="marquee" role="group" aria-label="Menú Personal en bucle infinito">
+        <div class="track" id="track">
+          <div class="track-set" id="set-a"></div>
+          <div class="track-set track-set--dup" id="set-b" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <p class="active-line">Sección activa: <strong id="active-name">Videos</strong></p>
+      <p class="hint">Flechas ← → para moverte entre botones · Enter o Espacio para activar · Pasa el puntero sobre la tira para frenarla.</p>
+    </main>
+
+    <footer>Demo — no modifica Mi Biblioteca</footer>
+  </div>
+
+<script>
+(function () {
+  "use strict";
+
+  var SECTIONS = ["Videos", "Enlaces", "Apps", "Automatizaciones", "Hábitos"];
+  var BASE_SPEED = 50;      // px por segundo, desfile lento y continuo
+  var REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var marquee = document.getElementById("marquee");
+  var track = document.getElementById("track");
+  var setA = document.getElementById("set-a");
+  var setB = document.getElementById("set-b");
+  var activeName = document.getElementById("active-name");
+
+  var activeSection = SECTIONS[0];
+  var offset = 0;           // desplazamiento actual en px
+  var speed = REDUCED ? 0 : BASE_SPEED; // velocidad actual (px/s)
+  var targetSpeed = speed;  // velocidad hacia la que se tiende con suavidad
+  var setWidth = 0;
+  var lastTs = null;
+  var rafId = null;
+
+  function buildSet(container, tabbable) {
+    SECTIONS.forEach(function (name) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "nav-btn" + (name === activeSection ? " active" : "");
+      b.textContent = name;
+      b.dataset.section = name;
+      b.setAttribute("aria-pressed", name === activeSection ? "true" : "false");
+      if (!tabbable) { b.tabIndex = -1; } // el duplicado no crea paradas de Tab
+      container.appendChild(b);
+    });
+  }
+  buildSet(setA, true);
+  buildSet(setB, false);
+
+  function allButtons() {
+    return Array.prototype.slice.call(track.querySelectorAll(".nav-btn"));
+  }
+
+  function setActive(name) {
+    activeSection = name;
+    activeName.textContent = name;
+    allButtons().forEach(function (b) {
+      var on = b.dataset.section === name;
+      b.classList.toggle("active", on);
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+  }
+
+  // Clic: solo cambia el estado activo (demo, no navega).
+  track.addEventListener("click", function (e) {
+    var b = e.target.closest(".nav-btn");
+    if (b) { setActive(b.dataset.section); }
+  });
+
+  // Teclado: ← → mueven el foco entre botones (con vuelta al llegar al extremo);
+  // Enter / Espacio activan el botón enfocado (comportamiento nativo del <button>).
+  marquee.addEventListener("keydown", function (e) {
+    if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") { return; }
+    var btns = Array.prototype.slice.call(setA.querySelectorAll(".nav-btn"));
+    var idx = btns.indexOf(document.activeElement);
+    if (idx === -1) { return; }
+    e.preventDefault();
+    var next = e.key === "ArrowRight"
+      ? (idx + 1) % btns.length
+      : (idx - 1 + btns.length) % btns.length;
+    btns[next].focus();
+  });
+
+  // Frenado suave: el puntero (o el foco) pide velocidad ~0 y la tira
+  // decelera con easing; al salir, retoma la velocidad base igual de suave.
+  // La zona que frena es toda la tarjeta de la demo (la tira está dentro),
+  // para que el botón no se escape de debajo del puntero al frenar.
+  function slowDown() { targetSpeed = 0; }
+  function speedUp() {
+    if (REDUCED) { return; }
+    targetSpeed = BASE_SPEED;
+    if (rafId === null) { // el bucle estaba parado tras frenar del todo
+      lastTs = null;
+      rafId = requestAnimationFrame(tick);
+    }
+  }
+  var demo = document.querySelector(".demo");
+  demo.addEventListener("mouseenter", slowDown);
+  demo.addEventListener("mouseleave", speedUp);
+  marquee.addEventListener("focusin", slowDown);
+  marquee.addEventListener("focusout", function (e) {
+    if (!demo.contains(e.relatedTarget)) { speedUp(); }
+  });
+
+  function measure() {
+    // Ancho de un conjunto (los dos miden lo mismo); el bucle salta de
+    // setWidth a 0, punto en el que la pista se ve idéntica: salto invisible.
+    setWidth = setA.getBoundingClientRect().width;
+  }
+
+  function tick(ts) {
+    if (lastTs === null) { lastTs = ts; }
+    var dt = Math.min((ts - lastTs) / 1000, 0.1); // segundos, acotado
+    lastTs = ts;
+    // Acercamiento exponencial: sin frenazos ni arranques bruscos.
+    speed += (targetSpeed - speed) * (1 - Math.exp(-dt * 2.5));
+    if (Math.abs(targetSpeed - speed) < 0.05) { speed = targetSpeed; }
+    offset += speed * dt;
+    if (setWidth > 0) { offset = offset % setWidth; }
+    track.style.transform = "translateX(" + (-offset) + "px)";
+    if (targetSpeed === 0 && speed === 0) {
+      // Frenada completa: parar el bucle para que la tira quede quieta
+      // de verdad (y el botón se pueda tocar); se reanuda al salir.
+      rafId = null;
+      return;
+    }
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function start() {
+    measure();
+    if (REDUCED) {
+      track.style.transform = "translateX(0px)";
+      return; // fila estática, sin bucle ni animación
+    }
+    cancelAnimationFrame(rafId);
+    lastTs = null;
+    rafId = requestAnimationFrame(tick);
+  }
+
+  window.addEventListener("resize", measure);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () { measure(); });
+  }
+  start();
+
+  // Gancho para la verificación automatizada (solo lectura de estado).
+  window.__navDemo = {
+    getOffset: function () { return offset; },
+    getSpeed: function () { return speed; },
+    getBaseSpeed: function () { return BASE_SPEED; },
+    getActive: function () { return activeSection; },
+    isReducedMotion: function () { return REDUCED; },
+    getSetWidth: function () { return setWidth; }
+  };
+})();
+</script>
+</body>
+</html>
