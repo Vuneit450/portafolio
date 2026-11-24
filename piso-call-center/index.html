@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Piso Call Center — INTER ATC · nov 2026</title>
+<style>
+  :root{
+    --ink:#1f2937; --muted:#6b7280; --line:#e5e7eb;
+    --green:#16a34a; --orange:#ea580c; --yellow:#ca8a04; --gray:#9ca3af;
+    --accent:#ff6900; --panel:#ffffff;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{background:transparent;}
+  body{
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    color:var(--ink); overflow-x:hidden;
+  }
+  .wrap{width:100%; max-width:1000px; margin:0 auto; background:#f8fafc;
+    border:1px solid var(--line); border-radius:12px; overflow:hidden;}
+  /* ---------- Encabezado ---------- */
+  header{padding:10px 14px 8px; background:#fff; border-bottom:1px solid var(--line);}
+  .title-row{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;}
+  h1{font-size:20px; letter-spacing:.2px;}
+  h1 span{color:var(--accent);}
+  .badge{font-size:11px; font-weight:700; color:#fff; background:#0f766e;
+    border-radius:999px; padding:2px 9px; white-space:nowrap;}
+  .sub{font-size:11px; color:var(--muted); margin-top:2px;}
+  .kpis{display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;}
+  .kpi{flex:1 1 105px; min-width:105px; background:#f8fafc; border:1px solid var(--line);
+    border-radius:8px; padding:5px 8px;}
+  .kpi b{display:block; font-size:16px; line-height:1.15; font-variant-numeric:tabular-nums;}
+  .kpi b small{font-size:11px; color:var(--muted); font-weight:600;}
+  .kpi span{font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.4px;}
+  .kpi.hot b{color:var(--accent);}
+  /* ---------- Controles / leyenda ---------- */
+  .controls{display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+    padding:7px 14px; background:#fff; border-bottom:1px solid var(--line); font-size:12px;}
+  .switch{display:inline-flex; align-items:center; gap:7px; cursor:pointer;
+    border:1px solid var(--line); background:#f8fafc; border-radius:999px; padding:4px 10px;
+    font-size:12px; font-weight:600; color:var(--ink);}
+  .switch .track{width:30px; height:16px; border-radius:999px; background:#cbd5e1;
+    position:relative; transition:background .2s; flex:none;}
+  .switch .track::after{content:""; position:absolute; top:2px; left:2px; width:12px; height:12px;
+    border-radius:50%; background:#fff; box-shadow:0 1px 2px rgba(0,0,0,.3); transition:left .2s;}
+  .switch[aria-checked="true"] .track{background:#dc2626;}
+  .switch[aria-checked="true"] .track::after{left:16px;}
+  .legend{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+  .legend .item{display:inline-flex; align-items:center; gap:5px; white-space:nowrap;}
+  .dot{width:11px; height:11px; border-radius:50%; flex:none; border:1.5px solid rgba(0,0,0,.25);}
+  .heat-scale{display:inline-flex; align-items:center; gap:5px;}
+  .heat-scale .bar{width:90px; height:10px; border-radius:3px;
+    background:linear-gradient(90deg,#fef9c3,#fde047,#f59e0b,#f97316,#dc2626);
+    border:1px solid rgba(0,0,0,.2);}
+  .scale-note{font-size:11px; color:var(--muted);}
+  /* ---------- Escena ---------- */
+  .scene{position:relative; width:100%; background:
+    linear-gradient(180deg,#eef2f7 0%,#f8fafc 60%,#eef2f7 100%);}
+  svg{display:block; width:100%; height:auto;}
+  .zone-label{font-size:11px; font-weight:700; fill:#334155;}
+  .zone-sub{font-size:10px; font-weight:600; fill:#64748b;}
+  .station{cursor:pointer;}
+  .station:hover .desk-top{stroke:#0f766e; stroke-width:2;}
+  .station text{pointer-events:none;}
+  .st-id{font-size:8.5px; font-weight:700; fill:#334155;}
+  .call-dot{pointer-events:none;}
+  .queue-count{font-size:12px; font-weight:800; fill:#fff;}
+  /* ---------- Inspector ---------- */
+  .inspector{position:absolute; top:10px; right:10px; width:236px; background:var(--panel);
+    border:1px solid var(--line); border-radius:10px; box-shadow:0 6px 24px rgba(15,23,42,.18);
+    padding:12px 13px; font-size:12.5px; z-index:5;}
+  .inspector[hidden]{display:none;}
+  .inspector h2{font-size:14px; margin-bottom:2px;}
+  .inspector .cartera{font-size:11.5px; color:var(--muted); margin-bottom:8px;}
+  .inspector dl{display:grid; grid-template-columns:auto 1fr; gap:4px 10px;}
+  .inspector dt{color:var(--muted); font-size:11.5px;}
+  .inspector dd{font-weight:600; text-align:right; font-variant-numeric:tabular-nums;}
+  .state-badge{display:inline-block; padding:2px 9px; border-radius:999px; color:#fff;
+    font-size:11.5px; font-weight:700;}
+  .inspector .close{position:absolute; top:6px; right:8px; border:0; background:none;
+    font-size:16px; line-height:1; cursor:pointer; color:var(--muted); padding:4px;}
+  .inspector .note{margin-top:9px; font-size:10.5px; color:var(--muted); line-height:1.45;}
+  .hint{position:absolute; left:10px; bottom:8px; font-size:11px; color:var(--muted);
+    background:rgba(255,255,255,.85); border:1px solid var(--line); border-radius:6px;
+    padding:3px 8px; z-index:4;}
+  .reduced-note{display:none; font-size:11px; color:#92400e; background:#fef3c7;
+    border:1px solid #fcd34d; border-radius:6px; padding:3px 8px; margin-left:auto;}
+  footer{padding:6px 14px 9px; font-size:10.5px; color:var(--muted); background:#fff;
+    border-top:1px solid var(--line); line-height:1.5;}
+  /* ---------- Movimiento reducido ---------- */
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+    .reduced-note{display:inline-block;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="title-row">
+      <h1>Piso Call Center <span>· INTER ATC</span></h1>
+      <span class="badge">nov 2026</span>
+      <span class="sub">Foto fija de noviembre 2026 · 31 estaciones · 1 estación ≈ 500 llamadas</span>
+    </div>
+    <div class="kpis" role="group" aria-label="Indicadores globales de noviembre 2026">
+      <div class="kpi hot"><b>89,6 % <small>/ meta 90 %</small></b><span>Nivel de servicio</span></div>
+      <div class="kpi"><b>15.618</b><span>Llamadas recibidas</span></div>
+      <div class="kpi"><b>12.963 <small>· 83,0 %</small></b><span>Atendidas</span></div>
+      <div class="kpi"><b>4,7 %</b><span>Abandono &gt; 5 s</span></div>
+      <div class="kpi"><b>8:52</b><span>TMO</span></div>
+      <div class="kpi"><b>+34,1</b><span>NPS</span></div>
+      <div class="kpi"><b>1.349</b><span>Demoradas &gt; 20 s</span></div>
+    </div>
+  </header>
+
+  <div class="controls">
+    <button class="switch" id="heatToggle" role="switch" aria-checked="true">
+      <span class="track" aria-hidden="true"></span> Heatmap por volumen
+    </button>
+    <div class="legend" aria-label="Leyenda de estados de estación">
+      <span class="item"><span class="dot" style="background:#16a34a"></span>Disponible</span>
+      <span class="item"><span class="dot" style="background:#ea580c"></span>En llamada</span>
+      <span class="item"><span class="dot" style="background:#ca8a04"></span>Post-llamada</span>
+      <span class="item"><span class="dot" style="background:#9ca3af"></span>Pausa</span>
+      <span class="item"><span class="dot" style="background:#7c3aed"></span>Llamada en camino</span>
+      <span class="item"><span class="dot" style="background:#0ea5e9;border-radius:2px"></span>Supervisor</span>
+    </div>
+    <span class="heat-scale" id="heatLegend"><span>Volumen&nbsp;↓</span><span class="bar"></span><span>↑&nbsp;mayor</span></span>
+    <span class="reduced-note">Vista estática: movimiento reducido activado</span>
+  </div>
+
+  <div class="scene" id="scene">
+    <svg id="floor" viewBox="0 0 1000 560" role="img"
+         aria-label="Vista isométrica del piso del call center con 6 zonas y 31 estaciones">
+    </svg>
+
+    <aside class="inspector" id="inspector" hidden aria-live="polite">
+      <button class="close" id="inspClose" aria-label="Cerrar panel">✕</button>
+      <h2 id="inspTitle">Estación A-01</h2>
+      <div class="cartera" id="inspCartera">BRADESCARD ASISTENCIAS</div>
+      <dl>
+        <dt>Estado</dt><dd><span class="state-badge" id="inspEstado">En llamada</span></dd>
+        <dt>Llamada en curso</dt><dd id="inspCall">LL-4821</dd>
+        <dt>Tiempo en curso</dt><dd id="inspTimer">00:00</dd>
+        <dt>NS de la zona</dt><dd id="inspNS">87,8 %</dd>
+        <dt>TMO (global)</dt><dd>8:52</dd>
+        <dt>Volumen nov (zona)</dt><dd id="inspVol">7.909</dd>
+      </dl>
+      <p class="note">TMO por zona no forma parte de la foto fija de nov 2026; se muestra el TMO global (8:52). La llamada en curso es un identificador ficticio de la simulación.</p>
+    </aside>
+
+    <div class="hint">Toca una estación para ver su detalle · El supervisor recorre los pasillos apoyando estaciones</div>
+  </div>
+
+  <footer>
+    Fuente: foto fija nov 2026 del libro INTER ATC (vista Dirección). Zonas por cartera con su volumen y NS de noviembre;
+    estaciones proporcionales al volumen (1 ≈ 500 llamadas, redondeo visible en cada rótulo). Los estados de estación,
+    las llamadas en tránsito y el supervisor son una simulación en vivo sobre esa foto fija; no representan agentes reales
+    (las estaciones se identifican solo por ID). La suma de volúmenes por cartera (14.995) difiere en 623 llamadas del
+    total global recibido (15.618) según los datos de origen.
+  </footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- Datos reales (foto fija nov 2026) ---------- */
+var ZONES = [
+  {key:"ASIS",  name:"BRADESCARD ASISTENCIAS", short:"ASISTENCIAS", ns:"87,8 %", vol:7909, volTxt:"7.909", n:16, prefix:"A", u0:2,   v0:2,  cols:4, rows:4, lab:{mode:"back", dx:0, dy:-23}},
+  {key:"COPPEL",name:"COPPEL VIDA",            short:"COPPEL VIDA", ns:"86,8 %", vol:3424, volTxt:"3.424", n:7,  prefix:"B", u0:17.5,v0:2,  cols:4, rows:2, lab:{dx:0,  dy:15}},
+  {key:"CRED",  name:"CREDIAUTO",              short:"CREDIAUTO",   ns:"98,5 %", vol:1902, volTxt:"1.902", n:4,  prefix:"C", u0:2,   v0:15, cols:4, rows:1, lab:{dx:-16, dy:28}},
+  {key:"SEG",   name:"BRADESCARD SEGUROS",     short:"SEGUROS",     ns:"88,7 %", vol:1180, volTxt:"1.180", n:2,  prefix:"D", u0:18,  v0:15, cols:2, rows:1, lab:{dx:-41,dy:26}},
+  {key:"EMPL",  name:"EMPLEADOS",              short:"EMPLEADOS",   ns:"97,7 %", vol:377,  volTxt:"377",   n:1,  prefix:"E", u0:24,  v0:15, cols:1, rows:1, lab:{dx:-19,dy:39}},
+  {key:"LIV",   name:"LIVERPOOL",              short:"LIVERPOOL",   ns:"96,7 %", vol:203,  volTxt:"203",   n:1,  prefix:"F", u0:29,  v0:15, cols:1, rows:1, lab:{dx:3,  dy:36}}
+];
+var STATES = {
+  llamada:    {label:"En llamada",  color:"#ea580c"},
+  disponible: {label:"Disponible", color:"#16a34a"},
+  pausa:      {label:"Pausa",       color:"#9ca3af"},
+  post:       {label:"Post-llamada",color:"#ca8a04"}
+};
+/* Heatmap por volumen (escala): mayor volumen = rojo más intenso */
+function heatColor(vol){
+  if(vol>=7000) return "#dc2626";
+  if(vol>=3000) return "#f97316";
+  if(vol>=1500) return "#f59e0b";
+  if(vol>=1000) return "#facc15";
+  if(vol>=300)  return "#a3e635";
+  return "#86efac";
+}
+
+/* ---------- Proyección isométrica ---------- */
+function iso(u,v){ return {x: 500 + (u - v) * 13, y: 62 + (u + v) * 6.5}; }
+function poly(points){ return points.map(function(p){return p.x.toFixed(1)+","+p.y.toFixed(1);}).join(" "); }
+
+var svg = document.getElementById("floor");
+var NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs, parent){
+  var e = document.createElementNS(NS, tag);
+  for(var k in attrs){ e.setAttribute(k, attrs[k]); }
+  if(parent) parent.appendChild(e);
+  return e;
+}
+
+/* ---------- Piso base ---------- */
+var floorPts = [iso(-1,-1), iso(34,-1), iso(34,23), iso(-1,23)];
+el("polygon", {points: poly(floorPts), fill:"#e2e8f0", stroke:"#cbd5e1", "stroke-width":1}, svg);
+var floorIn = [iso(0,0), iso(33,0), iso(33,22), iso(0,22)];
+el("polygon", {points: poly(floorIn), fill:"#f1f5f9", stroke:"#cbd5e1", "stroke-width":1}, svg);
+
+/* Pasillos (líneas de guía) */
+[[14.5,0,14.5,22],[0,13.3,33,13.3]].forEach(function(l){
+  var a=iso(l[0],l[1]), b=iso(l[2],l[3]);
+  el("line",{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:"#e2e8f0","stroke-width":7,"stroke-linecap":"round"},svg);
+});
+
+/* ---------- Zonas, plataformas y estaciones ---------- */
+var stations = [];   /* {id, zone, g, dot, screen, state, callId, callStart, timerEl} */
+var zoneLayer = el("g", {id:"zoneLayer"}, svg);
+var heatLayer = el("g", {id:"heatLayer"}, svg);
+var stationLayer = el("g", {id:"stationLayer"}, svg);
+
+ZONES.forEach(function(z){
+  var du = 3.2, dv = 3.2;
+  var u1 = z.u0 + (z.cols-1)*du, v1 = z.v0 + (z.rows-1)*dv;
+  /* plataforma */
+  var p = [iso(z.u0-1.2, z.v0-1.2), iso(u1+1.6, z.v0-1.2), iso(u1+1.6, v1+1.6), iso(z.u0-1.2, v1+1.6)];
+  el("polygon", {points: poly(p), fill:"#ffffff", stroke:"#cbd5e1", "stroke-width":1.2}, zoneLayer);
+  /* heatmap overlay (encima de la plataforma, debajo de las estaciones) */
+  var h = el("polygon", {points: poly(p), fill: heatColor(z.vol), opacity:0.38,
+    stroke: heatColor(z.vol), "stroke-width":1.5, "class":"heat-poly"}, heatLayer);
+  h.setAttribute("data-zone", z.key);
+  /* rótulo de zona: píldora con fondo blanco; por defecto bajo la esquina
+     frontal de la plataforma, salvo ASISTENCIAS (encima de la esquina trasera,
+     zona libre sobre el piso) */
+  var anchor = (z.lab.mode === "back")
+    ? iso(z.u0-1.2, z.v0-1.2)
+    : iso(u1+1.6, v1+1.6);
+  var lx = anchor.x + z.lab.dx, ly = anchor.y + z.lab.dy;
+  var line1 = z.short + " · NS " + z.ns;
+  var line2 = z.volTxt + " ÷ 500 ≈ " + z.n + " est.";
+  var w = Math.max(line1.length, line2.length) * 6.8 + 24, hh = 28;
+  el("rect", {x: lx-w/2, y: ly-hh/2, width: w, height: hh, rx: 7,
+    fill:"#ffffff", stroke:"#cbd5e1", "stroke-width":1}, zoneLayer);
+  var t1 = el("text", {x: lx, y: ly-4, "text-anchor":"middle", "class":"zone-label"}, zoneLayer);
+  t1.textContent = line1;
+  var t2 = el("text", {x: lx, y: ly+9, "text-anchor":"middle", "class":"zone-sub"}, zoneLayer);
+  t2.textContent = line2;
+  /* estaciones */
+  var idx = 0;
+  for(var r=0; r<z.rows && idx<z.n; r++){
+    for(var c=0; c<z.cols && idx<z.n; c++){
+      idx++;
+      var u = z.u0 + c*du, v = z.v0 + r*dv;
+      var s = iso(u, v);
+      var id = z.prefix + "-" + String(idx).padStart(2,"0");
+      var g = el("g", {"class":"station", "data-station-id": id, "data-zone": z.key, tabindex:"0", role:"button",
+        "aria-label":"Estación "+id+", "+z.name}, stationLayer);
+      /* sombra */
+      el("ellipse", {cx:s.x, cy:s.y+12, rx:15, ry:5, fill:"rgba(15,23,42,.10)"}, g);
+      /* silla */
+      el("ellipse", {cx:s.x-1, cy:s.y+9, rx:7, ry:4.5, fill:"#94a3b8", stroke:"#64748b", "stroke-width":.8}, g);
+      /* escritorio isométrico */
+      el("polygon", {points: (s.x-15)+","+(s.y-1)+" "+(s.x+1)+","+(s.y-10)+" "+(s.x+17)+","+(s.y-1)+" "+(s.x+1)+","+(s.y+8),
+        fill:"#cbd5e1", stroke:"#94a3b8", "stroke-width":1, "class":"desk-top"}, g);
+      el("polygon", {points: (s.x-15)+","+(s.y-1)+" "+(s.x+1)+","+(s.y+8)+" "+(s.x+1)+","+(s.y+13)+" "+(s.x-15)+","+(s.y+4),
+        fill:"#94a3b8"}, g);
+      /* monitor (pantalla con el color del estado) */
+      el("rect", {x:s.x-2, y:s.y-24, width:13, height:10, rx:1.5, fill:"#334155", stroke:"#1e293b", "stroke-width":.8}, g);
+      var screen = el("rect", {x:s.x-0.5, y:s.y-22.5, width:10, height:7, rx:1, fill:STATES.disponible.color, "class":"monitor"}, g);
+      /* punto de estado */
+      var dot = el("circle", {cx:s.x+14, cy:s.y-16, r:5.5, fill:STATES.disponible.color,
+        stroke:"#fff", "stroke-width":1.5, "class":"state-dot"}, g);
+      /* ID */
+      var idT = el("text", {x:s.x+1, y:s.y+24, "text-anchor":"middle", "class":"st-id"}, g);
+      idT.textContent = id;
+      stations.push({id:id, zone:z, g:g, dot:dot, screen:screen, sx:s.x, sy:s.y,
+        state:"disponible", callId:null, callStart:0, callEnd:0});
+    }
+  }
+});
+
+/* ---------- Cola de entrada ---------- */
+var queue = el("g", {id:"queue"}, svg);
+el("rect", {x:60, y:450, width:880, height:56, rx:10, fill:"#ffffff", stroke:"#cbd5e1", "stroke-width":1.2}, queue);
+el("rect", {x:60, y:450, width:150, height:56, rx:10, fill:"#7c3aed"}, queue);
+var qt = el("text", {x:135, y:474, "text-anchor":"middle", fill:"#fff", "font-size":12, "font-weight":700}, queue);
+qt.textContent = "COLA DE ENTRADA";
+var qs = el("text", {x:135, y:491, "text-anchor":"middle", fill:"#e9d5ff", "font-size":10.5}, queue);
+qs.textContent = "llamadas esperando";
+var qCount = el("text", {x:905, y:485, "text-anchor":"end", "font-size":13, "font-weight":800, fill:"#475569"}, queue);
+qCount.textContent = "En espera: 0";
+
+/* ---------- Supervisor ---------- */
+var supWaypoints = [
+  {u:14.5, v:6}, {u:14.5, v:12}, {u:19, v:13.3}, {u:25, v:13.3}, {u:14.5, v:17.8},
+  {u:6, v:13.3}, {u:14.5, v:9}
+].map(function(w){ var p=iso(w.u,w.v); return {x:p.x, y:p.y}; });
+var sup = el("g", {id:"supervisor"}, svg);
+el("circle", {cx:0, cy:0, r:13, fill:"rgba(14,165,233,.18)", stroke:"#0ea5e9", "stroke-width":1.5}, sup);
+el("circle", {cx:0, cy:-4, r:5, fill:"#0ea5e9", stroke:"#fff", "stroke-width":1.5}, sup);
+el("path", {d:"M -6 8 Q 0 0 6 8 L 6 11 L -6 11 Z", fill:"#0284c7", stroke:"#fff", "stroke-width":1}, sup);
+var supT = el("text", {x:0, y:-20, "text-anchor":"middle", "font-size":9, "font-weight":800, fill:"#0369a1"}, sup);
+supT.textContent = "SUPERVISOR";
+sup.setAttribute("transform", "translate("+supWaypoints[0].x+","+supWaypoints[0].y+")");
+
+/* ---------- Estado inicial ---------- */
+function setState(st, state, callId){
+  st.state = state;
+  st.dot.setAttribute("fill", STATES[state].color);
+  st.screen.setAttribute("fill", STATES[state].color);
+  st.g.setAttribute("data-state", state);
+  st.g.setAttribute("aria-label", "Estación "+st.id+", "+st.zone.name+", "+STATES[state].label +
+    (callId ? ", llamada "+callId : ""));
+  if(callId){ st.callId = callId; st.callStart = Date.now(); }
+  if(state !== "llamada"){ st.callId = null; }
+}
+function randCallId(){ return "LL-" + (1000 + Math.floor(Math.random()*9000)); }
+
+var initial = ["llamada","llamada","llamada","disponible","llamada","disponible","post","llamada",
+  "pausa","llamada","disponible","llamada","post","llamada","disponible","llamada","pausa","llamada"];
+stations.forEach(function(st, i){
+  var s = REDUCED ? initial[i % initial.length] : initial[i % initial.length];
+  setState(st, s, s==="llamada" ? randCallId() : null);
+  if(s==="llamada"){ st.callEnd = Date.now() + (6000 + Math.random()*9000); }
+});
+
+/* ---------- Simulación en vivo ---------- */
+var callLayer = el("g", {id:"callLayer"}, svg);
+var activeCalls = [];   /* {el, from, ctrl, to, t, dur, target} */
+var waiting = 0;
+
+function spawnCall(){
+  if(REDUCED) return;
+  var free = stations.filter(function(s){ return s.state==="disponible"; });
+  if(!free.length) { waiting++; updateQueue(); return; }
+  var target = free[Math.floor(Math.random()*free.length)];
+  var from = {x: 220 + Math.random()*560, y: 477};
+  var to = {x: target.sx, y: target.sy - 30};
+  var ctrl = {x: (from.x+to.x)/2, y: Math.min(from.y, to.y) - 120};
+  var c = el("circle", {cx: from.x, cy: from.y, r:6, fill:"#7c3aed", stroke:"#fff",
+    "stroke-width":1.8, "class":"call-dot"}, callLayer);
+  el("circle", {cx: from.x, cy: from.y, r:10, fill:"none", stroke:"#7c3aed",
+    "stroke-width":1, opacity:.5, "class":"call-dot"}, callLayer);
+  activeCalls.push({els:[c], from:from, ctrl:ctrl, to:to, t:0, dur:1.4+Math.random()*0.7, target:target});
+}
+function updateQueue(){
+  qCount.textContent = "En espera: " + waiting + (activeCalls.length ? " · " + activeCalls.length + " en camino" : "");
+}
+function bezier(p0,p1,p2,t){
+  var u=1-t;
+  return {x: u*u*p0.x + 2*u*t*p1.x + t*t*p2.x,
+          y: u*u*p0.y + 2*u*t*p1.y + t*t*p2.y};
+}
+
+var lastTs = 0, supIdx = 0, supT0 = 0, supDwellUntil = 0, supPos = {x:supWaypoints[0].x, y:supWaypoints[0].y};
+function frame(ts){
+  if(REDUCED) return;
+  var dt = Math.min(0.05, (ts - lastTs)/1000 || 0.016); lastTs = ts;
+  /* llamadas en tránsito */
+  for(var i=activeCalls.length-1; i>=0; i--){
+    var c = activeCalls[i];
+    c.t += dt / c.dur;
+    if(c.t >= 1){
+      c.els.forEach(function(e){ e.remove(); });
+      activeCalls.splice(i,1);
+      if(c.target.state === "disponible"){
+        setState(c.target, "llamada", randCallId());
+        c.target.callEnd = Date.now() + (8000 + Math.random()*9000);
+      }
+      updateQueue();
+    } else {
+      var p = bezier(c.from, c.ctrl, c.to, c.t);
+      c.els.forEach(function(e){ e.setAttribute("cx", p.x.toFixed(1)); e.setAttribute("cy", p.y.toFixed(1)); });
+    }
+  }
+  /* supervisor: camina entre puntos, se detiene 2,5 s en cada uno */
+  if(Date.now() > supDwellUntil){
+    var next = supWaypoints[(supIdx+1) % supWaypoints.length];
+    var dx = next.x - supPos.x, dy = next.y - supPos.y;
+    var dist = Math.hypot(dx,dy), speed = 55;
+    if(dist < 2){
+      supIdx = (supIdx+1) % supWaypoints.length;
+      supDwellUntil = Date.now() + 2500;
+      /* apoyo: marca la estación más cercana con un pulso */
+      var near = null, best = 1e9;
+      stations.forEach(function(s){
+        var d = Math.hypot(s.sx-supPos.x, s.sy-supPos.y);
+        if(d<best){ best=d; near=s; }
+      });
+      if(near && best < 90){
+        near.dot.setAttribute("stroke", "#0ea5e9");
+        near.dot.setAttribute("stroke-width", "3");
+        setTimeout(function(){ near.dot.setAttribute("stroke","#fff"); near.dot.setAttribute("stroke-width","1.5"); }, 2400);
+      }
+    } else {
+      supPos.x += dx/dist * speed * dt;
+      supPos.y += dy/dist * speed * dt;
+      sup.setAttribute("transform", "translate("+supPos.x.toFixed(1)+","+supPos.y.toFixed(1)+")");
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+function tick(){
+  if(REDUCED) return;
+  var now = Date.now();
+  stations.forEach(function(st){
+    if(st.state==="llamada" && now > st.callEnd){
+      setState(st, "post");
+      st.callEnd = now + 4000;
+    } else if(st.state==="post" && now > st.callEnd){
+      setState(st, "disponible");
+    } else if(st.state==="disponible" && Math.random()<0.06){
+      setState(st, "pausa");
+      st.callEnd = now + 5000 + Math.random()*6000;
+    } else if(st.state==="pausa" && now > st.callEnd){
+      setState(st, "disponible");
+    }
+  });
+  /* si hay espera acumulada y hay libres, asignar */
+  if(waiting > 0){
+    var free = stations.filter(function(s){ return s.state==="disponible"; });
+    if(free.length){ waiting--; updateQueue(); }
+  }
+  refreshInspectorTimer();
+}
+
+if(!REDUCED){
+  setInterval(spawnCall, 1400);
+  setInterval(tick, 2000);
+  setInterval(updateQueue, 1000);
+  requestAnimationFrame(frame);
+  spawnCall(); spawnCall();
+} else {
+  /* estático: 3 llamadas en espera dibujadas en la cola, sin movimiento */
+  [300, 330, 360].forEach(function(x){
+    el("circle", {cx:x, cy:477, r:6, fill:"#7c3aed", stroke:"#fff", "stroke-width":1.8}, callLayer);
+  });
+  waiting = 3; updateQueue();
+}
+
+/* ---------- Heatmap ---------- */
+var heatOn = true;
+var heatToggle = document.getElementById("heatToggle");
+var heatLegend = document.getElementById("heatLegend");
+function applyHeat(){
+  heatLayer.style.display = heatOn ? "" : "none";
+  heatLegend.style.opacity = heatOn ? "1" : ".35";
+  heatToggle.setAttribute("aria-checked", String(heatOn));
+}
+heatToggle.addEventListener("click", function(){ heatOn = !heatOn; applyHeat(); });
+applyHeat();
+
+/* ---------- Inspector ---------- */
+var inspector = document.getElementById("inspector");
+var current = null;
+function fmtTime(ms){
+  var s = Math.max(0, Math.floor(ms/1000));
+  var m = Math.floor(s/60);
+  return String(m).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
+}
+function refreshInspectorTimer(){
+  if(!current || current.state!=="llamada"){ return; }
+  document.getElementById("inspTimer").textContent = fmtTime(Date.now() - current.callStart);
+}
+setInterval(refreshInspectorTimer, 1000);
+function openInspector(st){
+  current = st;
+  document.getElementById("inspTitle").textContent = "Estación " + st.id;
+  document.getElementById("inspCartera").textContent = st.zone.name;
+  var b = document.getElementById("inspEstado");
+  b.textContent = STATES[st.state].label;
+  b.style.background = STATES[st.state].color;
+  document.getElementById("inspCall").textContent = st.state==="llamada" ? st.callId : "—";
+  document.getElementById("inspTimer").textContent =
+    st.state==="llamada" ? fmtTime(Date.now()-st.callStart) : "—";
+  document.getElementById("inspNS").textContent = st.zone.ns;
+  document.getElementById("inspVol").textContent = st.zone.volTxt;
+  inspector.hidden = false;
+}
+svg.addEventListener("click", function(ev){
+  var g = ev.target.closest ? ev.target.closest(".station") : null;
+  if(g){
+    var st = stations.filter(function(s){ return s.id===g.getAttribute("data-station-id"); })[0];
+    if(st) openInspector(st);
+  } else if(ev.target===svg){
+    inspector.hidden = true; current = null;
+  }
+});
+svg.addEventListener("keydown", function(ev){
+  if((ev.key==="Enter"||ev.key===" ") && ev.target.classList.contains("station")){
+    ev.preventDefault();
+    var st = stations.filter(function(s){ return s.id===ev.target.getAttribute("data-station-id"); })[0];
+    if(st) openInspector(st);
+  }
+});
+document.getElementById("inspClose").addEventListener("click", function(){
+  inspector.hidden = true; current = null;
+});
+
+/* ---------- Hooks de verificación ---------- */
+window.__piso = {
+  stations: stations,
+  counts: function(){
+    var c = {llamada:0, disponible:0, pausa:0, post:0};
+    stations.forEach(function(s){ c[s.state]++; });
+    return c;
+  },
+  perZone: function(){
+    var r = {};
+    stations.forEach(function(s){ r[s.zone.key] = (r[s.zone.key]||0)+1; });
+    return r;
+  },
+  heatOn: function(){ return heatOn; },
+  reduced: REDUCED
+};
+})();
+</script>
+</body>
+</html>
