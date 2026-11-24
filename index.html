@@ -1,93 +1,364 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Jonathan — Portafolio</title>
-<meta name="description" content="Portafolio de Jonathan (Vuneit450): apps personales, automatizaciones y tableros de BI.">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nivel de servicio — INTER ATC</title>
 <style>
-  :root { --bg:#0f1115; --card:#171a21; --text:#e8eaf0; --muted:#9aa3b2; --accent:#e3262b; --line:#262b36; }
-  * { box-sizing:border-box; }
-  body { margin:0; background:var(--bg); color:var(--text); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; line-height:1.6; }
-  header { max-width:880px; margin:0 auto; padding:64px 20px 32px; }
-  header h1 { font-size:2.4rem; margin:0 0 8px; }
-  header p { color:var(--muted); margin:0; max-width:640px; }
-  main { max-width:880px; margin:0 auto; padding:0 20px 64px; display:grid; gap:20px; }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:24px; }
-  .card h2 { margin:0 0 4px; font-size:1.35rem; }
-  .badge { display:inline-block; font-size:.78rem; font-weight:600; padding:2px 10px; border-radius:999px; margin-bottom:10px; }
-  .badge.publica { background:#123f22; color:#7ee2a0; }
-  .badge.llave { background:#3d2f10; color:#f2c14e; }
-  .badge.login { background:#1d2f4d; color:#8db8f2; }
-  .card p { margin:8px 0; }
-  .tech { color:var(--muted); font-size:.92rem; }
-  .tech strong { color:var(--text); }
-  .card a.visit { display:inline-block; margin-top:12px; color:#fff; background:var(--accent); text-decoration:none; font-weight:600; padding:9px 16px; border-radius:9px; }
-  .card a.visit:hover { opacity:.88; }
-  .note { font-size:.88rem; color:var(--muted); margin-top:8px; }
-  footer { max-width:880px; margin:0 auto; padding:0 20px 48px; color:var(--muted); font-size:.9rem; }
-  footer a { color:var(--text); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: transparent;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- Tarjeta ---------- */
+  .card {
+    width: 356px;
+    border: 1px solid #e4e4e7;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ---------- Visual (180px) ---------- */
+  .visual {
+    width: 356px;
+    height: 180px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* 1. GridLayer */
+  .grid-layer {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(128, 128, 128, 0.08) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(128, 128, 128, 0.08) 1px, transparent 1px);
+    background-size: 20px 20px;
+    -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000000 60%, transparent 100%);
+    mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000000 60%, transparent 100%);
+    opacity: 0.7;
+  }
+
+  /* 2. EllipseGradient */
+  .ellipse-gradient {
+    position: absolute;
+    inset: 0;
+    width: 356px;
+    height: 180px;
+    display: block;
+  }
+
+  /* 3. Layer3 (gradiente inferior) */
+  .layer3 {
+    position: absolute;
+    inset: 0;
+    width: 356px;
+    height: 180px;
+    display: block;
+    transform: translateY(100%);
+    opacity: 0;
+    transition: transform 500ms cubic-bezier(0.6, 0.6, 0, 1), opacity 500ms cubic-bezier(0.6, 0.6, 0, 1);
+  }
+  .card.hover .layer3 {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* 5. Layer1 (donut) */
+  .layer1 {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 356px;
+    height: 360px;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 500ms cubic-bezier(0.6, 0.6, 0, 1);
+  }
+  .card.hover .layer1 {
+    transform: translate(-50%, calc(-50% - 90px)) scale(1.1);
+  }
+  .donut-wrap {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    flex: 0 0 auto;
+  }
+  .donut-wrap svg {
+    width: 120px;
+    height: 120px;
+    display: block;
+  }
+  .donut-base {
+    fill: none;
+    stroke: rgba(0, 0, 0, 0.2);
+    stroke-width: 10;
+  }
+  .donut-arc {
+    fill: none;
+    stroke-width: 14;
+    stroke-linecap: round;
+    stroke-dasharray: 251.33;
+    transform: rotate(-90deg);
+    transform-origin: 50px 50px;
+    transition: stroke-dashoffset 0.5s cubic-bezier(0.6, 0.6, 0, 1);
+  }
+  .donut-arc-secondary {
+    stroke: #f54900;
+    stroke-dashoffset: 251.33;
+  }
+  .donut-arc-main {
+    stroke: #ff6900;
+    stroke-dashoffset: 26.14;
+  }
+  .donut-number {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: #000000;
+    pointer-events: none;
+  }
+
+  /* 4. Layer2 (chip superior) */
+  .layer2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    padding: 16px;
+    transition: transform 500ms cubic-bezier(0.6, 0.6, 0, 1), opacity 500ms cubic-bezier(0.6, 0.6, 0, 1);
+  }
+  .card.hover .layer2 {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  .chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 6px;
+    border: 1px solid #e4e4e7;
+    background: rgba(255, 255, 255, 0.25);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    padding: 6px 8px;
+  }
+  .chip-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ff6900;
+    flex: 0 0 auto;
+  }
+  .chip-title {
+    font-size: 12px;
+    line-height: 1.3;
+    color: #000000;
+  }
+  .chip-sub {
+    font-size: 12px;
+    line-height: 1.3;
+    color: #71717a;
+  }
+
+  /* 6. Layer4 (6 píldoras) */
+  .layer4 {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    transition: opacity 500ms cubic-bezier(0.6, 0.6, 0, 1);
+  }
+  .card.hover .layer4 {
+    opacity: 1;
+  }
+  .pill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: 9999px;
+    border: 1px solid #e4e4e7;
+    background: rgba(255, 255, 255, 0.7);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    padding: 2px 6px;
+    font-size: 10px;
+    line-height: 1.4;
+    color: #000000;
+    white-space: nowrap;
+    transform: translate(-50%, -50%);
+    transition: transform 500ms cubic-bezier(0.6, 0.6, 0, 1);
+  }
+  .pill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+  }
+  .card.hover .pill-1 { transform: translate(calc(-50% + 100px), calc(-50% + 50px)); }
+  .card.hover .pill-2 { transform: translate(calc(-50% + 100px), calc(-50% - 50px)); }
+  .card.hover .pill-3 { transform: translate(calc(-50% + 125px), calc(-50% + 0px)); }
+  .card.hover .pill-4 { transform: translate(calc(-50% - 125px), calc(-50% + 0px)); }
+  .card.hover .pill-5 { transform: translate(calc(-50% - 100px), calc(-50% + 50px)); }
+  .card.hover .pill-6 { transform: translate(calc(-50% - 100px), calc(-50% - 50px)); }
+
+  /* 7. Overlay de hover */
+  .hover-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+  }
+
+  /* ---------- Cuerpo ---------- */
+  .card-body {
+    border-top: 1px solid #e4e4e7;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .card-body h3 {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #000000;
+  }
+  .card-body p {
+    font-size: 14px;
+    line-height: 1.4;
+    color: #71717a;
+  }
 </style>
 </head>
 <body>
-<header>
-  <h1>Jonathan</h1>
-  <p>Construyo herramientas que uso todos los días: apps personales, automatizaciones y tableros de inteligencia de negocios. Esto es una muestra de lo que está en producción.</p>
-</header>
-<main>
+  <div class="card" id="card" role="region" aria-label="Nivel de servicio — INTER ATC, noviembre 2026">
+    <div class="visual">
+      <!-- 1. GridLayer -->
+      <div class="grid-layer" aria-hidden="true"></div>
 
-  <section class="card">
-    <span class="badge publica">Pública — abre para cualquiera</span>
-    <h2>Tanz</h2>
-    <p><strong>Problema:</strong> ensayar coreografías con la música, la letra y cada instrumento a la mano, desde el teléfono y sin depender de varias apps.</p>
-    <p class="tech"><strong>Hecho con:</strong> Cloudflare Workers, almacenamiento en R2, separación de instrumentos por Demucs, PWA instalable.</p>
-    <p>App de música para ensayos: biblioteca compartida por carpetas, letras con karaoke, mezclador de instrumentos (voz, batería, bajo y otros) y reproductor con velocidad y loop.</p>
-    <a class="visit" href="https://musica-tanz.jesusjonathan171.workers.dev/">Abrir Tanz ↗</a>
-  </section>
+      <!-- 2. EllipseGradient -->
+      <svg class="ellipse-gradient" width="356" height="180" viewBox="0 0 356 180" aria-hidden="true">
+        <defs>
+          <radialGradient id="ellipseGrad" cx="178" cy="98" r="98" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#ff6900" stop-opacity="0.25"></stop>
+            <stop offset="0.34" stop-color="#ff6900" stop-opacity="0.15"></stop>
+            <stop offset="1" stop-color="#ff6900" stop-opacity="0"></stop>
+          </radialGradient>
+        </defs>
+        <rect width="356" height="180" fill="url(#ellipseGrad)"></rect>
+      </svg>
 
-  <section class="card">
-    <span class="badge llave">Pide llave maestra</span>
-    <h2>Centro de Control</h2>
-    <p><strong>Problema:</strong> lanzar y ejecutar scripts y automatizaciones del día a día desde un solo lugar, sin abrir la consola ni recordar dónde vive cada uno.</p>
-    <p class="tech"><strong>Hecho con:</strong> Google Apps Script, app web (Mi Biblioteca) y Cloudflare Workers.</p>
-    <p>Lanzador y ejecutor de scripts y automatizaciones: las rutinas se disparan desde la app y se ve el resultado real de cada ejecución.</p>
-    <a class="visit" href="https://biblioteca.jesusjonathan171.workers.dev/">Abrir Mi Biblioteca ↗</a>
-    <p class="note">El Centro de Control vive dentro de Mi Biblioteca y pide la llave maestra para entrar.</p>
-  </section>
+      <!-- 3. Layer3 (gradiente inferior) -->
+      <svg class="layer3" width="356" height="180" viewBox="0 0 356 180" aria-hidden="true">
+        <defs>
+          <linearGradient id="bottomGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0.35" stop-color="#ff6900" stop-opacity="0"></stop>
+            <stop offset="1" stop-color="#ff6900" stop-opacity="0.3"></stop>
+          </linearGradient>
+        </defs>
+        <rect width="356" height="180" fill="url(#bottomGrad)"></rect>
+      </svg>
 
-  <section class="card">
-    <span class="badge llave">Pide llave maestra</span>
-    <h2>Bolsillo / Finanzas</h2>
-    <p><strong>Problema:</strong> llevar el dinero personal — saldos, movimientos y categorías — en el teléfono, sin cuentas y con los datos bajo control propio.</p>
-    <p class="tech"><strong>Hecho con:</strong> app web progresiva (PWA), datos locales en el navegador, sincronización opcional en la nube con Cloudflare Workers.</p>
-    <p>App de dinero: saldos y movimientos por categoría, seguimiento de hábitos y bóveda personal, con sincronización entre dispositivos cuando se configura.</p>
-    <a class="visit" href="https://mi-balance.jesusjonathan171.workers.dev/">Abrir Bolsillo ↗</a>
-    <p class="note">Pide la llave maestra para entrar.</p>
-  </section>
+      <!-- 5. Layer1 (donut) -->
+      <div class="layer1">
+        <div class="donut-wrap">
+          <svg width="120" height="120" viewBox="0 0 100 100" role="img" aria-label="Nivel de servicio 89,6 por ciento, meta 90 por ciento">
+            <circle class="donut-base" cx="50" cy="50" r="40"></circle>
+            <circle class="donut-arc donut-arc-secondary" id="arcSecondary" cx="50" cy="50" r="40"></circle>
+            <circle class="donut-arc donut-arc-main" cx="50" cy="50" r="40"></circle>
+          </svg>
+          <div class="donut-number" id="donutNumber">89,6&nbsp;%</div>
+        </div>
+      </div>
 
-  <section class="card">
-    <span class="badge login">Pide inicio de sesión</span>
-    <h2>Tableros de Tableau</h2>
-    <p><strong>Problema:</strong> seguir la operación de un call center — campañas, cobranza, ventas y retenciones — con reportes claros y actualizados para decidir a tiempo.</p>
-    <p class="tech"><strong>Hecho con:</strong> Tableau Cloud, extractos programados y fuentes de datos empresariales.</p>
-    <p>Reportes de inteligencia de negocios y gestión de fuerza laboral: tableros por campaña con los indicadores de la operación.</p>
-    <a class="visit" href="https://us-east-1.online.tableau.com/#/site/grupogabssa">Ver en Tableau Cloud ↗</a>
-    <p class="note">El sitio pide iniciar sesión; los tableros son internos y no son públicos.</p>
-  </section>
+      <!-- 4. Layer2 (chip superior) -->
+      <div class="layer2">
+        <div class="chip">
+          <span class="chip-dot" aria-hidden="true"></span>
+          <div>
+            <div class="chip-title">Nivel de servicio &middot; nov 2026</div>
+            <div class="chip-sub">15.618 recibidas &middot; 12.963 atendidas</div>
+          </div>
+        </div>
+      </div>
 
-  <section class="card">
-    <span class="badge llave">Skill — no es una página pública</span>
-    <h2>Skill de tableros</h2>
-    <p><strong>Problema:</strong> armar tableros de campañas de call center siempre con el mismo estilo y las mismas reglas, sin empezar de cero ni improvisar el diseño en cada proyecto.</p>
-    <p class="tech"><strong>Hecho con:</strong> skill para Claude (BINATSA), con guías de datos, diseño, publicación y video manual.</p>
-    <p>Skill que guía la creación, revisión y publicación de tableros en Tableau Cloud: una campaña, un libro, un tablero, con estilo fijo y documentación incluida. Se usa dentro de Mi Biblioteca y de Claude; no es una página pública con demo.</p>
-    <a class="visit" href="https://biblioteca.jesusjonathan171.workers.dev/">Abrir Mi Biblioteca ↗</a>
-    <p class="note">El enlace lleva a Mi Biblioteca, donde vive el skill; pide la llave maestra.</p>
-  </section>
+      <!-- 6. Layer4 (6 píldoras) -->
+      <div class="layer4" aria-hidden="true">
+        <div class="pill pill-1"><span class="pill-dot" style="background:#ff6900"></span>ASISTENCIAS 87,8&nbsp;%</div>
+        <div class="pill pill-2"><span class="pill-dot" style="background:#ff6900"></span>COPPEL VIDA 86,8&nbsp;%</div>
+        <div class="pill pill-3"><span class="pill-dot" style="background:#ff6900"></span>CREDIAUTO 98,5&nbsp;%</div>
+        <div class="pill pill-4"><span class="pill-dot" style="background:#f54900"></span>BRAD SEG 88,7&nbsp;%</div>
+        <div class="pill pill-5"><span class="pill-dot" style="background:#f54900"></span>EMPLEADOS 97,7&nbsp;%</div>
+        <div class="pill pill-6"><span class="pill-dot" style="background:#f54900"></span>LIVERPOOL 96,7&nbsp;%</div>
+      </div>
 
-</main>
-<footer>
-  <p>Jonathan (Vuneit450) — <a href="https://github.com/Vuneit450">github.com/Vuneit450</a></p>
-</footer>
+      <!-- 7. Overlay de hover -->
+      <div class="hover-overlay" id="hoverOverlay"></div>
+    </div>
+
+    <div class="card-body">
+      <h3>Nivel de servicio</h3>
+      <p>89,6&nbsp;% de llamadas atendidas en &le;20&nbsp;s &middot; meta 90&nbsp;% &middot; nov 2026</p>
+    </div>
+  </div>
+
+<script>
+(function () {
+  var card = document.getElementById('card');
+  var overlay = document.getElementById('hoverOverlay');
+  var arcSecondary = document.getElementById('arcSecondary');
+  var donutNumber = document.getElementById('donutNumber');
+  var timer = null;
+
+  // Circunferencia: 2 * PI * 40 = 251.33
+  // Progreso 90  -> dashoffset 251.33 * (1 - 0.90) = 25.13
+  // Progreso 0   -> dashoffset 251.33
+  var OFFSET_ZERO = '251.33';
+  var OFFSET_GOAL = '25.13';
+
+  function enterHover() {
+    card.classList.add('hover');
+    if (timer !== null) { clearTimeout(timer); }
+    timer = setTimeout(function () {
+      arcSecondary.style.strokeDashoffset = OFFSET_GOAL;
+      donutNumber.textContent = '90 %';
+      timer = null;
+    }, 200);
+  }
+
+  function leaveHover() {
+    if (timer !== null) { clearTimeout(timer); timer = null; }
+    card.classList.remove('hover');
+    arcSecondary.style.strokeDashoffset = OFFSET_ZERO;
+    donutNumber.textContent = '89,6 %';
+  }
+
+  overlay.addEventListener('mouseenter', enterHover);
+  overlay.addEventListener('mouseleave', leaveHover);
+})();
+</script>
 </body>
 </html>
