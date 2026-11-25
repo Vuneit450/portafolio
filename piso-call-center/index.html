@@ -85,7 +85,7 @@
 }
 
 .dir-kpi--hero .dir-kpi-value {
-  color: #ff6900;
+  color: #c2410c;
 }
 
 .dir-kpi-sub {
@@ -139,7 +139,7 @@
 .dir-subtitulo {
   font-size: 0.9rem;
   margin: 12px 0 4px;
-  color: #ff6900;
+  color: #c2410c;
 }
 
 .dir-subtitulo:first-of-type {
@@ -236,7 +236,7 @@
   font-variant-numeric: tabular-nums;
 }
 
-.dir-num--pos { color: #1a9e54; font-weight: 600; }
+.dir-num--pos { color: #166534; font-weight: 600; }
 .dir-num--neg { color: #d93025; font-weight: 600; }
 
 .dir-nota {
@@ -288,7 +288,7 @@
 }
 
 .dir-sim-etiqueta output {
-  color: #ff6900;
+  color: #c2410c;
 }
 
 .dir-sim-range {
@@ -323,7 +323,7 @@
 .dir-sim-resultado-valor {
   display: block;
   font-size: 1.5rem;
-  color: #ff6900;
+  color: #c2410c;
 }
 
 .dir-sim-resultado-sub {
@@ -367,7 +367,7 @@
 }
 
 .dir-heat-relleno--bajo { background: #1a9e54; }
-.dir-heat-relleno--medio { background: #e8a100; }
+.dir-heat-relleno--medio { background: #92400e; }
 .dir-heat-relleno--alto { background: #d93025; }
 
 .dir-heat-valor {
@@ -409,17 +409,17 @@
 .camp-head{padding:12px 16px 10px; background:#fff; border-bottom:1px solid #e5e7eb;}
 .camp-title-row{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;}
 .camp-head h2{font-size:20px; letter-spacing:.2px; margin:0;}
-.camp-head h2 span{color:#ff6900;}
-.camp-badge{font-size:11px; font-weight:700; color:#fff; background:#ff6900;
+.camp-head h2 span{color:#c2410c;}
+.camp-badge{font-size:11px; font-weight:700; color:#fff; background:#c2410c;
   border-radius:999px; padding:2px 9px; white-space:nowrap;}
-.camp-sub{font-size:11px; color:#6b7280; margin-top:2px;}
+.camp-sub{font-size:11px; color:#4b5563; margin-top:2px;}
 .camp-kpis{display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;}
 .camp-kpi{flex:1 1 105px; min-width:105px; background:#f4f6fa; border:1px solid #e5e7eb;
   border-radius:8px; padding:5px 8px;}
 .camp-kpi b{display:block; font-size:16px; line-height:1.15; font-variant-numeric:tabular-nums;}
-.camp-kpi b small{font-size:11px; color:#6b7280; font-weight:600;}
-.camp-kpi span{font-size:10px; color:#6b7280; text-transform:uppercase; letter-spacing:.4px;}
-.camp-kpi.hot b{color:#ff6900;}
+.camp-kpi b small{font-size:11px; color:#4b5563; font-weight:600;}
+.camp-kpi span{font-size:10px; color:#4b5563; text-transform:uppercase; letter-spacing:.4px;}
+.camp-kpi.hot b{color:#c2410c;}
 
 /* ---------- Controles / leyenda ---------- */
 .camp-controls{display:flex; align-items:center; gap:12px; flex-wrap:wrap;
@@ -441,16 +441,16 @@
 .camp-slot-label{font-size:12px; font-weight:700; color:#475569; white-space:nowrap;}
 .camp-slot-btn{border:1px solid #e5e7eb; background:#f4f6fa; border-radius:999px;
   padding:4px 9px; font-size:12px; font-weight:600; color:#1f2937; cursor:pointer; font-family:inherit;}
-.camp-slot-btn[aria-pressed="true"]{background:#ff6900; color:#fff; border-color:#ff6900;}
+.camp-slot-btn[aria-pressed="true"]{background:#c2410c; color:#fff; border-color:#c2410c;}
 .camp-hour{width:110px; accent-color:#ff6900;}
-.camp-slot-info{font-size:11.5px; color:#6b7280; font-weight:600; white-space:nowrap;}
+.camp-slot-info{font-size:11.5px; color:#4b5563; font-weight:600; white-space:nowrap;}
 .camp-walker{cursor:pointer;}
-.camp-walker-label{font-size:8.5px; font-weight:800; fill:#334155;
+.camp-walker-label{font-size:10px; font-weight:800; fill:#334155;
   paint-order:stroke; stroke:#fff; stroke-width:2.5px;}
 .camp-filter-btn{border:1px solid #e5e7eb; background:#f4f6fa; border-radius:999px;
   padding:4px 9px; font-size:12px; font-weight:600; color:#1f2937; cursor:pointer; font-family:inherit;}
 .camp-filter-btn[aria-pressed="true"]{background:#1f2937; color:#fff; border-color:#1f2937;}
-.camp-filter-count{font-size:11.5px; color:#6b7280; font-weight:600; white-space:nowrap;}
+.camp-filter-count{font-size:11.5px; color:#4b5563; font-weight:600; white-space:nowrap;}
 .camp-legend{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
 .camp-legend .camp-item{display:inline-flex; align-items:center; gap:5px; white-space:nowrap;}
 .camp-dot{width:11px; height:11px; border-radius:50%; flex:none; border:1.5px solid rgba(0,0,0,.25);}
@@ -468,16 +468,17 @@
   linear-gradient(180deg,#eef2f7 0%,#f4f6fa 60%,#eef2f7 100%);}
 .camp-scene svg{display:block; width:100%; height:auto;}
 .camp-zone-label{font-size:11px; font-weight:700; fill:#334155;}
-.camp-zone-sub{font-size:10px; font-weight:600; fill:#64748b;}
+.camp-zone-sub{font-size:10px; font-weight:600; fill:#475569;}
 #camp-heatLayer{pointer-events:none;}
 #camp-zoneLayer rect, #camp-zoneLayer text{pointer-events:none;}
+#camp-textLayer text{pointer-events:none;}
 .camp-station{cursor:pointer;}
 .camp-station:hover .camp-desk-top{stroke:#ff6900; stroke-width:2;}
 .camp-station text{pointer-events:none;}
-.camp-st-id{font-size:8.5px; font-weight:700; fill:#334155;}
-.camp-call-timer{font-size:6.5px; font-weight:800; fill:#1f2937;
+.camp-st-id{font-size:10px; font-weight:700; fill:#334155; paint-order:stroke; stroke:#fff; stroke-width:2.5px;}
+.camp-call-timer{display:none; font-size:6.5px; font-weight:800; fill:#1f2937;
   paint-order:stroke; stroke:#fff; stroke-width:2px;}
-.camp-screen-glyph text{font-size:6.5px; fill:#fff;}
+.camp-screen-glyph text{font-size:10px; fill:#fff;}
 .camp-call-dot{pointer-events:none;}
 .camp-call-dot-click{pointer-events:auto; cursor:pointer;}
 .camp-call-dot-halo{pointer-events:none;}
@@ -492,12 +493,12 @@
 .camp-zone-tip[hidden]{display:none;}
 .camp-zone-tip h3{font-size:13px; margin:0 0 4px;}
 .camp-zone-tip dl{display:grid; grid-template-columns:auto 1fr; gap:3px 10px; margin:0;}
-.camp-zone-tip dt{color:#6b7280; font-size:11.5px;}
+.camp-zone-tip dt{color:#4b5563; font-size:11.5px;}
 .camp-zone-tip dd{font-weight:600; text-align:right; font-variant-numeric:tabular-nums; margin:0;}
 .camp-queue-count{font-size:12px; font-weight:800; fill:#fff;}
-.camp-pasillo-label{font-size:8px; font-weight:700; letter-spacing:1.5px; fill:#94a3b8; pointer-events:none;}
-.camp-sign-label{font-size:9px; font-weight:800; fill:#334155;}
-.camp-hint{position:absolute; left:10px; bottom:8px; font-size:11px; color:#6b7280;
+.camp-pasillo-label{font-size:10px; font-weight:700; letter-spacing:1.5px; fill:#475569; pointer-events:none;}
+.camp-sign-label{font-size:10px; font-weight:800; fill:#334155;}
+.camp-hint{position:absolute; left:10px; bottom:8px; font-size:11px; color:#4b5563;
   background:rgba(255,255,255,.85); border:1px solid #e5e7eb; border-radius:6px;
   padding:3px 8px; z-index:4;}
 
@@ -508,18 +509,18 @@
   padding:12px 14px; font-size:12.5px; z-index:5;}
 .camp-ficha[hidden]{display:none;}
 .camp-ficha h2{font-size:15px; margin:0 0 2px; padding-right:22px;}
-.camp-ficha .camp-ficha-sub{font-size:11.5px; color:#6b7280; margin-bottom:8px;}
+.camp-ficha .camp-ficha-sub{font-size:11.5px; color:#4b5563; margin-bottom:8px;}
 .camp-pareto{display:inline-block; padding:2px 9px; border-radius:999px; color:#fff;
   font-size:11.5px; font-weight:700; margin-bottom:8px;}
 .camp-pareto-a{background:#d93025;}
-.camp-pareto-b{background:#e8a100;}
+.camp-pareto-b{background:#e8a100;color:#1f2937;}
 .camp-pareto-c{background:#6b7280;}
 .camp-ficha dl{display:grid; grid-template-columns:auto 1fr; gap:4px 10px; margin:0 0 10px;}
-.camp-ficha dt{color:#6b7280; font-size:11.5px;}
+.camp-ficha dt{color:#4b5563; font-size:11.5px;}
 .camp-ficha dd{font-weight:600; text-align:right; font-variant-numeric:tabular-nums; margin:0;}
 .camp-ficha dd .camp-sin-dato{font-weight:600; color:#92400e;}
 .camp-ficha .camp-close{position:absolute; top:6px; right:8px; border:0; background:none;
-  font-size:16px; line-height:1; cursor:pointer; color:#6b7280; padding:4px;}
+  font-size:16px; line-height:1; cursor:pointer; color:#4b5563; padding:4px;}
 .camp-tmo-comp h3, .camp-ficha h3{font-size:12px; margin:0 0 6px;}
 .camp-tmo-row{display:grid; grid-template-columns:86px 1fr 62px; gap:8px; align-items:center;
   font-size:11.5px; margin-bottom:4px;}
@@ -530,17 +531,17 @@
 .camp-tmo-bar i.camp-tmo-pos{background:#e8a100;}
 .camp-tmo-bar i.camp-tmo-esp{background:#0ea5e9;}
 .camp-tmo-bar i.camp-tmo-pen{background:#94a3b8;}
-.camp-ficha .camp-note{margin-top:9px; font-size:10.5px; color:#6b7280; line-height:1.45;}
+.camp-ficha .camp-note{margin-top:9px; font-size:10.5px; color:#4b5563; line-height:1.45;}
 
 /* ---------- Tabla de carteras ---------- */
 .camp-table-wrap{background:#fff; border-top:1px solid #e5e7eb; padding:12px 16px 14px; overflow-x:auto;}
 .camp-table-wrap h2{font-size:15px; margin:0 0 2px;}
-.camp-table-wrap .camp-table-sub{font-size:11.5px; color:#6b7280; margin-bottom:8px;}
+.camp-table-wrap .camp-table-sub{font-size:11.5px; color:#4b5563; margin-bottom:8px;}
 .camp-table{width:100%; border-collapse:collapse; font-size:12.5px; font-variant-numeric:tabular-nums;}
 .camp-table th, .camp-table td{padding:6px 8px; text-align:right; border-bottom:1px solid #eef2f7; white-space:nowrap;}
 .camp-table th:first-child, .camp-table td:first-child{text-align:left;}
 .camp-table thead th{background:#f4f6fa; font-size:11px; text-transform:uppercase; letter-spacing:.4px;
-  color:#6b7280; cursor:pointer; user-select:none;}
+  color:#4b5563; cursor:pointer; user-select:none;}
 .camp-table thead th:hover{color:#1f2937;}
 .camp-table thead th[aria-sort="ascending"]::after{content:" ▲";}
 .camp-table thead th[aria-sort="descending"]::after{content:" ▼";}
@@ -550,19 +551,19 @@
 .camp-table tfoot td{font-weight:700; background:#f4f6fa; border-top:2px solid #e5e7eb;}
 .camp-sin-dato{color:#92400e; font-weight:600;}
 .camp-ns-bajo{color:#d93025; font-weight:700;}
-.camp-ns-alto{color:#1a9e54; font-weight:700;}
+.camp-ns-alto{color:#166534; font-weight:700;}
 
 /* ---------- Sin llamadas ---------- */
 .camp-sin-llamadas{background:#fff; border-top:1px solid #e5e7eb; padding:12px 16px 14px;}
 .camp-sin-llamadas h2{font-size:15px; margin:0 0 2px;}
-.camp-sin-llamadas .camp-table-sub{font-size:11.5px; color:#6b7280; margin-bottom:8px;}
+.camp-sin-llamadas .camp-table-sub{font-size:11.5px; color:#4b5563; margin-bottom:8px;}
 .camp-sin-cards{display:flex; gap:8px; flex-wrap:wrap;}
 .camp-sin-card{flex:1 1 220px; border:1px dashed #d1d5db; border-radius:8px; padding:10px 12px;
   background:#f4f6fa;}
 .camp-sin-card b{display:block; font-size:13px; margin-bottom:2px;}
-.camp-sin-card span{font-size:12px; color:#6b7280;}
+.camp-sin-card span{font-size:12px; color:#4b5563;}
 
-.camp-foot{padding:6px 16px 9px; font-size:10.5px; color:#6b7280; background:#fff;
+.camp-foot{padding:6px 16px 9px; font-size:10.5px; color:#4b5563; background:#fff;
   border-top:1px solid #e5e7eb; line-height:1.5;}
 
 /* ---------- Movimiento reducido ---------- */
@@ -573,6 +574,11 @@
 @media (max-width:640px){
   .camp-ficha{position:static; width:auto; max-height:none; margin:10px;
     box-shadow:0 2px 8px rgba(15,23,42,.12);}
+  /* Error 5: a 400 px la franja + deslizador + texto se salian (slotInfo nowrap
+     de ~410 px dentro de 348 px). El grupo ocupa su propia fila y el texto
+     pasa a su propia linea con salto de linea; el deslizador queda visible. */
+  .camp-slot-group{width:100%;}
+  .camp-slot-info{white-space:normal; flex:1 1 100%;}
 }
 
 /* SUPERVISOR — Consola de operación INTER ATC · nov 2026
@@ -584,7 +590,7 @@
 #sup-tab h3{font-size:14px;margin:0 0 6px}
 #sup-tab p{margin:0 0 8px}
 #sup-tab .sup-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px 16px;margin-bottom:14px}
-#sup-tab .sup-muted{color:#6b7280;font-size:12px}
+#sup-tab .sup-muted{color:#4b5563;font-size:12px}
 #sup-tab .sup-num{font-variant-numeric:tabular-nums}
 
 /* ---------- Aviso honesto ---------- */
@@ -595,7 +601,7 @@
 #sup-tab .sup-datos-reales{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 #sup-tab .sup-dato{flex:1 1 140px;min-width:140px;background:#f4f6fa;border:1px solid #e5e7eb;border-radius:8px;padding:8px 10px}
 #sup-tab .sup-dato b{display:block;font-size:17px;line-height:1.15}
-#sup-tab .sup-dato span{font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.4px}
+#sup-tab .sup-dato span{font-size:11px;color:#4b5563;text-transform:uppercase;letter-spacing:.4px}
 #sup-tab .sup-sindato{color:#92400e;font-weight:700}
 
 /* ---------- Simulación: controles ---------- */
@@ -611,7 +617,7 @@
 #sup-tab .sup-filter-group{display:inline-flex;gap:4px;align-items:center;flex-wrap:wrap}
 #sup-tab .sup-filter-btn{border:1px solid #e5e7eb;background:#f8fafc;border-radius:999px;padding:4px 9px;font-size:12px;font-weight:600;color:#1f2937;cursor:pointer}
 #sup-tab .sup-filter-btn[aria-pressed="true"]{background:#1f2937;color:#fff;border-color:#1f2937}
-#sup-tab .sup-filter-count{font-size:12px;color:#6b7280;font-weight:600;white-space:nowrap}
+#sup-tab .sup-filter-count{font-size:12px;color:#4b5563;font-weight:600;white-space:nowrap}
 #sup-tab .sup-legend{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 #sup-tab .sup-legend .sup-item{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;font-size:12px}
 #sup-tab .sup-dot{width:11px;height:11px;border-radius:50%;flex:none;border:1.5px solid rgba(0,0,0,.25)}
@@ -636,7 +642,7 @@
 #sup-tab .sup-monitor{pointer-events:none}
 #sup-tab .sup-walker{cursor:pointer}
 #sup-tab .sup-walker:hover .sup-person-body{stroke:#0f766e;stroke-width:2}
-#sup-tab .sup-walker-label{font-size:8px;font-weight:800;fill:#334155;paint-order:stroke;stroke:#fff;stroke-width:2.5px;pointer-events:none}
+#sup-tab .sup-walker-label{font-size:10px;font-weight:800;fill:#334155;paint-order:stroke;stroke:#fff;stroke-width:2.5px;pointer-events:none}
 #sup-tab .sup-state-counts{display:flex;gap:8px;flex-wrap:wrap;font-size:12.5px;margin:2px 0 8px}
 #sup-tab .sup-state-counts b{font-variant-numeric:tabular-nums}
 
@@ -644,15 +650,17 @@
 #sup-tab .sup-scene{position:relative;width:100%;background:linear-gradient(180deg,#eef2f7 0%,#f8fafc 60%,#eef2f7 100%);border:1px solid #e5e7eb;border-radius:10px;overflow:hidden}
 #sup-tab .sup-scene svg{display:block;width:100%;height:auto}
 #sup-tab .sup-zone-label{font-size:11px;font-weight:700;fill:#334155}
-#sup-tab .sup-zone-sub{font-size:10px;font-weight:600;fill:#64748b}
+#sup-tab .sup-zone-sub{font-size:10px;font-weight:600;fill:#475569}
 #sup-tab #sup-heatLayer{pointer-events:none}
 #sup-tab #sup-zoneLayer rect,#sup-tab #sup-zoneLayer text{pointer-events:none}
+#sup-tab #sup-labelTopLayer rect,#sup-tab #sup-labelTopLayer text{pointer-events:none}
+#sup-tab #sup-textLayer text{pointer-events:none}
 #sup-tab .sup-station{cursor:pointer}
 #sup-tab .sup-station:hover .sup-desk-top{stroke:#0f766e;stroke-width:2}
 #sup-tab .sup-station text{pointer-events:none}
-#sup-tab .sup-st-id{font-size:8.5px;font-weight:700;fill:#334155}
-#sup-tab .sup-call-timer{font-size:6.5px;font-weight:800;fill:#1f2937;paint-order:stroke;stroke:#fff;stroke-width:2px}
-#sup-tab .sup-screen-glyph text{font-size:6.5px;fill:#fff}
+#sup-tab .sup-st-id{font-size:10px;font-weight:700;fill:#334155;paint-order:stroke;stroke:#fff;stroke-width:2.5px}
+#sup-tab .sup-call-timer{display:none;font-size:6.5px;font-weight:800;fill:#1f2937;paint-order:stroke;stroke:#fff;stroke-width:2px}
+#sup-tab .sup-screen-glyph text{font-size:10px;fill:#fff}
 #sup-tab .sup-call-dot{pointer-events:none}
 #sup-tab .sup-call-dot-click{pointer-events:auto;cursor:pointer}
 #sup-tab .sup-call-dot-halo{pointer-events:none}
@@ -665,23 +673,23 @@
 #sup-tab .sup-zone-tip[hidden]{display:none}
 #sup-tab .sup-zone-tip h3{font-size:13px;margin-bottom:4px}
 #sup-tab .sup-zone-tip dl{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;margin:0}
-#sup-tab .sup-zone-tip dt{color:#6b7280;font-size:11.5px}
+#sup-tab .sup-zone-tip dt{color:#4b5563;font-size:11.5px}
 #sup-tab .sup-zone-tip dd{font-weight:600;text-align:right;font-variant-numeric:tabular-nums;margin:0}
 #sup-tab .sup-queue-count{font-size:12px;font-weight:800;fill:#fff}
-#sup-tab .sup-pasillo-label{font-size:8px;font-weight:700;letter-spacing:1.5px;fill:#94a3b8;pointer-events:none}
-#sup-tab .sup-sign-label{font-size:9px;font-weight:800;fill:#334155}
+#sup-tab .sup-pasillo-label{font-size:10px;font-weight:700;letter-spacing:1.5px;fill:#475569;pointer-events:none}
+#sup-tab .sup-sign-label{font-size:10px;font-weight:800;fill:#334155}
 #sup-tab .sup-inspector{position:absolute;top:10px;right:10px;width:236px;background:#fff;border:1px solid #e5e7eb;border-radius:10px;box-shadow:0 6px 24px rgba(15,23,42,.18);padding:12px 13px;font-size:12.5px;z-index:5}
 #sup-tab .sup-inspector[hidden]{display:none}
 #sup-tab .sup-inspector h2{font-size:14px;margin-bottom:2px}
-#sup-tab .sup-inspector .sup-cartera{font-size:11.5px;color:#6b7280;margin-bottom:8px}
+#sup-tab .sup-inspector .sup-cartera{font-size:11.5px;color:#4b5563;margin-bottom:8px}
 #sup-tab .sup-inspector dl{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;margin:0}
-#sup-tab .sup-inspector dt{color:#6b7280;font-size:11.5px}
+#sup-tab .sup-inspector dt{color:#4b5563;font-size:11.5px}
 #sup-tab .sup-inspector dd{font-weight:600;text-align:right;font-variant-numeric:tabular-nums;margin:0}
 #sup-tab .sup-state-badge{display:inline-block;padding:2px 9px;border-radius:999px;color:#fff;font-size:11.5px;font-weight:700}
-#sup-tab .sup-inspector .sup-close{position:absolute;top:6px;right:8px;border:0;background:none;font-size:16px;line-height:1;cursor:pointer;color:#6b7280;padding:4px}
-#sup-tab .sup-inspector .sup-note{margin-top:9px;font-size:10.5px;color:#6b7280;line-height:1.45}
-#sup-tab .sup-hint{position:absolute;left:10px;bottom:8px;font-size:11px;color:#6b7280;background:rgba(255,255,255,.85);border:1px solid #e5e7eb;border-radius:6px;padding:3px 8px;z-index:4}
-#sup-tab .sup-foot{font-size:11px;color:#6b7280;line-height:1.5;margin-top:8px}
+#sup-tab .sup-inspector .sup-close{position:absolute;top:6px;right:8px;border:0;background:none;font-size:16px;line-height:1;cursor:pointer;color:#4b5563;padding:4px}
+#sup-tab .sup-inspector .sup-note{margin-top:9px;font-size:10.5px;color:#4b5563;line-height:1.45}
+#sup-tab .sup-hint{position:absolute;left:10px;bottom:8px;font-size:11px;color:#4b5563;background:rgba(255,255,255,.85);border:1px solid #e5e7eb;border-radius:6px;padding:3px 8px;z-index:4}
+#sup-tab .sup-foot{font-size:11px;color:#4b5563;line-height:1.5;margin-top:8px}
 
 /* ---------- Prioridades ---------- */
 #sup-tab .sup-foco{border-left:5px solid #ff6900;background:#fff7ed;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:14px}
@@ -691,8 +699,8 @@
 #sup-tab .sup-prio h3{margin-bottom:4px}
 #sup-tab .sup-prio .sup-tag{display:inline-block;font-size:11px;font-weight:800;color:#fff;border-radius:999px;padding:2px 9px;margin-right:6px;vertical-align:middle}
 #sup-tab .sup-prio-p1 .sup-tag{background:#d93025}
-#sup-tab .sup-prio-p2 .sup-tag{background:#e8a100}
-#sup-tab .sup-prio-p3 .sup-tag{background:#ff6900}
+#sup-tab .sup-prio-p2 .sup-tag{background:#e8a100;color:#1f2937}
+#sup-tab .sup-prio-p3 .sup-tag{background:#c2410c}
 #sup-tab .sup-prio ul{margin:6px 0 0;padding-left:18px}
 #sup-tab .sup-prio li{margin-bottom:5px;font-size:13.5px}
 #sup-tab .sup-prio li b{font-variant-numeric:tabular-nums}
@@ -702,11 +710,11 @@
 #sup-tab .sup-search{flex:1 1 220px;min-width:200px;border:1px solid #e5e7eb;border-radius:8px;padding:8px 10px;font-size:14px;font-family:inherit;background:#fff;color:#1f2937}
 #sup-tab .sup-sort-group{display:inline-flex;gap:4px;flex-wrap:wrap}
 #sup-tab .sup-sort-btn{border:1px solid #e5e7eb;background:#f8fafc;border-radius:999px;padding:6px 11px;font-size:12.5px;font-weight:600;color:#1f2937;cursor:pointer}
-#sup-tab .sup-sort-btn[aria-pressed="true"]{background:#ff6900;color:#fff;border-color:#ff6900}
-#sup-tab .sup-count{font-size:12.5px;color:#6b7280;font-weight:600;white-space:nowrap}
+#sup-tab .sup-sort-btn[aria-pressed="true"]{background:#c2410c;color:#fff;border-color:#c2410c}
+#sup-tab .sup-count{font-size:12.5px;color:#4b5563;font-weight:600;white-space:nowrap}
 #sup-tab .sup-table-wrap{overflow-x:auto;border:1px solid #e5e7eb;border-radius:10px;background:#fff}
 #sup-tab table.sup-table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:560px}
-#sup-tab .sup-table th{position:sticky;top:0;background:#f8fafc;text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;color:#6b7280;padding:8px 10px;border-bottom:1px solid #e5e7eb;white-space:nowrap}
+#sup-tab .sup-table th{position:sticky;top:0;background:#f8fafc;text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;color:#4b5563;padding:8px 10px;border-bottom:1px solid #e5e7eb;white-space:nowrap}
 #sup-tab .sup-table td{padding:7px 10px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
 #sup-tab .sup-table tbody tr{cursor:pointer}
 #sup-tab .sup-table tbody tr:hover{background:#fff7ed}
@@ -717,22 +725,22 @@
 #sup-tab .sup-table .sup-tmo-alto{background:#ffedd5}
 #sup-tab .sup-badge{display:inline-block;font-size:10.5px;font-weight:700;border-radius:999px;padding:1px 8px;margin-left:6px;white-space:nowrap;vertical-align:middle}
 #sup-tab .sup-badge-nps{background:#d93025;color:#fff}
-#sup-tab .sup-badge-tmo{background:#ff6900;color:#fff}
-#sup-tab .sup-leyenda{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:#6b7280;margin-top:8px}
+#sup-tab .sup-badge-tmo{background:#c2410c;color:#fff}
+#sup-tab .sup-leyenda{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:#4b5563;margin-top:8px}
 #sup-tab .sup-leyenda .sup-item{display:inline-flex;align-items:center;gap:5px}
 
 /* ---------- Ficha detallada ---------- */
 #sup-tab .sup-ficha{border:2px solid #ff6900;background:#fff;border-radius:12px;padding:14px 16px;margin-top:12px}
 #sup-tab .sup-ficha[hidden]{display:none}
 #sup-tab .sup-ficha h2{font-size:16px}
-#sup-tab .sup-ficha .sup-ficha-sub{font-size:12.5px;color:#6b7280;margin-bottom:10px}
+#sup-tab .sup-ficha .sup-ficha-sub{font-size:12.5px;color:#4b5563;margin-bottom:10px}
 #sup-tab .sup-ficha dl.sup-kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:0 0 10px}
 #sup-tab .sup-ficha dl.sup-kv div{background:#f4f6fa;border:1px solid #e5e7eb;border-radius:8px;padding:8px 10px}
-#sup-tab .sup-ficha dl.sup-kv dt{font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.4px}
+#sup-tab .sup-ficha dl.sup-kv dt{font-size:11px;color:#4b5563;text-transform:uppercase;letter-spacing:.4px}
 #sup-tab .sup-ficha dl.sup-kv dd{font-weight:700;font-size:16px;margin:2px 0 0;font-variant-numeric:tabular-nums}
 #sup-tab .sup-ficha h3{margin-top:12px}
 #sup-tab .sup-ficha table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:6px}
-#sup-tab .sup-ficha th{text-align:left;font-size:11.5px;color:#6b7280;padding:5px 8px;border-bottom:1px solid #e5e7eb}
+#sup-tab .sup-ficha th{text-align:left;font-size:11.5px;color:#4b5563;padding:5px 8px;border-bottom:1px solid #e5e7eb}
 #sup-tab .sup-ficha td{padding:5px 8px;border-bottom:1px solid #f1f5f9;font-variant-numeric:tabular-nums}
 #sup-tab .sup-ficha td.sup-num,#sup-tab .sup-ficha th.sup-num{text-align:right}
 #sup-tab .sup-ficha .sup-bar{height:8px;background:#e5e7eb;border-radius:999px;overflow:hidden;min-width:80px}
@@ -755,8 +763,8 @@ body { margin: 0; background: #f4f6fa; color: #1a1d21;
 .tab-btn { border: 1px solid #dfe3ea; background: #fff; color: #1a1d21;
   border-radius: 999px; padding: 9px 18px; font-size: 0.95rem; font-weight: 700;
   cursor: pointer; font-family: inherit; }
-.tab-btn:hover { border-color: #ff6900; color: #ff6900; }
-.tab-btn[aria-selected="true"] { background: #ff6900; border-color: #ff6900; color: #fff; }
+.tab-btn:hover { border-color: #ff6900; color: #c2410c; }
+.tab-btn[aria-selected="true"] { background: #c2410c; border-color: #c2410c; color: #fff; }
 .tab-btn:focus-visible { outline: 3px solid #ff6900; outline-offset: 2px; }
 .tab-panel[hidden] { display: none; }
 /* Las tablas de Dirección son más anchas que una tarjeta a 400 px: que el
@@ -1015,7 +1023,7 @@ body { margin: 0; background: #f4f6fa; color: #1a1d21;
     <div class="camp-title-row">
       <h2>Campañas <span>· INTER ATC</span></h2>
       <span class="camp-badge">nov 2026</span>
-      <span class="camp-sub">Piso por cartera · 12 carteras con llamadas · 37 estaciones · 1 estación ≈ 500 llamadas</span>
+      <span class="camp-sub">Piso por cartera · 12 carteras con llamadas · 37 estaciones · 1 estación ≈ 430 llamadas</span>
     </div>
     <div class="camp-kpis" role="group" aria-label="Indicadores globales de noviembre 2026">
       <div class="camp-kpi hot"><b>89,9 % <small>/ meta 90 %</small></b><span>Nivel de servicio</span></div>
@@ -1071,7 +1079,7 @@ body { margin: 0; background: #f4f6fa; color: #1a1d21;
       <span class="camp-item"><span class="camp-dot" style="background:#a16207"></span>Moderna</span>
       <span class="camp-item"><span class="camp-dot" style="background:#4f46e5"></span>Bimbo</span>
     </div>
-    <span class="camp-heat-scale" id="camp-heatLegend"><span>Volumen&nbsp;↓</span><span class="camp-bar"></span><span>↑&nbsp;mayor</span></span>
+    <span class="camp-heat-scale" id="camp-heatLegend"><span>Volumen: 25&nbsp;↓</span><span class="camp-bar"></span><span>↑&nbsp;8.143</span></span>
     <span class="camp-sim-tag">Simulación en vivo</span>
     <span class="camp-reduced-note">Vista estática: movimiento reducido activado</span>
   </div>
@@ -1116,15 +1124,15 @@ body { margin: 0; background: #f4f6fa; color: #1a1d21;
     <table class="camp-table" id="camp-table">
       <thead>
         <tr>
-          <th data-camp-sort="name" aria-sort="none">Cartera</th>
-          <th data-camp-sort="rec" aria-sort="descending">Recibidas</th>
-          <th data-camp-sort="ate" aria-sort="none">Atendidas</th>
-          <th data-camp-sort="aba" aria-sort="none">Abandonadas</th>
-          <th data-camp-sort="dem" aria-sort="none">Demoradas</th>
-          <th data-camp-sort="ns" aria-sort="none">NS</th>
-          <th data-camp-sort="tmo" aria-sort="none">TMO</th>
-          <th data-camp-sort="asa" aria-sort="none">ASA</th>
-          <th data-camp-sort="nps" aria-sort="none">NPS</th>
+          <th data-camp-sort="name" tabindex="0" aria-sort="none">Cartera</th>
+          <th data-camp-sort="rec" tabindex="0" aria-sort="descending">Recibidas</th>
+          <th data-camp-sort="ate" tabindex="0" aria-sort="none">Atendidas</th>
+          <th data-camp-sort="aba" tabindex="0" aria-sort="none">Abandonadas</th>
+          <th data-camp-sort="dem" tabindex="0" aria-sort="none">Demoradas</th>
+          <th data-camp-sort="ns" tabindex="0" aria-sort="none">NS</th>
+          <th data-camp-sort="tmo" tabindex="0" aria-sort="none">TMO</th>
+          <th data-camp-sort="asa" tabindex="0" aria-sort="none">ASA</th>
+          <th data-camp-sort="nps" tabindex="0" aria-sort="none">NPS</th>
         </tr>
       </thead>
       <tbody id="camp-tableBody"></tbody>
@@ -1144,7 +1152,7 @@ body { margin: 0; background: #f4f6fa; color: #1a1d21;
   <footer class="camp-foot">
     Fuente: foto fija nov 2026 del libro INTER ATC (vista Dirección; leída en vivo 24 nov 2026, 18:08).
     Zonas por cartera con su volumen y NS de noviembre; estaciones proporcionales al volumen
-    (1 ≈ 500 llamadas, mínimo 1 por cartera). Los estados de estación, las llamadas en tránsito,
+    (1 ≈ 430 llamadas, mínimo 1 por cartera). Los estados de estación, las llamadas en tránsito,
     la franja del día y el supervisor son una simulación en vivo sobre esa foto fija; las personas
     que caminan por los pasillos también son simuladas. Cada persona lleva el color de su cartera
     y, al tocarla, abre su ficha con su nombre y cifras reales de nov 2026 (mapeo por atendidas
@@ -1217,7 +1225,7 @@ body { margin: 0; background: #f4f6fa; color: #1a1d21;
         <span class="sup-item"><span class="sup-dot" style="background:#64748b"></span>Empleados</span>
         <span class="sup-item"><span class="sup-dot" style="background:#ca8a04"></span>Liverpool</span>
       </div>
-      <span class="sup-heat-scale" id="sup-heatLegend"><span>Volumen&nbsp;↓</span><span class="sup-bar"></span><span>↑&nbsp;mayor</span></span>
+      <span class="sup-heat-scale" id="sup-heatLegend"><span>Volumen: 209&nbsp;↓</span><span class="sup-bar"></span><span>↑&nbsp;8.143</span></span>
       <span class="sup-reduced-note">Simulación congelada: movimiento reducido activado</span>
     </div>
 
@@ -1228,6 +1236,8 @@ body { margin: 0; background: #f4f6fa; color: #1a1d21;
       <span>Post-llamada: <b id="sup-c-post">—</b></span>
       <span>En espera: <b id="sup-c-espera">—</b></span>
     </div>
+
+    <p class="sup-aviso" role="note"><b>Este piso muestra 6 de 12 carteras:</b> solo las de mayor volumen, que concentran la operación del día. Las 6 restantes —LALA, JAC, SUZUKI, LIVERPOOL GMM, MODERNA y BIMBO— suman 639 llamadas (4,0 %) y se ven en la pestaña Campañas.</p>
 
     <div class="sup-scene" id="sup-scene">
       <svg id="sup-floor" viewBox="0 0 1000 560" role="img"
@@ -1251,8 +1261,8 @@ body { margin: 0; background: #f4f6fa; color: #1a1d21;
     </div>
     <p class="sup-foot">
       Fuente: foto fija nov 2026 del libro INTER ATC (vista Dirección), leída en vivo 24 nov 2026, 18:08.
-      Zonas por cartera con su volumen y NS de noviembre; estaciones proporcionales al volumen
-      (1 ≈ 500 llamadas, redondeo visible en cada rótulo). Los estados de estación, las llamadas en
+      Zonas por cartera —solo 6 de 12, las de mayor volumen— con su volumen y NS de noviembre; estaciones proporcionales al volumen
+      (1 ≈ 430 llamadas, redondeo visible en cada rótulo). Los estados de estación, las llamadas en
       tránsito, la franja del día y el supervisor son una simulación en vivo sobre esa foto fija;
       las personas que caminan por los pasillos también son simuladas. Cada persona lleva el color
       de su cartera y, al tocarla, abre su ficha con su nombre y cifras reales de nov 2026 (mapeo
@@ -1265,7 +1275,7 @@ body { margin: 0; background: #f4f6fa; color: #1a1d21;
   <div class="sup-card" id="sup-prioridades">
     <h2>Prioridades de operación</h2>
     <div class="sup-foco">
-      <b>FOCO — TMO 8:43, 1:14 arriba del objetivo 7:30;</b> el poscierre es el principal componente.
+      <b>FOCO — TMO 8:43, 1:13 arriba del objetivo 7:30;</b> el poscierre es el principal componente.
     </div>
     <div class="sup-prios">
       <div class="sup-prio sup-prio-p1">
@@ -1303,7 +1313,7 @@ body { margin: 0; background: #f4f6fa; color: #1a1d21;
       BRADESCARD ASISTENCIAS o COPPEL VIDA.
     </p>
     <div class="sup-tools">
-      <input class="sup-search" id="sup-search" type="search" placeholder="Buscar asesor por nombre…" aria-label="Buscar asesor por nombre">
+      <input class="sup-search" id="sup-search" type="search" placeholder="Buscar asesor por nombre o cartera…" aria-label="Buscar asesor por nombre o cartera">
       <span class="sup-sort-group" role="group" aria-label="Ordenar asesores">
         <button class="sup-sort-btn" id="sup-sort-at" aria-pressed="true">Atendidas ↓</button>
         <button class="sup-sort-btn" id="sup-sort-tmo" aria-pressed="false">TMO ↓</button>
@@ -1318,9 +1328,9 @@ body { margin: 0; background: #f4f6fa; color: #1a1d21;
             <th class="sup-num">#</th>
             <th>Asesor</th>
             <th>Cartera</th>
-            <th class="sup-num">Atendidas</th>
-            <th class="sup-num">TMO</th>
-            <th class="sup-num">NPS</th>
+            <th class="sup-num" data-sup-sort="at" tabindex="0">Atendidas</th>
+            <th class="sup-num" data-sup-sort="tmo" tabindex="0">TMO</th>
+            <th class="sup-num" data-sup-sort="nps" tabindex="0">NPS</th>
           </tr>
         </thead>
         <tbody id="sup-tbody"></tbody>
@@ -1357,6 +1367,7 @@ body { margin: 0; background: #f4f6fa; color: #1a1d21;
     <li>NS de BIMBO 95,2 % no cuadra con la fórmula del glosario (1−1/10=90 %).</li>
     <li>Dirección dice NS «subió 0,8 pts» pero 89,9−89,0=0,9.</li>
     <li>Mediana TMO del equipo aparece como 9:24 y como 9:39.</li>
+    <li>La composición del TMO no suma al TMO: BRADESCARD ASISTENCIAS suma 462 s frente a un TMO de 469 s (−7 s); CREDIAUTO 704 s frente a 720 s (−16 s); EMPLEADOS 742 s frente a 762 s (−20 s); en el resto las diferencias van de −7 s a +4 s (COPPEL VIDA suma 513 s frente a 509 s), salvo MODERNA, cuya espera es «s/d» y no se puede sumar. Además el % de conversación de la etiqueta no siempre coincide con segundos/TMO: ASISTENCIAS marca 86,0 % pero 397/469 = 84,6 %; BIMBO marca 84,7 % pero 415/494 = 84,0 %; en las demás carteras la diferencia es de 0,2 pts o menos.</li>
   </ul>
 </footer>
 
@@ -1721,7 +1732,7 @@ var selectedN = null;
 function sortedList(){
   var q = norm(searchInput.value.trim());
   var list = SUP_ASESORES.filter(function(a){
-    return !q || norm(a.nombre).indexOf(q) !== -1;
+    return !q || norm(a.nombre).indexOf(q) !== -1 || norm(a.cartera).indexOf(q) !== -1;
   });
   list.sort(function(a, b){
     var d = 0;
@@ -1765,7 +1776,14 @@ function renderList(){
     var c5 = document.createElement("td"); c5.className = "sup-num"; c5.textContent = fmtNPS(a.nps);
     if(a.nombre === "DAYLAN YOSHIMAR ALMAGUER ROCHA") c5.classList.add("sup-nps-neg", "sup-nps-bajo");
     tr.appendChild(c5);
+    tr.setAttribute("tabindex", "0");
     tr.addEventListener("click", function(){ openFicha(a.n); });
+    tr.addEventListener("keydown", function(ev){
+      if(ev.key === "Enter" || ev.key === " "){
+        ev.preventDefault();
+        openFicha(a.n);
+      }
+    });
     tbody.appendChild(tr);
   });
   countEl.textContent = list.length + " / 77 asesores";
@@ -1787,6 +1805,15 @@ function setSort(key){
 document.getElementById("sup-sort-at").addEventListener("click", function(){ setSort("at"); });
 document.getElementById("sup-sort-tmo").addEventListener("click", function(){ setSort("tmo"); });
 document.getElementById("sup-sort-nps").addEventListener("click", function(){ setSort("nps"); });
+document.querySelectorAll("#sup-table th[data-sup-sort]").forEach(function(th){
+  th.addEventListener("click", function(){ setSort(th.getAttribute("data-sup-sort")); });
+  th.addEventListener("keydown", function(ev){
+    if(ev.key === "Enter" || ev.key === " "){
+      ev.preventDefault();
+      setSort(th.getAttribute("data-sup-sort"));
+    }
+  });
+});
 searchInput.addEventListener("input", renderList);
 
 /* ---------- Ficha detallada ---------- */
@@ -1915,7 +1942,8 @@ window.__sup.setSort = setSort;
 "use strict";
 var root = document.getElementById("sup-tab");
 if(!root) return;
-var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+var REDUCED_MQ = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
+var REDUCED = REDUCED_MQ ? REDUCED_MQ.matches : false;
 function fmtInt(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
 
 /* ---------- Reloj de simulación ---------- */
@@ -1927,11 +1955,11 @@ var viewKind = "station", viewCall = null, viewSup = null;
 
 /* ---------- Datos reales (foto fija nov 2026, 18:08) ---------- */
 var ZONES = [
-  {key:"ASIS",  name:"BRADESCARD ASISTENCIAS", short:"ASISTENCIAS", ns:"88,1 %", vol:8143, volTxt:"8.143", n:16, prefix:"A", u0:2,   v0:2,  cols:4, rows:4, lab:{mode:"back", dx:0, dy:-23}},
+  {key:"ASIS",  name:"BRADESCARD ASISTENCIAS", short:"ASISTENCIAS", ns:"88,1 %", vol:8143, volTxt:"8.143", n:16, prefix:"A", u0:2,   v0:2,  cols:4, rows:4, lab:{mode:"back", dx:0, dy:-37}},
   {key:"COPPEL",name:"COPPEL VIDA",            short:"COPPEL VIDA", ns:"87,1 %", vol:3493, volTxt:"3.493", n:7,  prefix:"B", u0:17.5,v0:2,  cols:4, rows:2, lab:{dx:0,  dy:15}},
   {key:"CRED",  name:"CREDIAUTO",              short:"CREDIAUTO",   ns:"98,6 %", vol:1983, volTxt:"1.983", n:4,  prefix:"C", u0:2,   v0:15, cols:4, rows:1, lab:{dx:-16, dy:28}},
-  {key:"SEG",   name:"BRADESCARD SEGUROS",     short:"SEGUROS",     ns:"88,9 %", vol:1214, volTxt:"1.214", n:2,  prefix:"D", u0:18,  v0:15, cols:2, rows:1, lab:{dx:-41,dy:26}},
-  {key:"EMPL",  name:"EMPLEADOS",              short:"EMPLEADOS",   ns:"97,7 %", vol:379,  volTxt:"379",   n:1,  prefix:"E", u0:24,  v0:15, cols:1, rows:1, lab:{dx:-19,dy:39}},
+  {key:"SEG",   name:"BRADESCARD SEGUROS",     short:"SEGUROS",     ns:"88,9 %", vol:1214, volTxt:"1.214", n:2,  prefix:"D", u0:18,  v0:15, cols:2, rows:1, lab:{dx:-61,dy:26}},
+  {key:"EMPL",  name:"EMPLEADOS",              short:"EMPLEADOS",   ns:"97,7 %", vol:379,  volTxt:"379",   n:1,  prefix:"E", u0:24,  v0:15, cols:1, rows:1, lab:{dx:-40,dy:39}},
   {key:"LIV",   name:"LIVERPOOL",              short:"LIVERPOOL",   ns:"96,2 %", vol:209,  volTxt:"209",   n:1,  prefix:"F", u0:29,  v0:15, cols:1, rows:1, lab:{dx:3,  dy:36}}
 ];
 var TMO_GLOBAL = "8:43";
@@ -2009,6 +2037,8 @@ var mamparas = [];
 var zoneLayer = el("g", {id:"sup-zoneLayer"}, svg);
 var heatLayer = el("g", {id:"sup-heatLayer"}, svg);
 var stationLayer = el("g", {id:"sup-stationLayer"}, svg);
+var labelTopLayer = el("g", {id:"sup-labelTopLayer"}, svg);
+var textLayer = el("g", {id:"sup-textLayer"}, svg);
 
 ZONES.forEach(function(z){
   var du = 3.2, dv = 3.2;
@@ -2017,6 +2047,15 @@ ZONES.forEach(function(z){
   el("polygon", {points: poly(p), fill:"#ffffff", stroke:"#cbd5e1", "stroke-width":1.2,
     "class":"sup-zone-platform", "data-zone":z.key, tabindex:"0", role:"button",
     "aria-label":"Zona "+z.name+", NS "+z.ns+", volumen "+z.volTxt}, zoneLayer);
+  /* Error 23: el centro de COPPEL queda cubierto por las estaciones; el borde
+     visible de la zona (banda de 14 px sobre su arista) es el punto clicable.
+     Va en zoneLayer, bajo las estaciones, para no robarles el clic. */
+  if(z.key === "COPPEL"){
+    el("polygon", {points: poly(p), fill:"none", stroke:"#000000", "stroke-opacity":0,
+      "stroke-width":14, "pointer-events":"stroke",
+      "class":"sup-zone-platform sup-zone-border", "data-zone":z.key,
+      "aria-hidden":"true"}, zoneLayer);
+  }
   var h = el("polygon", {points: poly(p), fill: heatColor(z.vol), opacity:0.38,
     stroke: heatColor(z.vol), "stroke-width":1.5, "class":"sup-heat-poly"}, heatLayer);
   h.setAttribute("data-zone", z.key);
@@ -2025,7 +2064,7 @@ ZONES.forEach(function(z){
     : iso(u1+1.6, v1+1.6);
   var lx = anchor.x + z.lab.dx, ly = anchor.y + z.lab.dy;
   var line1 = z.short + " · NS " + z.ns;
-  var line2 = z.volTxt + " ÷ 500 ≈ " + z.n + " est.";
+  var line2 = z.volTxt + " llamadas · " + (z.n === 1 ? "1 estación" : z.n + " estaciones");
   var w = Math.max(line1.length, line2.length) * 6.8 + 24, hh = 28;
   el("rect", {x: lx-w/2, y: ly-hh/2, width: w, height: hh, rx: 7,
     fill:"#ffffff", stroke:"#cbd5e1", "stroke-width":1}, zoneLayer);
@@ -2056,9 +2095,9 @@ ZONES.forEach(function(z){
         fill:"#475569", stroke:"#1e293b", "stroke-width":.6}, g);
       el("rect", {x:s.x+11, y:s.y-5, width:6.5, height:3.5, rx:1, fill:"#1e293b", stroke:"#0f172a", "stroke-width":.5}, g);
       el("rect", {x:s.x+11.8, y:s.y-7, width:5, height:1.8, rx:.9, fill:"#334155", stroke:"#0f172a", "stroke-width":.4}, g);
-      el("rect", {x:s.x-2, y:s.y-24, width:13, height:10, rx:1.5, fill:"#334155", stroke:"#1e293b", "stroke-width":.8, "class":"sup-monitor-frame"}, g);
-      var screen = el("rect", {x:s.x-0.5, y:s.y-22.5, width:10, height:7, rx:1, fill:STATES.disponible.color, "class":"sup-monitor"}, g);
-      var glyph = el("g", {"class":"sup-screen-glyph", transform:"translate("+(s.x+4.5)+","+(s.y-19)+")"}, g);
+      el("rect", {x:s.x-2, y:s.y-24, width:13, height:12, rx:1.5, fill:"#334155", stroke:"#1e293b", "stroke-width":.8, "class":"sup-monitor-frame"}, g);
+      var screen = el("rect", {x:s.x-0.5, y:s.y-22.5, width:10, height:9, rx:1, fill:STATES.disponible.color, "class":"sup-monitor"}, g);
+      var glyph = el("g", {"class":"sup-screen-glyph", transform:"translate("+(s.x+4.5)+","+(s.y-17)+")"}, g);
       var glyphPhone = el("text", {x:0, y:2.2, "text-anchor":"middle", fill:"#fff"}, glyph);
       glyphPhone.textContent = "☎";
       var glyphCheck = el("path", {d:"M -2.6 0.2 L -0.9 1.9 L 2.7 -2", fill:"none", stroke:"#fff", "stroke-width":1.4, "stroke-linecap":"round", "stroke-linejoin":"round"}, glyph);
@@ -2076,7 +2115,7 @@ ZONES.forEach(function(z){
         el("rect", {x:s.x-14, y:s.y-8, width:5, height:6, rx:1, fill:"#ffffff", stroke:"#94a3b8", "stroke-width":.7}, g);
         el("path", {d:"M "+(s.x-9)+" "+(s.y-6)+" q 3.5 2 0 4", fill:"none", stroke:"#94a3b8", "stroke-width":.9}, g);
       }
-      var idT = el("text", {x:s.x+1, y:s.y+24, "text-anchor":"middle", "class":"sup-st-id"}, g);
+      var idT = el("text", {x:s.x+1, y:s.y+24, "text-anchor":"middle", "class":"sup-st-id"}, textLayer);
       idT.textContent = id;
       stations.push({id:id, zone:z, g:g, dot:dot, screen:screen, sx:s.x, sy:s.y, u:u, v:v,
         asesor:asesor, asesorReal:null, walking:false,
@@ -2138,17 +2177,20 @@ mamparas.forEach(function(m){
 [
   {key:"ASIS",  cu:13.2, cv:0.8,  dx:0,   dy:-21, w:74},
   {key:"COPPEL",cu:28.7, cv:0.8,  dx:0,   dy:-22, w:72},
-  {key:"CRED",  cu:13.2, cv:13.8, dx:0,   dy:-22, w:68},
+  {key:"CRED",  cu:6.7, cv:19.9, dx:-40, dy:-22, w:68},
   {key:"SEG",   cu:16.8, cv:13.8, dx:-64, dy:-21, w:64},
-  {key:"EMPL",  cu:25.6, cv:13.8, dx:0,   dy:-22, w:72},
+  {key:"EMPL",  cu:25.6, cv:13.8, dx:-56, dy:26, w:72},
   {key:"LIV",   cu:30.6, cv:13.8, dx:0,   dy:-22, w:68}
 ].forEach(function(sg){
   var z = ZONES.filter(function(zz){ return zz.key===sg.key; })[0];
   var p = iso(sg.cu, sg.cv);
   var px = p.x + sg.dx, py = p.y + sg.dy;
-  el("line", {x1:p.x, y1:py+15, x2:p.x, y2:p.y, stroke:"#64748b", "stroke-width":2}, zoneLayer);
-  el("rect", {x:px, y:py, width:sg.w, height:15, rx:3, fill:"#ffffff", stroke:"#cbd5e1", "stroke-width":1}, zoneLayer);
-  var t = el("text", {x:px+sg.w/2, y:py+11, "text-anchor":"middle", "class":"sup-sign-label"}, zoneLayer);
+  /* CRED: su placa quedaba bajo el escritorio de A-16 ("REDIAUTO"); solo esta
+     placa se dibuja en la capa superior para que ningun escritorio la tape. */
+  var layer = (sg.key === "CRED") ? labelTopLayer : zoneLayer;
+  el("line", {x1:p.x, y1:py+15, x2:p.x, y2:p.y, stroke:"#64748b", "stroke-width":2}, layer);
+  el("rect", {x:px, y:py, width:sg.w, height:15, rx:3, fill:"#ffffff", stroke:"#cbd5e1", "stroke-width":1}, layer);
+  var t = el("text", {x:px+sg.w/2, y:py+11, "text-anchor":"middle", "class":"sup-sign-label"}, layer);
   t.textContent = z.short;
 });
 var supPlat = [iso(29,0), iso(33,0), iso(33,4), iso(29,4)];
@@ -2161,7 +2203,7 @@ el("rect", {x:876.5, y:271.5, width:7, height:5, rx:1, fill:"#38bdf8"}, zoneLaye
 el("polygon", {points:"866,285 878,278 890,285 878,292", fill:"#cbd5e1", stroke:"#94a3b8", "stroke-width":1}, zoneLayer);
 el("polygon", {points:"866,285 878,292 878,296 866,289", fill:"#94a3b8"}, zoneLayer);
 el("ellipse", {cx:877, cy:298, rx:5.5, ry:3, fill:"#94a3b8", stroke:"#64748b", "stroke-width":.8}, zoneLayer);
-[["PASILLO",682,159],["PASILLO",500,266],["PASILLO",327,148],["PASILLO",756,363]].forEach(function(l){
+[["PASILLO",682,159],["PASILLO",500,262],["PASILLO",327,148],["PASILLO",756,363]].forEach(function(l){
   var t = el("text", {x:l[1], y:l[2], "text-anchor":"middle", "class":"sup-pasillo-label"}, svg);
   t.textContent = l[0];
 });
@@ -2172,7 +2214,7 @@ el("rect", {x:60, y:450, width:880, height:56, rx:10, fill:"#ffffff", stroke:"#7
 el("rect", {x:60, y:450, width:150, height:56, rx:10, fill:"#7c3aed"}, queue);
 var qt = el("text", {x:135, y:474, "text-anchor":"middle", fill:"#fff", "font-size":12, "font-weight":700}, queue);
 qt.textContent = "COLA DE ENTRADA";
-var qs = el("text", {x:135, y:491, "text-anchor":"middle", fill:"#e9d5ff", "font-size":10.5}, queue);
+var qs = el("text", {x:225, y:500, "text-anchor":"start", fill:"#7c3aed", "font-size":10.5}, queue);
 qs.textContent = "llamadas esperando · SIMULACIÓN";
 var qCount = el("text", {x:905, y:485, "text-anchor":"end", "font-size":13, "font-weight":800, fill:"#475569"}, queue);
 qCount.textContent = "En espera: 0";
@@ -2193,7 +2235,7 @@ var sup = el("g", {id:"sup-supervisor-walker", tabindex:"0", role:"button",
 el("circle", {cx:0, cy:0, r:13, fill:"rgba(14,165,233,.18)", stroke:"#0ea5e9", "stroke-width":1.5}, sup);
 el("circle", {cx:0, cy:-4, r:5, fill:"#0ea5e9", stroke:"#fff", "stroke-width":1.5}, sup);
 el("path", {d:"M -6 8 Q 0 0 6 8 L 6 11 L -6 11 Z", fill:"#0284c7", stroke:"#fff", "stroke-width":1}, sup);
-var supT = el("text", {x:0, y:-20, "text-anchor":"middle", "font-size":9, "font-weight":800, fill:"#0369a1"}, sup);
+var supT = el("text", {x:0, y:-20, "text-anchor":"middle", "font-size":10, "font-weight":800, fill:"#0369a1"}, sup);
 supT.textContent = "SUPERVISOR";
 sup.setAttribute("transform", "translate("+supWaypoints[0].x+","+supWaypoints[0].y+")");
 
@@ -2313,7 +2355,7 @@ var SLOTS = {
   tarde:{label:"Tarde", hours:"13:00–19:00", hour:16, waiting:4, callShare:0.65,
     pausaShare:0.08, walkers:2, spawnMs:1400, asa:"ASA ~12 s (simulación)"},
   noche:{label:"Noche", hours:"19:00–23:00", hour:22, waiting:9, callShare:0.80,
-    pausaShare:0.05, walkers:3, spawnMs:900, asa:"ASA 20 s · pico real 23:00 h"}
+    pausaShare:0.05, walkers:3, spawnMs:900, asa:"ASA ~15 s (simulación) · pico real 23:00 h: 20 s"}
 };
 var currentSlot = "noche";
 try{
@@ -2440,9 +2482,9 @@ var activeCalls = [];
 var waiting = 0;
 
 function spawnCall(){
-  if(REDUCED || paused) return;
+  if(REDUCED || paused || document.hidden) return;
   var free = stations.filter(function(s){ return s.state==="disponible"; });
-  if(!free.length) { waiting++; updateQueue(); return; }
+  if(!free.length) { if(waiting < SLOTS[currentSlot].waiting) waiting++; updateQueue(); return; }
   var target = free[Math.floor(Math.random()*free.length)];
   var from = {x: 220 + Math.random()*560, y: 477};
   var to = {x: target.sx, y: target.sy - 30};
@@ -2492,7 +2534,8 @@ function bezier(p0,p1,p2,t){
 
 var lastTs = 0, supIdx = 0, supDwellUntil = 0, supPos = {x:supWaypoints[0].x, y:supWaypoints[0].y};
 function frame(ts){
-  if(REDUCED) return;
+  if(REDUCED || docHidden){ rafRunning = false; return; }
+  rafRunning = true;
   var dt = Math.min(0.05, (ts - lastTs)/1000 || 0.016); lastTs = ts;
   if(paused){ requestAnimationFrame(frame); return; }
   simNow += dt * 1000 * speedFactor;
@@ -2566,21 +2609,63 @@ function tick(){
   if(currentFilter !== "all") applyFilter();
 }
 
-var spawnTimer = null, tickTimer = null;
+/* Pausa por visibilidad (revisión 9): temporizadores y rAF de ambas
+   simulaciones. docHidden nace de document.hidden para que tampoco
+   arranquen si la página carga ya oculta. */
+var spawnTimer = null, tickTimer = null, queueTimer = null, walkerTimer = null, inspectorTimer = null;
+var docHidden = document.hidden, rafRunning = false;
+function stopSimTimers(){
+  if(spawnTimer){ clearInterval(spawnTimer); spawnTimer = null; }
+  if(tickTimer){ clearInterval(tickTimer); tickTimer = null; }
+  if(queueTimer){ clearInterval(queueTimer); queueTimer = null; }
+  if(walkerTimer){ clearInterval(walkerTimer); walkerTimer = null; }
+  if(inspectorTimer){ clearInterval(inspectorTimer); inspectorTimer = null; }
+}
+function startSimTimers(){
+  if(REDUCED || paused || docHidden) return;
+  stopSimTimers();
+  startIntervals();
+  queueTimer = setInterval(updateQueue, 1000);
+  walkerTimer = setInterval(maybeSpawnWalkers, 1500);
+  inspectorTimer = setInterval(refreshInspectorTimer, 1000);
+  if(!rafRunning){ rafRunning = true; requestAnimationFrame(frame); }
+  updateQueue();
+}
+/* prefers-reduced-motion en caliente (revisión 26): si el usuario activa el
+   ajuste con la página ya abierta, se aplica sin recargar. Reutiliza los
+   temporizadores de la revisión 9: al activar, se paran; al desactivar, se
+   reanudan. Requiere E9-sup-1 aplicado antes. */
+if(REDUCED_MQ){
+  var onReducedChange = function(ev){
+    REDUCED = ev.matches;
+    window.__sup.reduced = REDUCED;
+    if(REDUCED){ stopSimTimers(); waiting = 3; updateQueue(); }
+    else { startSimTimers(); spawnCall(); spawnCall(); }
+  };
+  if(REDUCED_MQ.addEventListener) REDUCED_MQ.addEventListener("change", onReducedChange);
+  else if(REDUCED_MQ.addListener) REDUCED_MQ.addListener(onReducedChange);
+}
 function startIntervals(){
+  if(docHidden) return;
   if(spawnTimer) clearInterval(spawnTimer);
   if(tickTimer) clearInterval(tickTimer);
   spawnTimer = setInterval(spawnCall, SLOTS[currentSlot].spawnMs / speedFactor);
   tickTimer = setInterval(tick, 2000 / speedFactor);
 }
-if(!REDUCED){
-  startIntervals();
-  setInterval(updateQueue, 1000);
-  setInterval(maybeSpawnWalkers, 1500);
-  requestAnimationFrame(frame);
+document.addEventListener("visibilitychange", function(){
+  if(document.hidden){
+    docHidden = true;
+    stopSimTimers();
+  } else {
+    docHidden = false;
+    startSimTimers();
+  }
+});
+if(!REDUCED && !document.hidden){
+  startSimTimers();
   spawnCall(); spawnCall();
   setTimeout(function(){ maybeSpawnWalkers(); maybeSpawnWalkers(); }, 800);
-} else {
+} else if(REDUCED){
   waiting = 3; updateQueue();
 }
 updateCounts();
@@ -2610,7 +2695,8 @@ function refreshInspectorTimer(){
     document.getElementById("sup-inspTimer").textContent = fmtTime(nowSim() - viewCall.startSim);
   }
 }
-setInterval(refreshInspectorTimer, 1000);
+
+/* El refresco del inspector lo gestionan startSimTimers/stopSimTimers (revisión 9). */
 function openInspector(st){
   current = st; viewKind = "station"; viewCall = null; viewSup = null;
   document.getElementById("sup-inspTitle").textContent = "Estación " + st.id;
@@ -2620,7 +2706,8 @@ function openInspector(st){
       : " · Sin asesor asignado en la lista de 77 (sin dato de nombre)");
   var b = document.getElementById("sup-inspEstado");
   b.textContent = STATES[st.state].label;
-  b.style.background = STATES[st.state].color;
+  b.style.background = st.state === "llamada" ? "#c2410c" : st.state === "disponible" ? "#166534" : STATES[st.state].color;
+  b.style.color = (st.state === "post" || st.state === "pausa") ? "#1f2937" : "#fff";
   document.getElementById("sup-inspCall").textContent = st.state==="llamada" ? st.callId : "—";
   document.getElementById("sup-inspTimer").textContent =
     st.state==="llamada" ? fmtTime(nowSim()-st.callStart) : "—";
@@ -2694,7 +2781,7 @@ function openSupInspector(){
   document.getElementById("sup-inspCartera").textContent =
     "Apoyando a la estación " + st.id + " — " + st.zone.name;
   var b = document.getElementById("sup-inspEstado");
-  b.textContent = "En ronda"; b.style.background = "#0ea5e9";
+  b.textContent = "En ronda"; b.style.background = "#075985";
   document.getElementById("sup-inspCall").textContent = st.id + " · " + STATES[st.state].label;
   document.getElementById("sup-inspTimer").textContent = "—";
   document.getElementById("sup-inspNS").textContent = st.zone.ns;
@@ -2834,6 +2921,7 @@ function applyPauseLabel(){
 pauseBtn.addEventListener("click", function(){
   paused = !paused;
   applyPauseLabel();
+  if(!paused) startSimTimers();
 });
 function applySpeedLabel(){
   speedBtn.textContent = "Velocidad " + speedFactor + "x";
@@ -2947,7 +3035,8 @@ setTimeSlot(currentSlot);
    IDs y clases prefijados "camp-". Expone window.__camp para verificación. */
 (function(){
 "use strict";
-var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+var REDUCED_MQ = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
+var REDUCED = REDUCED_MQ ? REDUCED_MQ.matches : false;
 
 /* ---------- Formato español ---------- */
 function fmtInt(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
@@ -2966,12 +3055,12 @@ var ZONES = [
    rec:8143, ate:6882, pctAte:84.5, aba:1261, dem:819, ns:88.1, tmo:"7:49", tmoS:469,
    asa:16, esp:15, gt20:10.4, nps:47.9, enc:2111,
    comp:{pen:"4 s", penS:4, conv:"6:37", convS:397, convPct:86.0, esp:"15 s", espS:15, pos:"46 s", posS:46},
-   n:16, prefix:"A", u0:1, v0:1, cols:4, rows:4, lab:{mode:"back", dx:0, dy:-23}},
+   n:16, prefix:"A", u0:1, v0:1, cols:4, rows:4, lab:{mode:"back", dx:0, dy:-37}},
   {key:"COPPEL", name:"COPPEL VIDA", short:"COPPEL VIDA", pareto:"A",
    rec:3493, ate:2901, pctAte:83.1, aba:592, dem:374, ns:87.1, tmo:"8:29", tmoS:509,
    asa:13, esp:10, gt20:14.0, nps:19.6, enc:703,
    comp:{pen:"10 s", penS:10, conv:"7:20", convS:440, convPct:86.5, esp:"10 s", espS:10, pos:"53 s", posS:53},
-   n:7, prefix:"B", u0:15, v0:1, cols:4, rows:2, lab:{mode:"back", dx:60, dy:-30}},
+   n:7, prefix:"B", u0:15, v0:1, cols:4, rows:2, lab:{mode:"back", dx:60, dy:-36}},
   {key:"CRED", name:"CREDIAUTO", short:"CREDIAUTO", pareto:"A",
    rec:1983, ate:1598, pctAte:80.6, aba:385, dem:22, ns:98.6, tmo:"12:00", tmoS:720,
    asa:3, esp:2, gt20:1.3, nps:71.9, enc:1023,
@@ -2981,47 +3070,47 @@ var ZONES = [
    rec:1214, ate:943, pctAte:77.7, aba:271, dem:105, ns:88.9, tmo:"11:29", tmoS:689,
    asa:17, esp:13, gt20:11.1, nps:31.2, enc:535,
    comp:{pen:"8 s", penS:8, conv:"9:53", convS:593, convPct:86.2, esp:"13 s", espS:13, pos:"1:08", posS:68},
-   n:2, prefix:"D", u0:15, v0:9, cols:2, rows:1, sign:{cu:13.8, cv:10.6, dx:15, dy:30, w:64}},
+   n:2, prefix:"D", u0:15, v0:9, cols:2, rows:1, sign:{cu:13.8, cv:10.6, dx:15, dy:48, w:64}},
   {key:"EMPL", name:"EMPLEADOS", short:"EMPLEADOS", pareto:"C",
    rec:379, ate:306, pctAte:80.7, aba:73, dem:7, ns:97.7, tmo:"12:42", tmoS:762,
    asa:2, esp:2, gt20:1.4, nps:88.1, enc:143,
    comp:{pen:"2 s", penS:2, conv:"10:57", convS:657, convPct:86.1, esp:"2 s", espS:2, pos:"1:21", posS:81},
-   n:1, prefix:"E", u0:22, v0:9, cols:1, rows:1, sign:{cu:20.8, cv:7.8, dx:-15, dy:34, w:72}},
+   n:1, prefix:"E", u0:22, v0:9, cols:1, rows:1, sign:{cu:20.8, cv:7.8, dx:-15, dy:48, w:72}},
   {key:"LIV", name:"LIVERPOOL", short:"LIVERPOOL", pareto:"C",
    rec:209, ate:186, pctAte:89.0, aba:23, dem:7, ns:96.2, tmo:"8:58", tmoS:538,
    asa:3, esp:2, gt20:2.8, nps:89.0, enc:100,
    comp:{pen:"4 s", penS:4, conv:"7:49", convS:469, convPct:87.0, esp:"2 s", espS:2, pos:"58 s", posS:58},
-   n:1, prefix:"F", u0:28, v0:9, cols:1, rows:1, sign:{cu:26.8, cv:7.8, dx:-20, dy:116, w:72}},
+   n:1, prefix:"F", u0:28, v0:9, cols:1, rows:1, sign:{cu:26.8, cv:7.8, dx:-20, dy:130, w:72}},
   {key:"LALA", name:"LALA", short:"LALA", pareto:"B",
    rec:177, ate:149, pctAte:84.2, aba:28, dem:6, ns:96.0, tmo:"8:45", tmoS:525,
    asa:3, esp:2, gt20:3.4, nps:79.5, enc:122,
    comp:{pen:"4 s", penS:4, conv:"7:28", convS:448, convPct:85.3, esp:"2 s", espS:2, pos:"1:08", posS:68},
-   n:1, prefix:"G", u0:34, v0:9, cols:1, rows:1, sign:{cu:32.8, cv:7.8, dx:-40, dy:34, w:64}},
+   n:1, prefix:"G", u0:34, v0:9, cols:1, rows:1, sign:{cu:32.8, cv:7.8, dx:-40, dy:48, w:64}},
   {key:"JAC", name:"JAC", short:"JAC", pareto:"C",
    rec:166, ate:145, pctAte:87.3, aba:21, dem:9, ns:93.8, tmo:"9:58", tmoS:598,
    asa:5, esp:4, gt20:6.0, nps:76.2, enc:119,
    comp:{pen:"4 s", penS:4, conv:"8:35", convS:515, convPct:86.1, esp:"4 s", espS:4, pos:"1:09", posS:69},
-   n:1, prefix:"H", u0:2, v0:16, cols:1, rows:1, sign:{cu:0.8, cv:14.8, dx:-25, dy:34, w:64}},
+   n:1, prefix:"H", u0:2, v0:16, cols:1, rows:1, sign:{cu:0.8, cv:14.8, dx:-25, dy:48, w:64}},
   {key:"SUZUKI", name:"SUZUKI", short:"SUZUKI", pareto:"C",
    rec:126, ate:109, pctAte:86.5, aba:17, dem:0, ns:100.0, tmo:"9:45", tmoS:585,
    asa:2, esp:1, gt20:0.0, nps:93.5, enc:124,
    comp:{pen:"3 s", penS:3, conv:"8:36", convS:516, convPct:88.1, esp:"1 s", espS:1, pos:"59 s", posS:59},
-   n:1, prefix:"I", u0:10, v0:16, cols:1, rows:1, sign:{cu:8.8, cv:14.8, dx:0, dy:34, w:64}},
+   n:1, prefix:"I", u0:10, v0:16, cols:1, rows:1, sign:{cu:8.8, cv:14.8, dx:0, dy:48, w:64}},
   {key:"LIVGMM", name:"LIVERPOOL GMM", short:"LIV GMM", pareto:"C",
    rec:85, ate:76, pctAte:89.4, aba:9, dem:2, ns:97.5, tmo:"5:28", tmoS:328,
    asa:4, esp:3, gt20:2.5, nps:95.2, enc:63,
    comp:{pen:"3 s", penS:3, conv:"4:32", convS:272, convPct:83.0, esp:"3 s", espS:3, pos:"46 s", posS:46},
-   n:1, prefix:"J", u0:18, v0:16, cols:1, rows:1, sign:{cu:16.8, cv:14.8, dx:0, dy:34, w:64}},
+   n:1, prefix:"J", u0:18, v0:16, cols:1, rows:1, sign:{cu:16.8, cv:14.8, dx:0, dy:48, w:64}},
   {key:"MODERNA", name:"MODERNA", short:"MODERNA", pareto:"C",
    rec:60, ate:46, pctAte:76.7, aba:14, dem:1, ns:97.7, tmo:"5:31", tmoS:331,
    asa:5, esp:5, gt20:1.7, nps:null, enc:0,
    comp:{pen:"5 s", penS:5, conv:"4:51", convS:291, convPct:88.0, esp:null, espS:0, pos:"36 s", posS:36},
-   n:1, prefix:"K", u0:26, v0:16, cols:1, rows:1, sign:{cu:24.8, cv:14.8, dx:0, dy:34, w:64}},
+   n:1, prefix:"K", u0:26, v0:16, cols:1, rows:1, sign:{cu:24.8, cv:14.8, dx:0, dy:48, w:64}},
   {key:"BIMBO", name:"BIMBO", short:"BIMBO", pareto:"C",
    rec:25, ate:10, pctAte:40.0, aba:15, dem:1, ns:95.2, tmo:"8:14", tmoS:494,
    asa:6, esp:5, gt20:4.8, nps:60.0, enc:15,
    comp:{pen:"6 s", penS:6, conv:"6:55", convS:415, convPct:84.7, esp:"5 s", espS:5, pos:"1:03", posS:63},
-   n:1, prefix:"L", u0:34, v0:16, cols:1, rows:1, sign:{cu:32.8, cv:14.8, dx:0, dy:52, w:64}}
+   n:1, prefix:"L", u0:34, v0:16, cols:1, rows:1, sign:{cu:32.8, cv:14.8, dx:0, dy:66, w:64}}
 ];
 /* Totales de Dirección (DATOS.md) para el pie de tabla. */
 var TOTALES = {rec:16060, ate:13351, aba:2709, dem:1353, ns:89.9, tmo:"8:43", asa:10, nps:37.4};
@@ -3076,6 +3165,34 @@ var CARTERA_COLOR = {ASIS:"#ff6900", COPPEL:"#0ea5e9", CRED:"#16a34a",
 var CARTERA_DARK = {ASIS:"#c2410c", COPPEL:"#0369a1", CRED:"#15803d",
   SEG:"#6b21a8", EMPL:"#475569", LIV:"#92400e", LALA:"#9d174d", JAC:"#155e75",
   SUZUKI:"#991b1b", LIVGMM:"#065f46", MODERNA:"#713f12", BIMBO:"#3730a3"};
+var CARTERA_BADGE_BG = {ASIS:"#c2410c", COPPEL:"#075985", CRED:"#166534",
+  SEG:"#6b21a8", EMPL:"#475569", LIV:"#92400e", LALA:"#9d174d", JAC:"#155e75",
+  SUZUKI:"#991b1b", LIVGMM:"#065f46", MODERNA:"#713f12", BIMBO:"#3730a3"};
+/* Insignia de ficha de Campañas: fondo oscuro verificado >=4,5:1 con texto
+   blanco. Las 4 variantes prescritas (#c2410c, #075985, #166534, #92400e) y
+   el resto reutilizan CARTERA_DARK, ya en uso. Sin variante en el mapa, se
+   oscurece el color de cartera hasta pasar 4,5:1 con blanco. */
+function badgeBgForWhite(hex){
+  function lum(h){
+    var c = [1,3,5].map(function(i){
+      var v = parseInt(h.substr(i,2),16)/255;
+      return v <= 0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4);
+    });
+    return 0.2126*c[0] + 0.7152*c[1] + 0.0722*c[2];
+  }
+  function ratio(a, b){
+    var x = lum(a), y = lum(b);
+    return (Math.max(x,y)+0.05)/(Math.min(x,y)+0.05);
+  }
+  var c = hex, f = 1;
+  while(ratio(c, "#ffffff") < 4.5 && f > 0.05){
+    f -= 0.05;
+    c = "#" + [1,3,5].map(function(i){
+      return ("0" + Math.round(parseInt(hex.substr(i,2),16)*f).toString(16)).slice(-2);
+    }).join("");
+  }
+  return c;
+}
 /* Figura de persona isométrica (cabeza, cuerpo, diadema) en coords locales
    con origen en el frente del escritorio. standing=true añade piernas. */
 function drawPerson(g, shirt, dark, standing){
@@ -3161,6 +3278,7 @@ var zoneLayer = el("g", {id:"camp-zoneLayer"}, svg);
 var heatLayer = el("g", {id:"camp-heatLayer"}, svg);
 var stationLayer = el("g", {id:"camp-stationLayer"}, svg);
 var walkerLayer = el("g", {id:"camp-walkerLayer"}, svg);
+var textLayer = el("g", {id:"camp-textLayer"}, svg);
 
 ZONES.forEach(function(z){
   var du = 3.1, dv = 3.1;
@@ -3169,6 +3287,15 @@ ZONES.forEach(function(z){
   el("polygon", {points: poly(p), fill:"#ffffff", stroke:"#cbd5e1", "stroke-width":1.2,
     "class":"camp-zone-platform", "data-camp-zone":z.key, tabindex:"0", role:"button",
     "aria-label":"Zona "+z.name+", NS "+fmtPct(z.ns)+", volumen "+fmtInt(z.rec)}, zoneLayer);
+  /* Error 23: el centro de COPPEL queda cubierto por las estaciones; el borde
+     visible de la zona (banda de 14 px sobre su arista) es el punto clicable.
+     Va en zoneLayer, bajo las estaciones, para no robarles el clic. */
+  if(z.key === "COPPEL"){
+    el("polygon", {points: poly(p), fill:"none", stroke:"#000000", "stroke-opacity":0,
+      "stroke-width":14, "pointer-events":"stroke",
+      "class":"camp-zone-platform camp-zone-border", "data-camp-zone":z.key,
+      "aria-hidden":"true"}, zoneLayer);
+  }
   var h = el("polygon", {points: poly(p), fill: heatColor(z.rec), opacity:0.38,
     stroke: heatColor(z.rec), "stroke-width":1.5, "class":"camp-heat-poly"}, heatLayer);
   h.setAttribute("data-camp-zone", z.key);
@@ -3182,7 +3309,7 @@ ZONES.forEach(function(z){
         : iso(u1+1.6, v1+1.6));
     var lx = anchor.x + z.lab.dx, ly = anchor.y + z.lab.dy;
     var line1 = z.short + " · NS " + fmtPct(z.ns);
-    var line2 = fmtInt(z.rec) + " ÷ 500 ≈ " + z.n + " est.";
+    var line2 = fmtInt(z.rec) + " llamadas · " + (z.n === 1 ? "1 estación" : z.n + " estaciones");
     var w = Math.max(line1.length, line2.length) * 6.8 + 24, hh = 28;
     el("rect", {x: lx-w/2, y: ly-hh/2, width: w, height: hh, rx: 7,
       fill:"#ffffff", stroke:"#cbd5e1", "stroke-width":1, "class":"camp-zone-pill"}, zoneLayer);
@@ -3215,9 +3342,9 @@ ZONES.forEach(function(z){
         fill:"#475569", stroke:"#1e293b", "stroke-width":.6}, g);
       el("rect", {x:s.x+11, y:s.y-5, width:6.5, height:3.5, rx:1, fill:"#1e293b", stroke:"#0f172a", "stroke-width":.5}, g);
       el("rect", {x:s.x+11.8, y:s.y-7, width:5, height:1.8, rx:.9, fill:"#334155", stroke:"#0f172a", "stroke-width":.4}, g);
-      el("rect", {x:s.x-2, y:s.y-24, width:13, height:10, rx:1.5, fill:"#334155", stroke:"#1e293b", "stroke-width":.8}, g);
-      var screen = el("rect", {x:s.x-0.5, y:s.y-22.5, width:10, height:7, rx:1, fill:STATES.disponible.color, "class":"camp-monitor"}, g);
-      var glyph = el("g", {"class":"camp-screen-glyph", transform:"translate("+(s.x+4.5)+","+(s.y-19)+")"}, g);
+      el("rect", {x:s.x-2, y:s.y-24, width:13, height:12, rx:1.5, fill:"#334155", stroke:"#1e293b", "stroke-width":.8}, g);
+      var screen = el("rect", {x:s.x-0.5, y:s.y-22.5, width:10, height:9, rx:1, fill:STATES.disponible.color, "class":"camp-monitor"}, g);
+      var glyph = el("g", {"class":"camp-screen-glyph", transform:"translate("+(s.x+4.5)+","+(s.y-17)+")"}, g);
       var glyphPhone = el("text", {x:0, y:2.2, "text-anchor":"middle", fill:"#fff"}, glyph);
       glyphPhone.textContent = "☎";
       var glyphCheck = el("path", {d:"M -2.6 0.2 L -0.9 1.9 L 2.7 -2", fill:"none", stroke:"#fff", "stroke-width":1.4, "stroke-linecap":"round", "stroke-linejoin":"round"}, glyph);
@@ -3235,7 +3362,7 @@ ZONES.forEach(function(z){
         el("rect", {x:s.x-14, y:s.y-8, width:5, height:6, rx:1, fill:"#ffffff", stroke:"#94a3b8", "stroke-width":.7}, g);
         el("path", {d:"M "+(s.x-9)+" "+(s.y-6)+" q 3.5 2 0 4", fill:"none", stroke:"#94a3b8", "stroke-width":.9}, g);
       }
-      var idT = el("text", {x:s.x+1, y:s.y+24, "text-anchor":"middle", "class":"camp-st-id"}, g);
+      var idT = el("text", {x:s.x+1, y:s.y+24, "text-anchor":"middle", "class":"camp-st-id"}, textLayer);
       idT.textContent = id;
       stations.push({id:id, zone:z, g:g, dot:dot, screen:screen, sx:s.x, sy:s.y, u:u, v:v,
         asesor:asesor, asesorReal:null, walking:false, glyphs:{phone:glyphPhone, check:glyphCheck, clock:glyphClock, pause:glyphPause},
@@ -3313,7 +3440,7 @@ el("rect", {x:707.5, y:415.5, width:7, height:5, rx:1, fill:"#38bdf8"}, zoneLaye
 el("polygon", {points:"697,429 709,422 721,429 709,436", fill:"#cbd5e1", stroke:"#94a3b8", "stroke-width":1}, zoneLayer);
 el("polygon", {points:"697,429 709,436 709,440 697,433", fill:"#94a3b8"}, zoneLayer);
 el("ellipse", {cx:708, cy:442, rx:5.5, ry:3, fill:"#94a3b8", stroke:"#64748b", "stroke-width":.8}, zoneLayer);
-[["PASILLO",700,120],["PASILLO",540,300],["PASILLO",760,470]].forEach(function(l){
+[["PASILLO",700,94],["PASILLO",540,300],["PASILLO",760,470]].forEach(function(l){
   var t = el("text", {x:l[1], y:l[2], "text-anchor":"middle", "class":"camp-pasillo-label"}, svg);
   t.textContent = l[0];
 });
@@ -3345,7 +3472,7 @@ var sup = el("g", {id:"camp-supervisor", tabindex:"0", role:"button",
 el("circle", {cx:0, cy:0, r:13, fill:"rgba(14,165,233,.18)", stroke:"#0ea5e9", "stroke-width":1.5}, sup);
 el("circle", {cx:0, cy:-4, r:5, fill:"#0ea5e9", stroke:"#fff", "stroke-width":1.5}, sup);
 el("path", {d:"M -6 8 Q 0 0 6 8 L 6 11 L -6 11 Z", fill:"#0284c7", stroke:"#fff", "stroke-width":1}, sup);
-var supT = el("text", {x:0, y:-20, "text-anchor":"middle", "font-size":9, "font-weight":800, fill:"#0369a1"}, sup);
+var supT = el("text", {x:0, y:-20, "text-anchor":"middle", "font-size":10, "font-weight":800, fill:"#0369a1"}, sup);
 supT.textContent = "SUPERVISOR";
 sup.setAttribute("transform", "translate("+supWaypoints[0].x+","+supWaypoints[0].y+")");
 
@@ -3469,7 +3596,7 @@ var SLOTS = {
   tarde:{label:"Tarde", hours:"13:00–19:00", hour:16, waiting:4, callShare:0.65,
     pausaShare:0.08, walkers:2, spawnMs:1400, asa:"ASA ~12 s (simulación)"},
   noche:{label:"Noche", hours:"19:00–23:00", hour:22, waiting:9, callShare:0.80,
-    pausaShare:0.05, walkers:3, spawnMs:900, asa:"ASA 20 s · pico real 23:00 h"}
+    pausaShare:0.05, walkers:3, spawnMs:900, asa:"ASA ~15 s (simulación) · pico real 23:00 h: 20 s"}
 };
 var currentSlot = "noche";
 try{
@@ -3591,9 +3718,9 @@ var activeCalls = [];
 var waiting = 0;
 
 function spawnCall(){
-  if(REDUCED || paused) return;
+  if(REDUCED || paused || document.hidden) return;
   var free = stations.filter(function(s){ return s.state==="disponible"; });
-  if(!free.length) { waiting++; updateQueue(); return; }
+  if(!free.length) { if(waiting < SLOTS[currentSlot].waiting) waiting++; updateQueue(); return; }
   var target = free[Math.floor(Math.random()*free.length)];
   var from = {x: 220 + Math.random()*600, y: 572};
   var to = {x: target.sx, y: target.sy - 30};
@@ -3632,7 +3759,8 @@ function bezier(p0,p1,p2,t){
 
 var lastTs = 0, supIdx = 0, supDwellUntil = 0, supPos = {x:supWaypoints[0].x, y:supWaypoints[0].y};
 function frame(ts){
-  if(REDUCED) return;
+  if(REDUCED || docHidden){ rafRunning = false; return; }
+  rafRunning = true;
   var dt = Math.min(0.05, (ts - lastTs)/1000 || 0.016); lastTs = ts;
   if(paused){ requestAnimationFrame(frame); return; }
   simNow += dt * 1000 * speedFactor;
@@ -3705,21 +3833,61 @@ function tick(){
   if(currentFilter !== "all") applyFilter();
 }
 
-var spawnTimer = null, tickTimer = null;
+/* Pausa por visibilidad (revisión 9): temporizadores y rAF de ambas
+   simulaciones. docHidden nace de document.hidden para que tampoco
+   arranquen si la página carga ya oculta. */
+var spawnTimer = null, tickTimer = null, queueTimer = null, walkerTimer = null;
+var docHidden = document.hidden, rafRunning = false;
+function stopSimTimers(){
+  if(spawnTimer){ clearInterval(spawnTimer); spawnTimer = null; }
+  if(tickTimer){ clearInterval(tickTimer); tickTimer = null; }
+  if(queueTimer){ clearInterval(queueTimer); queueTimer = null; }
+  if(walkerTimer){ clearInterval(walkerTimer); walkerTimer = null; }
+}
+function startSimTimers(){
+  if(REDUCED || paused || docHidden) return;
+  stopSimTimers();
+  startIntervals();
+  queueTimer = setInterval(updateQueue, 1000);
+  walkerTimer = setInterval(maybeSpawnWalkers, 1500);
+  if(!rafRunning){ rafRunning = true; requestAnimationFrame(frame); }
+  updateQueue();
+}
+/* prefers-reduced-motion en caliente (revisión 26): si el usuario activa el
+   ajuste con la página ya abierta, se aplica sin recargar. Reutiliza los
+   temporizadores de la revisión 9: al activar, se paran; al desactivar, se
+   reanudan. Requiere E9-camp-1 aplicado antes. */
+if(REDUCED_MQ){
+  var onReducedChange = function(ev){
+    REDUCED = ev.matches;
+    window.__camp.reduced = REDUCED;
+    if(REDUCED){ stopSimTimers(); waiting = 3; updateQueue(); }
+    else { startSimTimers(); spawnCall(); spawnCall(); }
+  };
+  if(REDUCED_MQ.addEventListener) REDUCED_MQ.addEventListener("change", onReducedChange);
+  else if(REDUCED_MQ.addListener) REDUCED_MQ.addListener(onReducedChange);
+}
 function startIntervals(){
+  if(docHidden) return;
   if(spawnTimer) clearInterval(spawnTimer);
   if(tickTimer) clearInterval(tickTimer);
   spawnTimer = setInterval(spawnCall, SLOTS[currentSlot].spawnMs / speedFactor);
   tickTimer = setInterval(tick, 2000 / speedFactor);
 }
-if(!REDUCED){
-  startIntervals();
-  setInterval(updateQueue, 1000);
-  setInterval(maybeSpawnWalkers, 1500);
-  requestAnimationFrame(frame);
+document.addEventListener("visibilitychange", function(){
+  if(document.hidden){
+    docHidden = true;
+    stopSimTimers();
+  } else {
+    docHidden = false;
+    startSimTimers();
+  }
+});
+if(!REDUCED && !document.hidden){
+  startSimTimers();
   spawnCall(); spawnCall();
   setTimeout(function(){ maybeSpawnWalkers(); maybeSpawnWalkers(); }, 800);
-} else {
+} else if(REDUCED){
   waiting = 3; updateQueue();
 }
 
@@ -3751,7 +3919,7 @@ function openFicha(zoneKey){
   document.getElementById("camp-fichaTitle").textContent = z.name;
   document.getElementById("camp-fichaSub").textContent =
     fmtInt(z.rec) + " recibidas en nov 2026 · " + z.n + (z.n === 1 ? " estación" : " estaciones") +
-    " (1 ≈ 500 llamadas) · " + fmtDec1(z.rec / TOTALES.rec * 100) + " % del total";
+    " (1 ≈ 430 llamadas) · " + fmtDec1(z.rec / TOTALES.rec * 100) + " % del total";
   var pb = document.getElementById("camp-fichaPareto");
   pb.textContent = "Clase Pareto " + z.pareto;
   pb.className = "camp-pareto camp-pareto-" + z.pareto.toLowerCase();
@@ -3876,7 +4044,7 @@ function openSupFicha(){
     "Apoyando a la estación " + st.id + " — " + st.zone.name;
   var pb = document.getElementById("camp-fichaPareto");
   pb.textContent = "En ronda"; pb.className = "camp-pareto";
-  pb.style.background = "#0ea5e9";
+  pb.style.background = "#075985";
   document.getElementById("camp-fichaFields").innerHTML =
     "<dt>Estación apoyada</dt><dd>" + st.id + " · " + STATES[st.state].label + "</dd>" +
     "<dt>Cartera</dt><dd>" + st.zone.name + "</dd>" +
@@ -3902,7 +4070,7 @@ function openPersonFicha(st){
       st.zone.name + " · Estación " + st.id + " · nov 2026 · n.º " + a.n + " de la lista de 77";
     pb.textContent = "Asesor · " + st.zone.short;
     pb.className = "camp-pareto";
-    pb.style.background = CARTERA_COLOR[st.zone.key];
+    pb.style.background = CARTERA_BADGE_BG[st.zone.key] || badgeBgForWhite(CARTERA_COLOR[st.zone.key]);
     document.getElementById("camp-fichaFields").innerHTML =
       "<dt>Estación</dt><dd>" + st.id + " · " + STATES[st.state].label + "</dd>" +
       "<dt>Cartera</dt><dd>" + st.zone.name + "</dd>" +
@@ -4071,6 +4239,7 @@ function applyPauseLabel(){
 pauseBtn.addEventListener("click", function(){
   paused = !paused;
   applyPauseLabel();
+  if(!paused) startSimTimers();
 });
 function applySpeedLabel(){
   speedBtn.textContent = "Velocidad " + speedFactor + "x";
@@ -4171,6 +4340,12 @@ document.querySelectorAll("#camp-table th[data-camp-sort]").forEach(function(th)
       o.setAttribute("aria-sort", o === th ? (sortDir === -1 ? "descending" : "ascending") : "none");
     });
     renderTable();
+  });
+  th.addEventListener("keydown", function(ev){
+    if(ev.key === "Enter" || ev.key === " "){
+      ev.preventDefault();
+      th.click();
+    }
   });
 });
 document.getElementById("camp-tableFoot").innerHTML =
