@@ -584,6 +584,11 @@
 .camp-tmo-bar i.camp-tmo-esp{background:#0ea5e9;}
 .camp-tmo-bar i.camp-tmo-pen{background:#94a3b8;}
 .camp-ficha .camp-note{margin-top:9px; font-size:10.5px; color:#4b5563; line-height:1.45;}
+.camp-atienden{margin-top:10px; border-top:1px solid #eef2f7; padding-top:8px; font-size:11.5px; line-height:1.45;}
+.camp-atienden h3{font-size:12px; margin:0 0 4px;}
+.camp-atienden p{margin:0 0 6px; color:#4b5563; font-size:10.5px;}
+.camp-atienden ul{columns:2; column-gap:14px; margin:0 0 6px; padding-left:16px;}
+.camp-atienden li{break-inside:avoid; margin-bottom:2px;}
 
 /* ---------- Tabla de carteras ---------- */
 .camp-table-wrap{background:#fff; border-top:1px solid #e5e7eb; padding:12px 16px 14px; overflow-x:auto;}
@@ -753,6 +758,11 @@
 #sup-tab .sup-state-badge{display:inline-block;padding:2px 9px;border-radius:999px;color:#fff;font-size:11.5px;font-weight:700}
 #sup-tab .sup-inspector .sup-close{position:absolute;top:6px;right:8px;border:0;background:none;font-size:16px;line-height:1;cursor:pointer;color:#4b5563;padding:4px}
 #sup-tab .sup-inspector .sup-note{margin-top:9px;font-size:10.5px;color:#4b5563;line-height:1.45}
+#sup-tab .sup-atienden{margin-top:9px;border-top:1px solid #eef2f7;padding-top:8px;font-size:11px;line-height:1.45}
+#sup-tab .sup-atienden h3{font-size:12px;margin:0 0 4px}
+#sup-tab .sup-atienden p{margin:0 0 6px;color:#4b5563;font-size:10.5px}
+#sup-tab .sup-atienden ul{margin:0 0 6px;padding-left:16px}
+#sup-tab .sup-atienden li{margin-bottom:2px}
 #sup-tab .sup-hint{position:absolute;left:10px;bottom:8px;font-size:11px;color:#4b5563;background:rgba(255,255,255,.85);border:1px solid #e5e7eb;border-radius:6px;padding:3px 8px;z-index:4}
 #sup-tab .sup-foot{font-size:11px;color:#4b5563;line-height:1.5;margin-top:8px}
 
@@ -1277,13 +1287,14 @@ body { padding-top: 48px; }
   </div>
 
   <footer class="camp-foot">
-    Fuente: foto fija nov 2026 del libro INTER ATC (vista Dirección; leída en vivo 24 nov 2026, 18:08).
+    Fuente: foto fija nov 2026 del libro INTER ATC (vista Dirección; leída en vivo 24 nov 2026, 18:08)
+    para los totales por cartera; lista de 77 asesores de la vista Asesores, leída en vivo 25 nov 2026, 12:55.
     Zonas por cartera con su volumen y NS de noviembre; 77 lugares, uno por cada asesor con
-    nombre en la lista de 77 de Tableau (BRADESCARD ASISTENCIAS 38, COPPEL VIDA 31, CREDIAUTO 4,
-    BRADESCARD SEGUROS 4). Las otras 8 carteras —EMPLEADOS, LIVERPOOL, LALA, JAC, SUZUKI,
-    LIVERPOOL GMM, MODERNA y BIMBO— tienen llamadas pero ningún asesor con nombre en Tableau:
-    sus zonas muestran sus totales reales y la nota «sin asesores identificados en Tableau»,
-    sin lugares con nombre inventado. Los estados de estación, las llamadas en tránsito,
+    nombre en la lista de 77 de Tableau (BRADESCARD ASISTENCIAS 32, CREDIAUTO 16, COPPEL VIDA 12,
+    LIVERPOOL 6, LALA 4, JAC 3, SUZUKI 3, BIMBO 1). EMPLEADOS, MODERNA, LIVERPOOL GMM y
+    BRADESCARD SEGUROS no llevan asientos: sus zonas muestran sus totales reales y quiénes las
+    atienden (su asiento principal está en otra cartera), sin lugares con nombre inventado.
+    Los estados de estación, las llamadas en tránsito,
     la franja del día y el supervisor son una simulación en vivo sobre esa foto fija; las personas
     que caminan por los pasillos también son simuladas. Cada persona lleva el color de su cartera
     y, al tocarla, abre su ficha con su nombre y cifras reales de nov 2026. El filtro por cartera
@@ -1388,7 +1399,7 @@ body { padding-top: 48px; }
       <span>En espera: <b id="sup-c-espera">—</b></span>
     </div>
 
-    <p class="sup-aviso" role="note"><b>Este piso muestra las 12 carteras y los 77 lugares:</b> un lugar por cada asesor con nombre en Tableau (BRADESCARD ASISTENCIAS 38, COPPEL VIDA 31, CREDIAUTO 4, BRADESCARD SEGUROS 4). Las 8 carteras sin asesores identificados —EMPLEADOS, LIVERPOOL, LALA, JAC, SUZUKI, LIVERPOOL GMM, MODERNA y BIMBO— muestran sus totales sin lugares con nombre.</p>
+    <p class="sup-aviso" role="note"><b>Este piso muestra las 12 carteras y los 77 lugares:</b> un lugar por cada asesor con nombre en Tableau (BRADESCARD ASISTENCIAS 32, CREDIAUTO 16, COPPEL VIDA 12, LIVERPOOL 6, LALA 4, JAC 3, SUZUKI 3, BIMBO 1). EMPLEADOS, MODERNA, LIVERPOOL GMM y BRADESCARD SEGUROS no llevan asientos: sus zonas muestran sus totales reales y quiénes las atienden, con su asiento principal en otra cartera.</p>
 
     <div class="sup-scene" id="sup-scene">
       <svg id="sup-floor" viewBox="0 0 1220 910" role="img"
@@ -1411,12 +1422,13 @@ body { padding-top: 48px; }
       <div class="sup-hint">Toca una persona o una estación para ver la ficha del asesor · Enter sobre una estación abre su estado · Las personas se paran y caminan por los pasillos (simulación)</div>
     </div>
     <p class="sup-foot">
-      Fuente: foto fija nov 2026 del libro INTER ATC (vista Dirección), leída en vivo 24 nov 2026, 18:08.
+      Fuente: foto fija nov 2026 del libro INTER ATC (vista Dirección), leída en vivo 24 nov 2026, 18:08,
+      para los totales por cartera; lista de 77 asesores de la vista Asesores, leída en vivo 25 nov 2026, 12:55.
       Zonas por cartera —las 12 con llamadas— con su volumen y NS de noviembre; 77 lugares, uno por
-      cada asesor con nombre en la lista de 77 de Tableau (BRADESCARD ASISTENCIAS 38, COPPEL VIDA 31,
-      CREDIAUTO 4, BRADESCARD SEGUROS 4). Las 8 carteras sin asesores identificados —EMPLEADOS,
-      LIVERPOOL, LALA, JAC, SUZUKI, LIVERPOOL GMM, MODERNA y BIMBO— muestran sus totales reales y
-      la nota «sin asesores identificados en Tableau», sin lugares con nombre inventado. Los estados
+      cada asesor con nombre en la lista de 77 de Tableau (BRADESCARD ASISTENCIAS 32, CREDIAUTO 16,
+      COPPEL VIDA 12, LIVERPOOL 6, LALA 4, JAC 3, SUZUKI 3, BIMBO 1). EMPLEADOS, MODERNA,
+      LIVERPOOL GMM y BRADESCARD SEGUROS no llevan asientos: sus zonas muestran sus totales reales y
+      quiénes las atienden (su asiento principal está en otra cartera), sin lugares con nombre inventado. Los estados
       de estación, las llamadas en tránsito, la franja del día y el supervisor son una simulación en
       vivo sobre esa foto fija; las personas que caminan por los pasillos también son simuladas. Cada
       persona lleva el color de su cartera y, al tocarla, abre su ficha con su nombre y cifras reales
@@ -1448,9 +1460,9 @@ body { padding-top: 48px; }
       <div class="sup-prio sup-prio-p3">
         <h3><span class="sup-tag">P3 · COACHING</span> TMO más alto con volumen</h3>
         <ul>
-          <li><b>JOSÉ ALBERTO RANGEL LARA — 13:08</b> (CREDIAUTO, 181 atendidas).</li>
-          <li><b>BRISA LISSET CAMARENA HERNÁNDEZ — 12:47</b> (CREDIAUTO, 186 atendidas).</li>
-          <li><b>FRANCISCO GUERRERO LÓPEZ — 12:38</b> (CREDIAUTO, 188 atendidas).</li>
+          <li><b>MELANY BELIO TREJO — 14:44</b> (CREDIAUTO, 113 atendidas).</li>
+          <li><b>ALONDRA SHANTAL BECERRIL MONTAÑO — 14:13</b> (CREDIAUTO, 141 atendidas).</li>
+          <li><b>SHADANY ITZEL ZAPATA NUNEZ — 14:01</b> (BRADESCARD ASISTENCIAS, 164 atendidas).</li>
         </ul>
         <p class="sup-muted">Escuchar llamadas y revisar poscierre / ACW.</p>
       </div>
@@ -1462,8 +1474,9 @@ body { padding-top: 48px; }
     <h2>Asesores — 77 en nov 2026</h2>
     <p class="sup-muted">
       Orden de la lista: por atendidas, como en Tableau. Toca un asesor para ver su ficha.
-      Solo 4 asesores son de CREDIAUTO y 4 de BRADESCARD SEGUROS; el resto son de
-      BRADESCARD ASISTENCIAS o COPPEL VIDA.
+      ASISTENCIAS 32, CREDIAUTO 16, COPPEL VIDA 12, LIVERPOOL 6, LALA 4, JAC 3, SUZUKI 3,
+      BIMBO 1; EMPLEADOS, MODERNA, LIVERPOOL GMM y BRADESCARD SEGUROS no tienen asiento
+      propio: sus asesores atienden desde otra cartera (ver la ficha de cada cartera).
     </p>
     <div class="sup-tools">
       <label class="sup-search-label" for="sup-search">Buscar asesor</label>
@@ -1491,13 +1504,13 @@ body { padding-top: 48px; }
       </table>
     </div>
     <div class="sup-leyenda">
-      <span class="sup-item"><span class="sup-badge sup-badge-nps">NPS más bajo</span> DAYLAN YOSHIMAR ALMAGUER ROCHA −94,9</span>
-      <span class="sup-item"><span class="sup-badge sup-badge-tmo">TMO alto</span> 3 asesores de CREDIAUTO ≥ 12:38</span>
+      <span class="sup-item"><span class="sup-badge sup-badge-nps">NPS más bajo</span> DAYLAN SAJID SANCHEZ MOHEDANO −95,1</span>
+      <span class="sup-item"><span class="sup-badge sup-badge-tmo">TMO alto</span> 3 asesores con 30+ atendidas y TMO ≥ 14:01</span>
       <span class="sup-item">NPS «s/d» = sin dato en Tableau, nunca 0</span>
     </div>
     <p class="sup-foot">
-      Nota del tablero (sin corregir): la suma de atendidas de los 77 asesores (~20.152) supera el
-      total del mes (13.351). NS, demoradas y abandono por asesor: sin dato en Tableau.
+      Nota: la suma de atendidas de los 77 asesores (13.338) ya no supera el total del mes (13.351):
+      la diferencia es de 13. NS, demoradas y abandono por asesor: sin dato en Tableau.
     </p>
 
     <div class="sup-ficha" id="sup-ficha" hidden aria-live="polite">
@@ -1512,15 +1525,17 @@ body { padding-top: 48px; }
 
 <footer class="console-foot" id="console-foot">
   <h2>Fuente y notas</h2>
-  <p>Fuente: foto fija de noviembre 2026 del libro <strong>INTER ATC</strong> (vistas Dirección, Operación, Asesores y Análisis), leída en vivo de Tableau el <strong>24 nov 2026, 18:08</strong>. Los estados de estación, las llamadas en tránsito, la franja del día, el supervisor y las personas que caminan son una <strong>simulación en vivo</strong> sobre esa foto fija.</p>
+  <p>Fuente: foto fija de noviembre 2026 del libro <strong>INTER ATC</strong> (vistas Dirección, Operación, Asesores y Análisis), leída en vivo de Tableau el <strong>24 nov 2026, 18:08</strong>. La lista de 77 asesores es de la vista Asesores, leída en vivo el <strong>25 nov 2026, 12:55</strong>. Los estados de estación, las llamadas en tránsito, la franja del día, el supervisor y las personas que caminan son una <strong>simulación en vivo</strong> sobre esa foto fija.</p>
   <p><strong>Inconsistencias del tablero (nota completa, sin corregir — los valores se muestran tal como los entrega Tableau):</strong></p>
   <ul>
-    <li>La suma de atendidas de los 77 asesores (~20.152) supera el total 13.351.</li>
+    <li>La suma de atendidas de los 77 asesores (13.338) cuadra con el total 13.351 (diferencia de 13); la nota vieja de ~20.152 quedó resuelta al reconstruir la lista con la vista Asesores en vivo del 25 nov 2026.</li>
+    <li>NPS en vivo vs lista vieja (no se mezclan las fuentes): JUAN MANUEL RIVERA DEL VALLE +76,4 (viejo) vs −21,2 (en vivo); FRANCISCO GUERRERO LOPEZ +50,0 vs −7,7; JOSE ALBERTO RANGEL LARA 0,0 vs s/d; BRISA LISSET CAMARENA HERNANDEZ +50,0 vs +74,1. El peor NPS viejo era de DAYLAN YOSHIMAR ALMAGUER ROCHA (−94,9, que no está en la lista en vivo); en vivo el peor es DAYLAN SAJID SANCHEZ MOHEDANO (−95,1). Se usan solo los valores en vivo.</li>
+    <li>BRADESCARD SEGUROS: nadie leyó su vista Asesores filtrada en vivo; la lista de quiénes la atienden se reconstruyó por cruce con el extracto local (31 nombres) y se marca como tal en su ficha.</li>
     <li>La matriz de skills de Operación difiere de su tabla en abandonadas de JAC (36 vs 21), SUZUKI (15 vs 17), LIVERPOOL GMM (5 vs 9), BIMBO (4 vs 15), MODERNA (16 vs 14).</li>
     <li>Encuestas NPS por cartera suman 5.058 vs 7.258 del mes.</li>
     <li>NS de BIMBO 95,2 % no cuadra con la fórmula del glosario (1−1/10=90 %).</li>
     <li>Dirección dice NS «subió 0,8 pts» pero 89,9−89,0=0,9.</li>
-    <li>Mediana TMO del equipo aparece como 9:24 y como 9:39.</li>
+    <li>Mediana TMO del equipo aparece como 9:24 y como 9:39 en las vistas viejas; la ficha en vivo de Asesores (25 nov 2026) da 9:28.</li>
     <li>La composición del TMO no suma al TMO: BRADESCARD ASISTENCIAS suma 462 s frente a un TMO de 469 s (−7 s); CREDIAUTO 704 s frente a 720 s (−16 s); EMPLEADOS 742 s frente a 762 s (−20 s); en el resto las diferencias van de −7 s a +4 s (COPPEL VIDA suma 513 s frente a 509 s), salvo MODERNA, cuya espera es «s/d» y no se puede sumar. Además el % de conversación de la etiqueta no siempre coincide con segundos/TMO: ASISTENCIAS marca 86,0 % pero 397/469 = 84,6 %; BIMBO marca 84,7 % pero 415/494 = 84,0 %; en las demás carteras la diferencia es de 0,2 pts o menos.</li>
   </ul>
 </footer>
@@ -1774,120 +1789,182 @@ function norm(s){
   return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
-/* ---------- ASESORES: 77, por nombre (cartera; atendidas; TMO; NPS) ----------
-   Orden original = por atendidas, como en Tableau. NPS null = s/d. */
+/* ---------- ASESORES: 77 en vivo, por nombre (cartera dominante; atendidas; TMO; NPS) ----------
+   Vista Asesores sin filtrar, leída en vivo 25 nov 2026, 12:55 (nov 2026,
+   Inter ambas). Orden = por atendidas, como en Tableau. NPS null = s/d.
+   Suma de atendidas: 13.338 (total del mes 13.351). */
 var SUP_ASESORES = [
-["JUAN MANUEL RIVERA DEL VALLE","BRADESCARD ASISTENCIAS",497,"4:43",76.4],
-["LIZETH GUADALUPE JIMENEZ RAMIREZ","BRADESCARD ASISTENCIAS",477,"6:34",61.0],
-["MARIA LAURA HERNANDEZ JIMENEZ","BRADESCARD ASISTENCIAS",458,"5:06",null],
-["SANDRA PATRICIA ALVAREZ SANCHEZ","BRADESCARD ASISTENCIAS",446,"6:23",65.2],
-["LUIS ENRIQUE VAZQUEZ VILLALOBOS","BRADESCARD ASISTENCIAS",407,"7:32",59.6],
-["ANA GABRIELA HERNANDEZ GALICIA","BRADESCARD ASISTENCIAS",374,"7:06",49.6],
-["ALEXA VALERIA CAMACHO RUIZ","BRADESCARD ASISTENCIAS",366,"6:45",null],
-["ERICK MICHEL CORONEL SANCHEZ","BRADESCARD ASISTENCIAS",357,"6:40",70.8],
-["DAYLAN YOSHIMAR ALMAGUER ROCHA","BRADESCARD ASISTENCIAS",357,"7:11",-94.9],
-["NATALIA CAROLINA MENDOZA VAZQUEZ","BRADESCARD ASISTENCIAS",354,"6:53",null],
-["MONICA LETICIA REYES VARGAS","BRADESCARD ASISTENCIAS",352,"6:15",75.0],
-["ALONDRA GUADALUPE MARTINEZ RODRIGUEZ","BRADESCARD ASISTENCIAS",348,"6:39",79.5],
-["JENNIFER ALEXANDRA HERNANDEZ CASTANEDA","BRADESCARD ASISTENCIAS",326,"7:05",68.4],
-["ALEJANDRA SANCHEZ ALVAREZ","COPPEL VIDA",316,"6:45",44.4],
-["ADRIAN EMMANUEL DELGADO RODRIGUEZ","COPPEL VIDA",310,"6:41",62.2],
-["GABRIELA ESTRADA JIMENEZ","COPPEL VIDA",308,"6:26",72.1],
-["KAREN ITZEL GARCIA GUTIERREZ","COPPEL VIDA",305,"7:08",70.0],
-["JUAN JOSE RODRIGUEZ MARTINEZ","COPPEL VIDA",301,"6:33",84.6],
-["LESLIE ADRIANA ROSALES LOPEZ","BRADESCARD ASISTENCIAS",297,"6:31",70.6],
-["LUCERO ITZEL GONZALEZ TORRES","BRADESCARD ASISTENCIAS",295,"8:14",42.4],
-["FERNANDO GUADALUPE MARTINEZ DELGADO","BRADESCARD ASISTENCIAS",294,"6:24",64.6],
-["JOSE DE JESUS CERVANTES RAMIREZ","COPPEL VIDA",293,"6:41",64.7],
-["KEVIN RICARDO MORENO CUEVAS","COPPEL VIDA",285,"7:41",50.0],
-["ERIKA LIZBETH ZAVALA VAZQUEZ","COPPEL VIDA",284,"6:40",62.5],
-["LEONARDO SAID VEGA SALAZAR","COPPEL VIDA",281,"6:48",40.0],
-["MARIA FERNANDA MEZA ORTIZ","COPPEL VIDA",280,"6:50",62.5],
-["PAULINA ITZEL GONZALEZ PEREZ","BRADESCARD ASISTENCIAS",270,"6:20",62.5],
-["ITZEL GUADALUPE VELAZQUEZ LOPEZ","COPPEL VIDA",269,"7:43",77.8],
-["LIZBETH ADRIANA GONZALEZ BERNAL","BRADESCARD ASISTENCIAS",263,"6:47",75.0],
-["JESUS EMMANUEL FLORES RUIZ","COPPEL VIDA",259,"6:56",72.7],
-["ARANTXA BERENICE GONZALEZ MENDOZA","BRADESCARD ASISTENCIAS",252,"6:46",66.7],
-["JORGE LUIS HERNANDEZ ZAMORA","COPPEL VIDA",252,"7:22",58.3],
-["CHRISTIAN GIOVANNI TORRES BAEZ","COPPEL VIDA",250,"6:39",64.0],
-["MARIA GUADALUPE ORTEGA CASTRO","BRADESCARD ASISTENCIAS",247,"7:41",55.6],
-["MARLON JOSE LUIS CORTEZ ALANIS","BRADESCARD ASISTENCIAS",246,"6:45",60.0],
-["ALEXIS ALEXANDER GUTIERREZ HERNANDEZ","COPPEL VIDA",245,"6:54",73.1],
-["EDUARDO IVAN REYES LOPEZ","BRADESCARD ASISTENCIAS",243,"6:45",87.5],
-["KARLA PAOLA GARZA GUTIERREZ","BRADESCARD ASISTENCIAS",243,"7:00",76.9],
-["JOCELYN ALEJANDRA RAMIREZ ALVAREZ","BRADESCARD ASISTENCIAS",240,"7:48",62.5],
-["JORGE ARTURO TREVINO GALLEGOS","BRADESCARD ASISTENCIAS",239,"7:14",75.0],
-["ANGEL DAVID GARCIA GARCIA","COPPEL VIDA",238,"6:45",66.7],
-["ALAN DANIEL VALDEZ SANCHEZ","BRADESCARD ASISTENCIAS",237,"7:26",63.6],
-["MARIA DEL CARMEN HERNANDEZ GARCIA","BRADESCARD ASISTENCIAS",236,"7:00",58.3],
-["MONSERRAT MICHELLE LOPEZ GARZA","COPPEL VIDA",235,"6:55",57.1],
-["LIZETH ADRIANA VEGA GUERRERO","BRADESCARD ASISTENCIAS",234,"6:53",77.8],
-["ADRIANA NOHEMI HERNANDEZ GARCIA","COPPEL VIDA",233,"7:02",57.1],
-["ANGELICA MARIA MARTINEZ REYES","COPPEL VIDA",232,"7:15",66.7],
-["LOURDES ADRIANA RODRIGUEZ CORONADO","BRADESCARD ASISTENCIAS",231,"6:51",57.1],
-["MARTHA PATRICIA GUTIERREZ RAMIREZ","COPPEL VIDA",228,"6:36",77.8],
-["JOSE GUILLERMO DELGADO GARZA","COPPEL VIDA",227,"7:07",100.0],
-["MIGUEL ANGEL AGUILAR ZAMBRANO","BRADESCARD ASISTENCIAS",225,"6:49",90.0],
-["LUIS ANGEL ORTIZ MORENO","BRADESCARD ASISTENCIAS",224,"6:37",33.3],
-["KAREN LIZBETH MARTINEZ CORONADO","COPPEL VIDA",223,"6:58",80.0],
-["FERNANDA YAMILETH MONTES RIVERA","COPPEL VIDA",222,"7:22",50.0],
-["IVAN ALEJANDRO GARCIA GARCIA","BRADESCARD ASISTENCIAS",221,"6:59",66.7],
-["FATIMA LUCERO CARRILLO ALVARADO","BRADESCARD ASISTENCIAS",220,"7:39",90.9],
-["MIGUEL ANGEL ARREDONDO RODRIGUEZ","BRADESCARD ASISTENCIAS",220,"6:48",100.0],
-["ALMA YADIRA ZUNIGA GARCIA","BRADESCARD ASISTENCIAS",220,"7:15",60.0],
-["DANIEL ALEJANDRO GARZA GARZA","COPPEL VIDA",219,"7:12",100.0],
-["MARTHA GUADALUPE DELGADO GUERRERO","COPPEL VIDA",218,"7:28",100.0],
-["ABRIL ALEJANDRA GARCIA GONZALEZ","BRADESCARD ASISTENCIAS",213,"6:31",50.0],
-["ALEJANDRO ALBERTO GARCIA REYES","COPPEL VIDA",213,"6:42",100.0],
-["NAYELI FABIOLA MARTINEZ GARZA","COPPEL VIDA",209,"7:10",100.0],
-["OSCAR ULISES CASTILLO SALINAS","BRADESCARD ASISTENCIAS",208,"7:16",80.0],
-["FERNANDA SARAHI RODRIGUEZ RIVERA","COPPEL VIDA",203,"6:41",66.7],
-["CRISTIAN EDUARDO RIVERA GARCIA","COPPEL VIDA",200,"7:02",100.0],
-["ANGELICA LIZBETH RODRIGUEZ LOPEZ","COPPEL VIDA",197,"6:33",50.0],
-["JOSE EDUARDO SANCHEZ ARRIAGA","BRADESCARD ASISTENCIAS",196,"6:34",100.0],
-["CESAR OMAR ESPARZA HERNANDEZ","COPPEL VIDA",190,"7:05",100.0],
-["FRANCISCO GUERRERO LOPEZ","CREDIAUTO",188,"12:38",50.0],
-["ANGEL GABRIEL HERNANDEZ PEREZ","CREDIAUTO",187,"6:51",50.0],
-["BRISA LISSET CAMARENA HERNANDEZ","CREDIAUTO",186,"12:47",50.0],
-["JOSE ALBERTO RANGEL LARA","CREDIAUTO",181,"13:08",0.0],
-["JOSE ANDRES RANGEL RANGEL","BRADESCARD SEGUROS",172,"7:05",null],
-["GABRIELA YAMILETH HERNANDEZ MARTINEZ","BRADESCARD SEGUROS",160,"7:20",null],
-["JOSE EDUARDO IBARRA GARZA","BRADESCARD SEGUROS",112,"6:44",null],
-["JESUS ALEJANDRO GARCIA ROCHA","BRADESCARD SEGUROS",108,"7:30",null]
+["KAREN FERNANDA CARRIZOSA PALACIOS","BRADESCARD ASISTENCIAS",503,"6:17",-12.3],
+["JUAN MANUEL RIVERA DEL VALLE","BRADESCARD ASISTENCIAS",497,"4:43",-21.2],
+["NOEMI GARDUNO SANCHEZ","BRADESCARD ASISTENCIAS",489,"5:43",-23.3],
+["URIEL JOSUE GUZMAN GOMEZ","BRADESCARD ASISTENCIAS",479,"6:08",-55.7],
+["CLAUDIA ELENA GARCIA BEDOLLA","BRADESCARD ASISTENCIAS",445,"8:50",-65.0],
+["KARLA ANAIS TREILHARD VALDEZ","BRADESCARD ASISTENCIAS",428,"7:57",-13.3],
+["JOSEFINA ABIGAIL COLIN POLO","BRADESCARD ASISTENCIAS",391,"9:28",22.8],
+["LUIS ANGELES RODRIGUEZ","COPPEL VIDA",391,"6:01",null],
+["DAYLAN SAJID SANCHEZ MOHEDANO","BRADESCARD ASISTENCIAS",389,"8:20",-95.1],
+["MARIA ELENA GARNICA GONZALEZ","BRADESCARD ASISTENCIAS",371,"9:26",17.5],
+["ARIEL SERRANO MEDRANO","BRADESCARD ASISTENCIAS",366,"6:54",13.3],
+["CLAUDIA LETICIA FLORES ARELLANO","BRADESCARD ASISTENCIAS",359,"8:50",1.9],
+["FRANCISCO GUERRERO LOPEZ","BRADESCARD ASISTENCIAS",358,"12:26",-7.7],
+["MELANIE CASIO BUENROSTRO","BRADESCARD ASISTENCIAS",352,"8:02",-33.7],
+["ANGELICA ALEXANDRA LOPEZ ALVARADO","COPPEL VIDA",346,"9:21",null],
+["VERONICA ALEJANDRINA ROMERO RAMOS","COPPEL VIDA",337,"9:51",null],
+["JORGE FELIPE CHAVEZ VELASCO","BRADESCARD ASISTENCIAS",329,"9:39",22.0],
+["MARIANA LOYOLA FALCON","BRADESCARD ASISTENCIAS",325,"9:17",9.2],
+["MIRIAM LIZBETH ALVARADO LOPEZ","COPPEL VIDA",285,"8:41",null],
+["SEBASTIAN GUZMAN MARTINEZ","COPPEL VIDA",271,"10:06",null],
+["JOSE ALBERTO RANGEL LARA","COPPEL VIDA",264,"13:07",null],
+["ALDO GARCIA HERNANDEZ","COPPEL VIDA",229,"9:44",null],
+["ABNER ULICES GONZALEZ ALCANTARA","COPPEL VIDA",228,"8:43",null],
+["VERONICA BARRERA GOMEZ","BRADESCARD ASISTENCIAS",225,"9:18",45.1],
+["ASTRID SOFIA RAMIREZ ALVARADO","BRADESCARD ASISTENCIAS",218,"10:20",40.3],
+["ERNESTO SERVIN ESQUIVAL","BRADESCARD ASISTENCIAS",216,"9:08",20.0],
+["DANIEL SANCHEZ PEREZ","CREDIAUTO",199,"8:23",88.0],
+["MARIA NURIA MORERAS","BRADESCARD ASISTENCIAS",192,"5:38",49.2],
+["MARCOS CARMONA MIRANDA","BRADESCARD ASISTENCIAS",181,"11:53",-24.4],
+["BRISA LISSET CAMARENA HERNANDEZ","CREDIAUTO",169,"12:51",74.1],
+["HUNABKU ADAN ALDAMA MOLINOS","BRADESCARD ASISTENCIAS",168,"7:16",43.2],
+["LETICIA PEREZ MUNOZ","CREDIAUTO",167,"13:41",89.2],
+["YAJAIRA ARIZMENDI MENDOZA","BRADESCARD ASISTENCIAS",167,"12:23",-1.9],
+["SHADANY ITZEL ZAPATA NUNEZ","BRADESCARD ASISTENCIAS",164,"14:01",11.4],
+["CARLOS DAVID AVENDANO GUZMAN","CREDIAUTO",163,"11:59",90.4],
+["ASTRID SOFIA CASTILLO LEDEZMA","CREDIAUTO",160,"13:08",76.4],
+["JARED FRANCISCO HERNANDEZ RIOS","CREDIAUTO",153,"11:45",81.5],
+["ALONDRA SHANTAL BECERRIL MONTAÑO","CREDIAUTO",141,"14:13",88.5],
+["ARTURO DAVID RAMIREZ LEYTE","CREDIAUTO",137,"14:01",79.5],
+["CRISTOBAL DE JESUS RAZO FLORES","BRADESCARD ASISTENCIAS",134,"4:16",-50.0],
+["MARIO DANIEL ACUNA ALZATE","LIVERPOOL",132,"6:52",100.0],
+["ANA VIANEY NAJERA HERRERA","CREDIAUTO",129,"11:14",95.7],
+["KAREN ADRIANA CAMARENA GALVEZ","CREDIAUTO",122,"10:52",77.8],
+["KEVIN GABRIEL RIVERA","CREDIAUTO",120,"11:22",63.5],
+["LUIS FERNANDO LAGUNA FLORES","CREDIAUTO",120,"13:00",91.7],
+["MELANY BELIO TREJO","CREDIAUTO",113,"14:44",95.7],
+["LESLY PALMA BARAJAS","COPPEL VIDA",96,"8:25",null],
+["DIANA MAKZELL MARTINEZ HUERTA","JAC",88,"9:06",94.5],
+["VIANEY ALBARRAN CRUCES","BRADESCARD ASISTENCIAS",85,"9:01",63.0],
+["ALVARO TOVAR FRANCO","BRADESCARD ASISTENCIAS",81,"9:40",null],
+["SERGIO RODRIGUEZ MARTINEZ","BRADESCARD ASISTENCIAS",75,"9:24",25.0],
+["ROCIO DE LOURDES RAMIREZ MARTOS","LALA",72,"7:23",88.2],
+["LAURA GISELLE ROBLES MEJIA","BRADESCARD ASISTENCIAS",60,"2:14",-56.0],
+["JOSHUA DE JESUS PEREZ","SUZUKI",59,"6:02",94.6],
+["ABIGAIL RAMIREZ BERNAL","BRADESCARD ASISTENCIAS",55,"8:20",-23.1],
+["SALVADOR LARA RODRIGUEZ","CREDIAUTO",53,"11:10",81.0],
+["JORGE LUIS TENORIO CAMPUZANO","LIVERPOOL",48,"4:55",100.0],
+["JUAN CRUZ LOZANO","SUZUKI",48,"13:21",100.0],
+["SERGIO ENRIQUE MENDIETA JIMENEZ","BRADESCARD ASISTENCIAS",47,"6:08",-14.3],
+["ANGELES BERENICE OLIVARES COLIN","COPPEL VIDA",47,"9:46",null],
+["ANTONIO CASTELAN MEJIA","LIVERPOOL",45,"13:14",75.0],
+["ANA KAREN REYES JACOBO","LALA",40,"11:12",84.4],
+["OLIVIA LUNA TOLEDO","LIVERPOOL",37,"10:37",94.7],
+["JOAQUIN MONDRAGON","COPPEL VIDA",29,"11:26",null],
+["ROSA ITZEL VELASCO VAZQUEZ","LALA",25,"6:51",89.5],
+["SAMUEL RODRIGUEZ SANTOS","LIVERPOOL",25,"11:10",80.0],
+["GABRIEL ALBERTO VAZQUEZ MORA","BRADESCARD ASISTENCIAS",23,"10:15",71.4],
+["JOSE ANTONIO ROJAS RODRIGUEZ","CREDIAUTO",23,"12:11",100.0],
+["JUAN CARLOS SANTOS LOPEZ","SUZUKI",17,"12:07",37.5],
+["LUIS FERNANDO ALONSO ALEJO","BIMBO",8,"7:48",null],
+["JUAN JOSÉ RAMOS MORALES","LIVERPOOL",7,"8:19",null],
+["NOE SIERRA PEREZ","BRADESCARD ASISTENCIAS",7,"13:26",null],
+["LINDA PAMELA GUERRERO ALANIZ","LALA",5,"3:03",null],
+["JOANY CELESTE CRUZ ALVARADO","JAC",5,"4:04",null],
+["FANY ARELI LOPEZ ROSALES","CREDIAUTO",4,"10:51",null],
+["ALEJANDRO BELLO MARTINEZ","JAC",1,"14:27",null],
+["JONATHAN ARMANDO CAMERO LOAIZA","COPPEL VIDA",1,"11:09",null]
 ].map(function(r, i){
   return {n: i + 1, nombre: r[0], cartera: r[1], at: r[2], tmo: r[3], tmoSeg: tmoSeg(r[3]), nps: r[4]};
 });
-var TMO_ALTO = {"JOSE ALBERTO RANGEL LARA": true, "BRISA LISSET CAMARENA HERNANDEZ": true, "FRANCISCO GUERRERO LOPEZ": true};
+/* TMO alto: top-3 de TMO entre asesores con 30+ atendidas (en vivo).
+   ALEJANDRO BELLO MARTINEZ marca 14:27 con 1 atendida y queda fuera por volumen. */
+var TMO_ALTO = {"MELANY BELIO TREJO": true, "ALONDRA SHANTAL BECERRIL MONTAÑO": true, "SHADANY ITZEL ZAPATA NUNEZ": true};
 
-/* ---------- Ficha completa n.º 1: JUAN MANUEL RIVERA DEL VALLE ---------- */
-var SUP_FICHA1 = {
-  fcr: "33,3 %", transf: "27,6 %",
-  percentiles: [
-    ["Atendidas", "P97", "—"],
-    ["TMO", "P96", "mediana equipo 9:24"],
-    ["NPS", "P75", "mediana +63,9"],
-    ["FCR", "P38", "mediana 52,3 %"],
-    ["Transferencias", "P69", "mediana 40,0 %"]
-  ],
-  comparacion: "Comparado con 63 asesores con 30+ atendidas.",
-  evolucion: [
-    ["feb", 140, "3:53", "7:32"], ["mar", 464, "5:29", "8:09"],
-    ["abr", 683, "5:09", "8:15"], ["may", 731, "5:04", "9:03"],
-    ["jun", 521, "5:06", "8:58"], ["jul", 724, "4:51", "9:01"],
-    ["ago", 728, "4:59", "9:15"], ["sep", 646, "5:19", "9:19"],
-    ["oct", 678, "5:07", "9:23"], ["nov", 497, "4:43", "9:05"]
-  ],
-  composicion: [
-    ["Conversación", "4:21", "92,1 %", 92.1],
-    ["Espera", "0 s", "—", 0],
-    ["Poscierre", "18 s", "6,4 %", 6.4],
-    ["Pendiente", "4 s", "1,6 %", 1.6]
-  ],
-  actividad: [
-    ["Ocupación", "76,9 %"], ["En llamada", "36,3 %"], ["Disponible", "2,2 %"],
-    ["Poscierre", "17,7 %"], ["Pausa", "21,1 %"], ["No disponible", "21,7 %"]
-  ]
+/* ---------- Fichas completas leídas en vivo (vista Asesores, 25 nov 2026) ----------
+   Solo estos 3 asesores tienen FCR, transferencias, ocupación, percentiles,
+   evolución y composición del TMO en la ficha de Tableau. Para los otros 74,
+   «sin dato». La ficha rica se ata POR NOMBRE, no por n.º: la vieja ficha de
+   JUAN MANUEL RIVERA DEL VALLE (FCR 33,3 %, transf 27,6 %, ocupación 76,9 %)
+   era de la lectura del 24 nov y NO se atribuye a nadie. */
+var FICHAS_ASESOR = {
+  "KAREN FERNANDA CARRIZOSA PALACIOS": {
+    fcr: "34,7 %", transf: "46,1 %", ocupacion: "44,7 %",
+    percentiles: [
+    ["Atendidas", "P99", "—"],
+    ["TMO", "P83", "mediana equipo 9:28"],
+    ["NPS", "P24", "mediana +44,1 · 122 encuestas"],
+    ["FCR", "P43", "mediana 52,9 %"],
+    ["Transferencias", "P37", "mediana 39,1 %"],
+    ["Poscierre", "P91", "mediana 33 s"],
+    ["Espera", "P56", "mediana 16 s"],
+    ["Ocupación", "P53", "—"]
+    ],
+    comparacion: "Comparado con 63 asesores con 30+ atendidas.",
+    evolucion: [
+      ["sep", 271, "7:55", "s/d"],
+      ["oct", 634, "7:15", "s/d"],
+      ["nov", 503, "6:17", "s/d"]
+    ],
+    composicion: [
+    ["Conversación", "6:03", "96,3 %", 96.3],
+    ["Espera", "0 s", "0,0 %", 0.0],
+    ["Poscierre", "9 s", "2,5 %", 2.5],
+    ["Pendiente", "4 s", "1,2 %", 1.2]
+    ],
+    actividad: [["Ocupación", "44,7 %"]]
+  },
+  "LUIS ANGELES RODRIGUEZ": {
+    fcr: "s/d", transf: "4,1 %", ocupacion: "40,7 %",
+    percentiles: [
+    ["Atendidas", "P89", "—"],
+    ["TMO", "P90", "mediana equipo 9:28"],
+    ["NPS", "s/d", "0 encuestas"],
+    ["FCR", "s/d", "sin dato"],
+    ["Transferencias", "P83", "mediana 39,1 %"],
+    ["Poscierre", "P40", "mediana 33 s"],
+    ["Espera", "P47", "mediana 16 s"],
+    ["Ocupación", "P50", "—"]
+    ],
+    comparacion: "Comparado con 63 asesores con 30+ atendidas.",
+    evolucion: [
+      ["sep", 0, "s/d", "s/d"],
+      ["oct", 436, "8:10", "s/d"],
+      ["nov", 391, "6:01", "s/d"]
+    ],
+    composicion: [
+    ["Conversación", "4:44", "78,8 %", 78.8],
+    ["Espera", "31 s", "8,7 %", 8.7],
+    ["Poscierre", "43 s", "11,9 %", 11.9],
+    ["Pendiente", "2 s", "0,6 %", 0.6]
+    ],
+    actividad: [["Ocupación", "40,7 %"]]
+  },
+  "DAYLAN SAJID SANCHEZ MOHEDANO": {
+    fcr: "s/d", transf: "0,0 %", ocupacion: "50,0 %",
+    percentiles: [
+    ["Atendidas", "P87", "—"],
+    ["TMO", "P71", "mediana equipo 9:28"],
+    ["NPS", "P1", "mediana +44,1 · 61 encuestas"],
+    ["FCR", "s/d", "sin dato"],
+    ["Transferencias", "P97", "mediana 39,1 %"],
+    ["Poscierre", "P52", "mediana 33 s"],
+    ["Espera", "P55", "mediana 16 s"],
+    ["Ocupación", "P64", "—"]
+    ],
+    comparacion: "Comparado con 63 asesores con 30+ atendidas.",
+    evolucion: [
+      ["sep", 343, "8:41", "s/d"],
+      ["oct", 525, "9:35", "s/d"],
+      ["nov", 389, "8:20", "s/d"]
+    ],
+    composicion: [
+    ["Conversación", "7:44", "92,7 %", 92.7],
+    ["Espera", "0 s", "0,0 %", 0.0],
+    ["Poscierre", "32 s", "6,4 %", 6.4],
+    ["Pendiente", "4 s", "0,9 %", 0.9]
+    ],
+    actividad: [["Ocupación", "50,0 %"]]
+  },
 };
+var SUP_FICHA1 = FICHAS_ASESOR["KAREN FERNANDA CARRIZOSA PALACIOS"];
 
 /* ---------- Lista: búsqueda + orden ---------- */
 var tbody = document.getElementById("sup-tbody");
@@ -1926,7 +2003,7 @@ function renderList(){
     var c0 = document.createElement("td"); c0.className = "sup-num"; c0.textContent = a.n; tr.appendChild(c0);
     var c1 = document.createElement("td");
     c1.textContent = a.nombre;
-    if(a.nombre === "DAYLAN YOSHIMAR ALMAGUER ROCHA"){
+    if(a.nombre === "DAYLAN SAJID SANCHEZ MOHEDANO"){
       var b1 = document.createElement("span"); b1.className = "sup-badge sup-badge-nps"; b1.textContent = "NPS más bajo";
       c1.appendChild(b1);
     }
@@ -1941,7 +2018,7 @@ function renderList(){
     if(TMO_ALTO[a.nombre]) c4.classList.add("sup-tmo-alto");
     tr.appendChild(c4);
     var c5 = document.createElement("td"); c5.className = "sup-num"; c5.textContent = fmtNPS(a.nps);
-    if(a.nombre === "DAYLAN YOSHIMAR ALMAGUER ROCHA") c5.classList.add("sup-nps-neg", "sup-nps-bajo");
+    if(a.nombre === "DAYLAN SAJID SANCHEZ MOHEDANO") c5.classList.add("sup-nps-neg", "sup-nps-bajo");
     tr.appendChild(c5);
     /* Mejora 8: roving tabindex — solo la primera fila está en el orden
        de Tab; las flechas mueven entre filas (ver tbody keydown abajo). */
@@ -2062,37 +2139,38 @@ function openFicha(n){
   sub.textContent = "Asesor n.º " + a.n + " de 77 · " + a.cartera +
     (est ? " · Estación " + est : "") + " · nov 2026";
   fichaBody.appendChild(sub);
+  var F = FICHAS_ASESOR[a.nombre];
   fichaBody.appendChild(kvGrid([
     ["Atendidas", fmtInt(a.at)], ["TMO", a.tmo], ["NPS", fmtNPS(a.nps)],
-    ["FCR", n === 1 ? SUP_FICHA1.fcr : "s/d"],
-    ["Transferencias", n === 1 ? SUP_FICHA1.transf : "s/d"],
-    ["Ocupación", n === 1 ? SUP_FICHA1.actividad[0][1] : "s/d"]
+    ["FCR", F ? F.fcr : "s/d"],
+    ["Transferencias", F ? F.transf : "s/d"],
+    ["Ocupación", F ? F.ocupacion : "s/d"]
   ]));
-  if(a.nombre === "DAYLAN YOSHIMAR ALMAGUER ROCHA"){
-    fichaBody.appendChild(p("NPS más bajo de los 77 asesores: −94,9. Prioridad de revisión.", "sup-muted"));
+  if(a.nombre === "DAYLAN SAJID SANCHEZ MOHEDANO"){
+    fichaBody.appendChild(p("NPS más bajo de los 77 asesores: −95,1. Prioridad de revisión.", "sup-muted"));
   }
   if(TMO_ALTO[a.nombre]){
     fichaBody.appendChild(p("TMO entre los 3 más altos con volumen (P3 coaching): escuchar llamadas y revisar poscierre / ACW.", "sup-muted"));
   }
-  if(n === 1){
+  if(F){
     fichaBody.appendChild(h3("Percentiles (vs. equipo)"));
     fichaBody.appendChild(table(["Indicador", "Percentil", "Mediana del equipo"],
-      SUP_FICHA1.percentiles.map(function(r){ return [r[0], r[1], r[2]]; }), [1]));
-    fichaBody.appendChild(p(SUP_FICHA1.comparacion, "sup-muted"));
+      F.percentiles.map(function(r){ return [r[0], r[1], r[2]]; }), [1]));
+    fichaBody.appendChild(p(F.comparacion, "sup-muted"));
     fichaBody.appendChild(h3("Evolución mensual (atendidas · TMO · TMO del equipo)"));
     fichaBody.appendChild(table(["Mes", "Atendidas", "TMO", "TMO equipo"],
-      SUP_FICHA1.evolucion.map(function(r){ return [r[0], fmtInt(r[1]), r[2], r[3]]; }), [1]));
-    fichaBody.appendChild(h3("Composición del TMO (4:43)"));
+      F.evolucion.map(function(r){ return [r[0], fmtInt(r[1]), r[2], r[3]]; }), [1]));
+    fichaBody.appendChild(h3("Composición del TMO (" + a.tmo + ")"));
     fichaBody.appendChild(table(["Componente", "Tiempo", "%", ""],
-      SUP_FICHA1.composicion.map(function(r){ return [r[0], r[1], r[2], {bar: r[3]}]; }), []));
+      F.composicion.map(function(r){ return [r[0], r[1], r[2], {bar: r[3]}]; }), []));
     fichaBody.appendChild(h3("Actividad"));
     fichaBody.appendChild(table(["Estado", "%"],
-      SUP_FICHA1.actividad.map(function(r){ return [r[0], r[1]]; }), [1]));
-    fichaBody.appendChild(p("Nota del tablero (sin corregir): la mediana del TMO del equipo aparece como 9:24 y como 9:39 en otra vista.", "sup-muted"));
+      F.actividad.map(function(r){ return [r[0], r[1]]; }), [1]));
+    fichaBody.appendChild(p("Ficha leída en vivo en Tableau (vista Asesores, 25 nov 2026). Mediana del TMO del equipo según esa vista: 9:28.", "sup-muted"));
   } else {
     fichaBody.appendChild(h3("Composición del TMO"));
-    fichaBody.appendChild(p("Sin dato en Tableau para este asesor: la composición del TMO solo existe para el asesor n.º 1.", "sup-muted"));
-    fichaBody.appendChild(p("FCR, transferencias, ocupación y percentiles solo existen para el asesor n.º 1 en la ficha de Tableau; para el resto, sin dato en Tableau. ID de asesor: sin dato en Tableau.", "sup-muted"));
+    fichaBody.appendChild(p("Sin dato en Tableau para este asesor: la composición del TMO solo existe para 3 asesores con ficha leída en vivo (Karen Fernanda Carrizosa Palacios, Luis Angeles Rodriguez y Daylan Sajid Sanchez Mohedano).", "sup-muted"));
+    fichaBody.appendChild(p("FCR, transferencias, ocupación y percentiles solo existen para esos 3 asesores en la ficha de Tableau; para el resto, sin dato en Tableau. ID de asesor: sin dato en Tableau.", "sup-muted"));
   }
   fichaBody.appendChild(h3("Sin dato en Tableau para este asesor"));
   fichaBody.appendChild(kvGrid([
@@ -2115,6 +2193,7 @@ renderList();
 window.__sup = window.__sup || {};
 window.__sup.asesores = SUP_ASESORES;
 window.__sup.ficha1 = SUP_FICHA1;
+window.__sup.fichas = FICHAS_ASESOR;
 window.__sup.listCount = function(){ return tbody.querySelectorAll("tr").length; };
 window.__sup.listFirst = function(){
   var tr = tbody.querySelector("tr");
@@ -2151,20 +2230,20 @@ function nowSim(){ return simNow; }
 var lastCallInfo = null, lastSupInfo = null;
 var viewKind = "station", viewCall = null, viewSup = null;
 
-/* ---------- Datos reales (foto fija nov 2026, 18:08) ---------- */
+/* ---------- Datos reales (foto fija nov 2026, 18:08; lista de 77 en vivo 25 nov 2026, 12:55) ---------- */
 var ZONES = [
-  {key:"ASIS",  name:"BRADESCARD ASISTENCIAS", short:"ASISTENCIAS", ns:"88,1 %", vol:8143, volTxt:"8.143", n:38, prefix:"A", u0:0.5, v0:1,  cols:8, rows:5, lab:{mode:"back", dx:0, dy:-37}},
-  {key:"COPPEL",name:"COPPEL VIDA",            short:"COPPEL VIDA", ns:"87,1 %", vol:3493, volTxt:"3.493", n:31, prefix:"B", u0:26,  v0:1,  cols:7, rows:5, lab:{mode:"front", dx:60, dy:40}},
-  {key:"CRED",  name:"CREDIAUTO",              short:"CREDIAUTO",   ns:"98,6 %", vol:1983, volTxt:"1.983", n:4,  prefix:"C", u0:1,   v0:17, cols:4, rows:1, lab:{mode:"front", dx:-125, dy:40}},
-  {key:"SEG",   name:"BRADESCARD SEGUROS",     short:"SEGUROS",     ns:"88,9 %", vol:1214, volTxt:"1.214", n:4,  prefix:"D", u0:14,  v0:17, cols:4, rows:1, sign:{cu:12.8, cv:18.6, dx:-30, dy:34, w:64}},
-  {key:"EMPL",  name:"EMPLEADOS",              short:"EMPLEADOS",   ns:"97,7 %", vol:379,  volTxt:"379",   n:0,  prefix:"E", u0:27,  v0:23, cols:3, rows:1, card:true},
-  {key:"LIV",   name:"LIVERPOOL",              short:"LIVERPOOL",   ns:"96,2 %", vol:209,  volTxt:"209",   n:0,  prefix:"F", u0:40,  v0:23, cols:3, rows:1, card:true},
-  {key:"LALA",  name:"LALA",                   short:"LALA",        ns:"96,0 %", vol:177,  volTxt:"177",   n:0,  prefix:"G", u0:53,  v0:23, cols:3, rows:1, card:true},
-  {key:"JAC",   name:"JAC",                    short:"JAC",         ns:"93,8 %", vol:166,  volTxt:"166",   n:0,  prefix:"H", u0:66,  v0:23, cols:3, rows:1, card:true},
-  {key:"SUZUKI",name:"SUZUKI",                 short:"SUZUKI",      ns:"100,0 %", vol:126, volTxt:"126",   n:0,  prefix:"I", u0:33.5,v0:31, cols:3, rows:1, card:true},
-  {key:"LIVGMM",name:"LIVERPOOL GMM",          short:"LIV GMM",     ns:"97,5 %", vol:85,  volTxt:"85",    n:0,  prefix:"J", u0:46.5,v0:31, cols:3, rows:1, card:true},
-  {key:"MODERNA",name:"MODERNA",               short:"MODERNA",     ns:"97,7 %", vol:60,  volTxt:"60",    n:0,  prefix:"K", u0:59.5,v0:31, cols:3, rows:1, card:true},
-  {key:"BIMBO", name:"BIMBO",                  short:"BIMBO",       ns:"95,2 %", vol:25,  volTxt:"25",    n:0,  prefix:"L", u0:72.5,v0:31, cols:3, rows:1, card:true}
+  {key:"ASIS",  name:"BRADESCARD ASISTENCIAS", short:"ASISTENCIAS", ns:"88,1 %", vol:8143, volTxt:"8.143", n:32, prefix:"A", u0:0.5, v0:1,  cols:8, rows:5, lab:{mode:"back", dx:0, dy:-37}},
+  {key:"COPPEL",name:"COPPEL VIDA",            short:"COPPEL VIDA", ns:"87,1 %", vol:3493, volTxt:"3.493", n:12, prefix:"B", u0:26,  v0:1,  cols:7, rows:5, lab:{mode:"front", dx:60, dy:40}},
+  {key:"CRED",  name:"CREDIAUTO",              short:"CREDIAUTO",   ns:"98,6 %", vol:1983, volTxt:"1.983", n:16, prefix:"C", u0:1,   v0:17, cols:4, rows:4, lab:{mode:"front", dx:114, dy:109}},
+  {key:"SEG",   name:"BRADESCARD SEGUROS",     short:"SEGUROS",     ns:"88,9 %", vol:1214, volTxt:"1.214", n:0,  prefix:"D", u0:14,  v0:17, cols:4, rows:1, card:true, atienden:[["KAREN FERNANDA CARRIZOSA PALACIOS",71],["KARLA ANAIS TREILHARD VALDEZ",65],["NOEMI GARDUNO SANCHEZ",64],["JOSEFINA ABIGAIL COLIN POLO",60],["JUAN MANUEL RIVERA DEL VALLE",54],["URIEL JOSUE GUZMAN GOMEZ",53],["DAYLAN SAJID SANCHEZ MOHEDANO",49],["CLAUDIA ELENA GARCIA BEDOLLA",47],["MELANIE CASIO BUENROSTRO",47],["CLAUDIA LETICIA FLORES ARELLANO",44],["JORGE FELIPE CHAVEZ VELASCO",43],["FRANCISCO GUERRERO LOPEZ",41],["MARIA ELENA GARNICA GONZALEZ",40],["ARIEL SERRANO MEDRANO",38],["MARIANA LOYOLA FALCON",29],["ASTRID SOFIA RAMIREZ ALVARADO",29],["ERNESTO SERVIN ESQUIVAL",27],["YAJAIRA ARIZMENDI MENDOZA",24],["VERONICA BARRERA GOMEZ",23],["MARIA NURIA MORERAS",22],["MARCOS CARMONA MIRANDA",17],["SHADANY ITZEL ZAPATA NUNEZ",16],["HUNABKU ADAN ALDAMA MOLINOS",12],["CRISTOBAL DE JESUS RAZO FLORES",11],["VIANEY ALBARRAN CRUCES",7],["LAURA GISELLE ROBLES MEJIA",7],["ALVARO TOVAR FRANCO",5],["SERGIO RODRIGUEZ MARTINEZ",5],["SERGIO ENRIQUE MENDIETA JIMENEZ",5],["ABIGAIL RAMIREZ BERNAL",4],["GABRIEL ALBERTO VAZQUEZ MORA",2]], atiendenFuente:"cruce"},
+  {key:"EMPL",  name:"EMPLEADOS",              short:"EMPLEADOS",   ns:"97,7 %", vol:379,  volTxt:"379",   n:0,  prefix:"E", u0:27,  v0:23, cols:3, rows:1, card:true, atienden:[["DANIEL SANCHEZ PEREZ",33],["LETICIA PEREZ MUNOZ",30],["JARED FRANCISCO HERNANDEZ RIOS",26],["CARLOS DAVID AVENDANO GUZMAN",25],["ASTRID SOFIA CASTILLO LEDEZMA",25],["ALONDRA SHANTAL BECERRIL MONTAÑO",23],["ANA VIANEY NAJERA HERRERA",22],["KAREN ADRIANA CAMARENA GALVEZ",22],["BRISA LISSET CAMARENA HERNANDEZ",21],["LUIS FERNANDO LAGUNA FLORES",21],["ARTURO DAVID RAMIREZ LEYTE",18],["KEVIN GABRIEL RIVERA",14],["MELANY BELIO TREJO",14],["SALVADOR LARA RODRIGUEZ",9],["JOSE ANTONIO ROJAS RODRIGUEZ",4],["FANY ARELI LOPEZ ROSALES",1],["JOANY CELESTE CRUZ ALVARADO",1]], atiendenFuente:"vivo"},
+  {key:"LIV",   name:"LIVERPOOL",              short:"LIVERPOOL",   ns:"96,2 %", vol:209,  volTxt:"209",   n:6,  prefix:"F", u0:40,  v0:22, cols:3, rows:2, lab:{mode:"back", dx:-319, dy:11}},
+  {key:"LALA",  name:"LALA",                   short:"LALA",        ns:"96,0 %", vol:177,  volTxt:"177",   n:4,  prefix:"G", u0:53,  v0:23, cols:4, rows:1, sign:{cu:62, cv:25, dx:1, dy:45, w:64}},
+  {key:"JAC",   name:"JAC",                    short:"JAC",         ns:"93,8 %", vol:166,  volTxt:"166",   n:3,  prefix:"H", u0:66,  v0:23, cols:3, rows:1, lab:{mode:"back", dx:21, dy:-53}},
+  {key:"SUZUKI",name:"SUZUKI",                 short:"SUZUKI",      ns:"100,0 %", vol:126, volTxt:"126",   n:3,  prefix:"I", u0:33.5,v0:31, cols:3, rows:1, sign:{cu:20, cv:28, dx:4, dy:-54, w:64}},
+  {key:"LIVGMM",name:"LIVERPOOL GMM",          short:"LIV GMM",     ns:"97,5 %", vol:85,  volTxt:"85",    n:0,  prefix:"J", u0:46.5,v0:31, cols:3, rows:1, card:true, atienden:[["MARIO DANIEL ACUNA ALZATE",38],["JORGE LUIS TENORIO CAMPUZANO",15],["OLIVIA LUNA TOLEDO",9],["ANTONIO CASTELAN MEJIA",9],["SAMUEL RODRIGUEZ SANTOS",8],["JOSHUA DE JESUS PEREZ",3],["LINDA PAMELA GUERRERO ALANIZ",1]], atiendenFuente:"vivo"},
+  {key:"MODERNA",name:"MODERNA",               short:"MODERNA",     ns:"97,7 %", vol:60,  volTxt:"60",    n:0,  prefix:"K", u0:59.5,v0:31, cols:3, rows:1, card:true, atienden:[["ABIGAIL RAMIREZ BERNAL",21],["SERGIO ENRIQUE MENDIETA JIMENEZ",10],["HUNABKU ADAN ALDAMA MOLINOS",8],["GABRIEL ALBERTO VAZQUEZ MORA",6]], atiendenFuente:"vivo"},
+  {key:"BIMBO", name:"BIMBO",                  short:"BIMBO",       ns:"95,2 %", vol:25,  volTxt:"25",    n:1,  prefix:"L", u0:72.5,v0:31, cols:3, rows:1, sign:{cu:74, cv:30, dx:-17, dy:-32, w:64}}
 ];
 var TMO_GLOBAL = "8:43";
 var STATES = {
@@ -2252,7 +2331,7 @@ ZONES.forEach(function(z){
   var p = [iso(z.u0-1.2, z.v0-1.2), iso(u1+1.6, z.v0-1.2), iso(u1+1.6, v1+1.6), iso(z.u0-1.2, v1+1.6)];
   el("polygon", {points: poly(p), fill:"#ffffff", stroke:"#cbd5e1", "stroke-width":1.2,
     "class":"sup-zone-platform", "data-zone":z.key, tabindex:"0", role:"button",
-    "aria-label":"Zona "+z.name+", NS "+z.ns+", volumen "+z.volTxt+(z.card ? ", sin asesores identificados en Tableau" : "")}, zoneLayer);
+    "aria-label":"Zona "+z.name+", NS "+z.ns+", volumen "+z.volTxt+(z.atienden ? ", atienden " + z.atienden.length + " asesores" : (z.card ? ", sin asesores identificados en Tableau" : ""))}, zoneLayer);
   /* Error 23: el centro de COPPEL queda cubierto por las estaciones; el borde
      visible de la zona (banda de 14 px sobre su arista) es el punto clicable.
      Va en zoneLayer, bajo las estaciones, para no robarles el clic. */
@@ -2268,7 +2347,9 @@ ZONES.forEach(function(z){
   if(z.lab){
     var anchor = (z.lab.mode === "back")
       ? iso(z.u0-1.2, z.v0-1.2)
-      : iso(u1+1.6, v1+1.6);
+      : (z.lab.corner === "left-front"
+        ? iso(z.u0-1.2, v1+1.6)
+        : iso(u1+1.6, v1+1.6));
     var lx = anchor.x + z.lab.dx, ly = anchor.y + z.lab.dy;
     var line1 = z.short + " · NS " + z.ns;
     var line2 = z.volTxt + " llamadas · " + (z.n === 1 ? "1 lugar" : z.n + " lugares");
@@ -2280,16 +2361,17 @@ ZONES.forEach(function(z){
     var t2 = el("text", {x: lx, y: ly+9, "text-anchor":"middle", "class":"sup-zone-sub"}, zoneLayer);
     t2.textContent = line2;
   } else if(z.card){
-    /* Zona sin asesores: totales reales + nota visible, sin pildora ni lugares. */
+    /* Zona sin asientos: totales reales + nota visible, sin pildora ni lugares.
+     Si tiene `atienden`, la nota dice cuántos la atienden (la lista va en su ficha). */
     var cc = iso((z.u0+u1)/2, (z.v0+v1)/2);
     var cl1 = el("text", {x: cc.x, y: cc.y-13, "text-anchor":"middle", "class":"sup-card-line1", "data-zone":z.key}, textLayer);
     cl1.textContent = z.short;
     var cl2 = el("text", {x: cc.x, y: cc.y, "text-anchor":"middle", "class":"sup-card-line2", "data-zone":z.key}, textLayer);
     cl2.textContent = "NS " + z.ns + " · " + z.volTxt + " llamadas";
     var cn1 = el("text", {x: cc.x, y: cc.y+12, "text-anchor":"middle", "class":"sup-card-note", "data-zone":z.key}, textLayer);
-    cn1.textContent = "sin asesores identificados";
+    cn1.textContent = z.atienden ? ("0 lugares · atienden " + z.atienden.length) : "sin asesores identificados";
     var cn2 = el("text", {x: cc.x, y: cc.y+22, "text-anchor":"middle", "class":"sup-card-note", "data-zone":z.key}, textLayer);
-    cn2.textContent = "en Tableau";
+    cn2.textContent = z.atienden ? "su asiento está en otra zona" : "en Tableau";
   }
   var idx = 0;
   for(var r=0; r<z.rows && idx<z.n; r++){
@@ -2351,11 +2433,12 @@ ZONES.forEach(function(z){
 });
 
 /* ---------- Mapeo asesor real → estación (determinista) ----------
-   Por atendidas dentro de cada cartera (orden de la lista de 77):
-   ASISTENCIAS 38 → sus 38; COPPEL VIDA 31 → sus 31;
-   CREDIAUTO 4 → sus 4; BRADESCARD SEGUROS 4 → sus 4.
-   Las otras 8 carteras no tienen asesores en la lista de 77: son zonas
-   sin lugares, sin inventar nombres. */
+   Por atendidas dentro de cada cartera (orden de la lista de 77 en vivo,
+   vista Asesores 25 nov 2026): ASISTENCIAS 32; CREDIAUTO 16;
+   COPPEL VIDA 12; LIVERPOOL 6; LALA 4; JAC 3; SUZUKI 3; BIMBO 1.
+   EMPLEADOS, MODERNA, LIVERPOOL GMM y BRADESCARD SEGUROS no tienen
+   asesores con esa cartera como dominante: son zonas sin lugares
+   (muestran quiénes las atienden en su ficha), sin inventar nombres. */
 (function mapAsesores(){
   var all = (window.__sup && window.__sup.asesores) || [];
   var byCartera = {};
@@ -2366,7 +2449,8 @@ ZONES.forEach(function(z){
     byCartera[k].sort(function(a, b){ return (b.at - a.at) || (a.n - b.n); });
   });
   var zoneKeyByCartera = {"BRADESCARD ASISTENCIAS":"ASIS", "COPPEL VIDA":"COPPEL",
-    "CREDIAUTO":"CRED", "BRADESCARD SEGUROS":"SEG"};
+    "CREDIAUTO":"CRED", "BRADESCARD SEGUROS":"SEG", "LIVERPOOL":"LIV",
+    "LALA":"LALA", "JAC":"JAC", "SUZUKI":"SUZUKI", "BIMBO":"BIMBO"};
   var counters = {};
   stations.forEach(function(st){
     var list = byCartera[st.zone.name];
@@ -2404,8 +2488,12 @@ mamparas.forEach(function(m){
   el("polygon", {points: (p.x-6)+","+p.y+" "+(p.x+6)+","+p.y+" "+(p.x+4)+","+(p.y+7)+" "+(p.x-4)+","+(p.y+7),
     fill:"#b45309", stroke:"#92400e", "stroke-width":.8}, zoneLayer);
 });
+/* Letreros de zona (placa con el nombre corto) para SUZUKI, LALA y BIMBO,
+   cuyas píldoras no caben en sus huecos. SEGUROS ya no lleva placa (tarjeta). */
 [
-  {key:"SEG",   cu:12.8, cv:18.6, dx:-30, dy:34, w:64}
+  {key:"SUZUKI",cu:20, cv:28, dx:4,    dy:-54, w:64},
+  {key:"LALA",  cu:62, cv:25, dx:1,    dy:45,  w:64},
+  {key:"BIMBO", cu:74, cv:30, dx:-17,  dy:-32, w:64}
 ].forEach(function(sg){
   var z = ZONES.filter(function(zz){ return zz.key===sg.key; })[0];
   var p = iso(sg.cu, sg.cv);
@@ -2428,7 +2516,7 @@ el("rect", {x:343.5, y:369.5, width:7, height:5, rx:1, fill:"#38bdf8"}, zoneLaye
 el("polygon", {points:"333,383 345,376 357,383 345,390", fill:"#cbd5e1", stroke:"#94a3b8", "stroke-width":1}, zoneLayer);
 el("polygon", {points:"333,383 345,390 345,394 333,387", fill:"#94a3b8"}, zoneLayer);
 el("ellipse", {cx:344, cy:396, rx:5.5, ry:3, fill:"#94a3b8", stroke:"#64748b", "stroke-width":.8}, zoneLayer);
-[["PASILLO",383,276],["PASILLO",500,440],["PASILLO",526,361]].forEach(function(l){
+[["PASILLO",700,415],["PASILLO",600,440],["PASILLO",458,399]].forEach(function(l){
   var t = el("text", {x:l[1], y:l[2], "text-anchor":"middle", "class":"sup-pasillo-label"}, svg);
   t.textContent = l[0];
 });
@@ -2985,7 +3073,31 @@ function openInspector(st){
   document.getElementById("sup-inspNote").textContent =
     "TMO por zona no forma parte de la foto fija de nov 2026; se muestra el TMO global (" + TMO_GLOBAL + "). La llamada en curso es un identificador ficticio de la simulación." +
     (st.asesorReal ? " Toca la persona o la estación para ver su ficha completa." : "");
+  setInspectorAtienden(null);
   inspector.hidden = false;
+}
+/* Lista de quienes atienden una cartera sin asientos: nombre + atendidas
+   en esa cartera + cartera donde está su asiento principal (dominante). */
+function atiendenListHTML(z, lista){
+  var rows = z.atienden.map(function(t){
+    var dom = null;
+    for(var i = 0; i < lista.length; i++){ if(lista[i].nombre === t[0]){ dom = lista[i].cartera; break; } }
+    return "<li><b>" + t[0] + "</b> — " + t[1] + " · asiento en " + (dom || "sin dato") + "</li>";
+  }).join("");
+  var fuente = z.atiendenFuente === "cruce"
+    ? "Fuente: lista reconstruida por cruce con el extracto local (no se leyó la vista Asesores filtrada de SEGUROS en vivo); ante la duda, «sin dato»."
+    : "Fuente: vista Asesores filtrada por cartera, leída en vivo 25 nov 2026, 12:51.";
+  return "<h3>Quienes atienden en esta cartera</h3><p>Nombre + atendidas en esta cartera en nov 2026. Su asiento principal está en otra zona (entre paréntesis).</p><ul>" + rows + "</ul><p>" + fuente + "</p>";
+}
+function setInspectorAtienden(z){
+  var box = document.getElementById("sup-inspector");
+  var atEl = document.getElementById("sup-inspAtienden");
+  if(!atEl){
+    atEl = document.createElement("div");
+    atEl.id = "sup-inspAtienden"; atEl.className = "sup-atienden";
+    box.appendChild(atEl);
+  }
+  atEl.innerHTML = (z && z.atienden) ? atiendenListHTML(z, window.__sup.asesores) : "";
 }
 /* Inspector de cartera: totales de la zona + nota si no tiene asesores. */
 function openZoneInspector(key){
@@ -2994,7 +3106,9 @@ function openZoneInspector(key){
   current = null; viewKind = "zone"; viewCall = null; viewSup = null;
   document.getElementById("sup-inspTitle").textContent = "Cartera · " + z.short;
   document.getElementById("sup-inspCartera").textContent = z.name +
-    (z.n ? " · " + z.n + " lugares (1 por asesor real)" : " · sin asesores identificados en Tableau");
+    (z.n ? " · " + z.n + " lugares (1 por asesor real)"
+         : (z.atienden ? " · 0 lugares · atienden " + z.atienden.length + " asesores"
+                       : " · sin asesores identificados en Tableau"));
   var b = document.getElementById("sup-inspEstado");
   b.textContent = "Zona"; b.style.background = "#334155"; b.style.color = "#fff";
   document.getElementById("sup-inspCall").textContent = "—";
@@ -3002,9 +3116,13 @@ function openZoneInspector(key){
   document.getElementById("sup-inspNS").textContent = z.ns;
   document.getElementById("sup-inspVol").textContent = z.volTxt;
   document.getElementById("sup-inspNote").textContent =
-    z.card
-      ? "Esta cartera tiene llamadas pero ningún asesor con nombre en Tableau: sus totales son reales y no se inventan lugares ni nombres."
-      : "Totales de noviembre 2026. Toca un lugar del piso para ver la ficha de su asesor.";
+    z.atienden
+      ? "Esta cartera tiene llamadas y " + z.atienden.length + " asesores que la atienden, pero su asiento principal está en otra cartera: aquí no hay lugares con su nombre." +
+        (z.atiendenFuente === "cruce" ? " La lista viene del cruce con el extracto local (no de una lectura filtrada en vivo)." : "")
+      : (z.card
+        ? "Esta cartera tiene llamadas pero ningún asesor con nombre en Tableau: sus totales son reales y no se inventan lugares ni nombres."
+        : "Totales de noviembre 2026. Toca un lugar del piso para ver la ficha de su asesor.");
+  setInspectorAtienden(z);
   inspector.hidden = false;
 }
 function findCall(callId){
@@ -3169,7 +3287,7 @@ function showZoneTip(key, clientX, clientY){
   zoneTip.innerHTML = "<h3>"+z.name+"</h3><dl>"+
     "<dt>NS nov</dt><dd>"+z.ns+"</dd>"+
     "<dt>Volumen nov</dt><dd>"+z.volTxt+"</dd>"+
-    "<dt>Lugares</dt><dd>"+(z.n === 0 ? "0 — sin asesores identificados en Tableau" : z.n)+"</dd>"+
+    "<dt>Lugares</dt><dd>"+(z.n === 0 ? (z.atienden ? "0 — atienden " + z.atienden.length + " asesores (su asiento está en otra zona)" : "0 — sin asesores identificados en Tableau") : z.n)+"</dd>"+
     "<dt>En llamada ahora</dt><dd>"+inCall+"</dd></dl>";
   zoneTip.hidden = false;
   var rect = sceneEl.getBoundingClientRect();
@@ -3297,8 +3415,9 @@ window.__sup.stations = stations;
 /* Repintado con dato en vivo (2026-11-25): actualiza NS y volumen de las
    12 zonas del piso y sus etiquetas/heatmap. Solo los campos que trae el
    JSON; el resto (lugares, asesores) sigue siendo la foto fija. Las
-   pildoras son solo 4 (zonas con lugares); las 8 tarjetas se actualizan
-   por data-zone, no por indice. */
+   pildoras son 5 (ASIS, COPPEL, CRED, LIV, JAC); SUZUKI, LALA y BIMBO
+   llevan placa de nombre sin NS. Las 4 tarjetas (EMPL, MODERNA, LIVGMM, SEG)
+   se actualizan por data-zone, no por indice. */
 window.__sup.aplicarVivo = function (rows) {
   rows.forEach(function (r) {
     var z = null;
@@ -3321,7 +3440,7 @@ window.__sup.aplicarVivo = function (rows) {
   });
   document.querySelectorAll("#sup-floor .sup-zone-platform:not(.sup-zone-border)").forEach(function (p) {
     var z = zoneByKey(p.getAttribute("data-zone"));
-    if (z) p.setAttribute("aria-label", "Zona " + z.name + ", NS " + z.ns + ", volumen " + z.volTxt + (z.card ? ", sin asesores identificados en Tableau" : ""));
+    if (z) p.setAttribute("aria-label", "Zona " + z.name + ", NS " + z.ns + ", volumen " + z.volTxt + (z.atienden ? ", atienden " + z.atienden.length + " asesores" : (z.card ? ", sin asesores identificados en Tableau" : "")));
   });
   document.querySelectorAll("#sup-floor .sup-heat-poly").forEach(function (h) {
     var z = zoneByKey(h.getAttribute("data-zone"));
@@ -3419,153 +3538,153 @@ var ZONES = [
    rec:8143, ate:6882, pctAte:84.5, aba:1261, dem:819, ns:88.1, tmo:"7:49", tmoS:469,
    asa:16, esp:15, gt20:10.4, nps:47.9, enc:2111,
    comp:{pen:"4 s", penS:4, conv:"6:37", convS:397, convPct:86.0, esp:"15 s", espS:15, pos:"46 s", posS:46},
-   n:38, prefix:"A", u0:0.5, v0:1, cols:8, rows:5, lab:{mode:"back", dx:0, dy:-37}},
+   n:32, prefix:"A", u0:0.5, v0:1, cols:8, rows:5, lab:{mode:"back", dx:0, dy:-37}},
   {key:"COPPEL", name:"COPPEL VIDA", short:"COPPEL VIDA", pareto:"A",
    rec:3493, ate:2901, pctAte:83.1, aba:592, dem:374, ns:87.1, tmo:"8:29", tmoS:509,
    asa:13, esp:10, gt20:14.0, nps:19.6, enc:703,
    comp:{pen:"10 s", penS:10, conv:"7:20", convS:440, convPct:86.5, esp:"10 s", espS:10, pos:"53 s", posS:53},
-   n:31, prefix:"B", u0:26, v0:1, cols:7, rows:5, lab:{mode:"front", dx:60, dy:40}},
+   n:12, prefix:"B", u0:26, v0:1, cols:7, rows:5, lab:{mode:"front", dx:60, dy:40}},
   {key:"CRED", name:"CREDIAUTO", short:"CREDIAUTO", pareto:"A",
    rec:1983, ate:1598, pctAte:80.6, aba:385, dem:22, ns:98.6, tmo:"12:00", tmoS:720,
    asa:3, esp:2, gt20:1.3, nps:71.9, enc:1023,
    comp:{pen:"4 s", penS:4, conv:"10:18", convS:618, convPct:86.0, esp:"2 s", espS:2, pos:"1:20", posS:80},
-   n:4, prefix:"C", u0:1, v0:17, cols:4, rows:1, lab:{mode:"front", dx:-125, dy:40}},
+   n:16, prefix:"C", u0:1, v0:17, cols:4, rows:4, lab:{mode:"front", dx:114, dy:109}},
   {key:"SEG", name:"BRADESCARD SEGUROS", short:"SEGUROS", pareto:"B",
    rec:1214, ate:943, pctAte:77.7, aba:271, dem:105, ns:88.9, tmo:"11:29", tmoS:689,
    asa:17, esp:13, gt20:11.1, nps:31.2, enc:535,
    comp:{pen:"8 s", penS:8, conv:"9:53", convS:593, convPct:86.2, esp:"13 s", espS:13, pos:"1:08", posS:68},
-   n:4, prefix:"D", u0:14, v0:17, cols:4, rows:1, sign:{cu:12.8, cv:18.6, dx:-30, dy:34, w:64}},
+   n:0, prefix:"D", u0:14, v0:17, cols:4, rows:1, card:true, atienden:[["KAREN FERNANDA CARRIZOSA PALACIOS",71],["KARLA ANAIS TREILHARD VALDEZ",65],["NOEMI GARDUNO SANCHEZ",64],["JOSEFINA ABIGAIL COLIN POLO",60],["JUAN MANUEL RIVERA DEL VALLE",54],["URIEL JOSUE GUZMAN GOMEZ",53],["DAYLAN SAJID SANCHEZ MOHEDANO",49],["CLAUDIA ELENA GARCIA BEDOLLA",47],["MELANIE CASIO BUENROSTRO",47],["CLAUDIA LETICIA FLORES ARELLANO",44],["JORGE FELIPE CHAVEZ VELASCO",43],["FRANCISCO GUERRERO LOPEZ",41],["MARIA ELENA GARNICA GONZALEZ",40],["ARIEL SERRANO MEDRANO",38],["MARIANA LOYOLA FALCON",29],["ASTRID SOFIA RAMIREZ ALVARADO",29],["ERNESTO SERVIN ESQUIVAL",27],["YAJAIRA ARIZMENDI MENDOZA",24],["VERONICA BARRERA GOMEZ",23],["MARIA NURIA MORERAS",22],["MARCOS CARMONA MIRANDA",17],["SHADANY ITZEL ZAPATA NUNEZ",16],["HUNABKU ADAN ALDAMA MOLINOS",12],["CRISTOBAL DE JESUS RAZO FLORES",11],["VIANEY ALBARRAN CRUCES",7],["LAURA GISELLE ROBLES MEJIA",7],["ALVARO TOVAR FRANCO",5],["SERGIO RODRIGUEZ MARTINEZ",5],["SERGIO ENRIQUE MENDIETA JIMENEZ",5],["ABIGAIL RAMIREZ BERNAL",4],["GABRIEL ALBERTO VAZQUEZ MORA",2]], atiendenFuente:"cruce"},
   {key:"EMPL", name:"EMPLEADOS", short:"EMPLEADOS", pareto:"C",
    rec:379, ate:306, pctAte:80.7, aba:73, dem:7, ns:97.7, tmo:"12:42", tmoS:762,
    asa:2, esp:2, gt20:1.4, nps:88.1, enc:143,
    comp:{pen:"2 s", penS:2, conv:"10:57", convS:657, convPct:86.1, esp:"2 s", espS:2, pos:"1:21", posS:81},
-   n:0, prefix:"E", u0:27, v0:23, cols:3, rows:1, card:true},
+   n:0, prefix:"E", u0:27, v0:23, cols:3, rows:1, card:true, atienden:[["DANIEL SANCHEZ PEREZ",33],["LETICIA PEREZ MUNOZ",30],["JARED FRANCISCO HERNANDEZ RIOS",26],["CARLOS DAVID AVENDANO GUZMAN",25],["ASTRID SOFIA CASTILLO LEDEZMA",25],["ALONDRA SHANTAL BECERRIL MONTAÑO",23],["ANA VIANEY NAJERA HERRERA",22],["KAREN ADRIANA CAMARENA GALVEZ",22],["BRISA LISSET CAMARENA HERNANDEZ",21],["LUIS FERNANDO LAGUNA FLORES",21],["ARTURO DAVID RAMIREZ LEYTE",18],["KEVIN GABRIEL RIVERA",14],["MELANY BELIO TREJO",14],["SALVADOR LARA RODRIGUEZ",9],["JOSE ANTONIO ROJAS RODRIGUEZ",4],["FANY ARELI LOPEZ ROSALES",1],["JOANY CELESTE CRUZ ALVARADO",1]], atiendenFuente:"vivo"},
   {key:"LIV", name:"LIVERPOOL", short:"LIVERPOOL", pareto:"C",
    rec:209, ate:186, pctAte:89.0, aba:23, dem:7, ns:96.2, tmo:"8:58", tmoS:538,
    asa:3, esp:2, gt20:2.8, nps:89.0, enc:100,
    comp:{pen:"4 s", penS:4, conv:"7:49", convS:469, convPct:87.0, esp:"2 s", espS:2, pos:"58 s", posS:58},
-   n:0, prefix:"F", u0:40, v0:23, cols:3, rows:1, card:true},
+   n:6, prefix:"F", u0:40, v0:22, cols:3, rows:2, lab:{mode:"front", corner:"left-front", dx:-242, dy:-28}},
   {key:"LALA", name:"LALA", short:"LALA", pareto:"B",
    rec:177, ate:149, pctAte:84.2, aba:28, dem:6, ns:96.0, tmo:"8:45", tmoS:525,
    asa:3, esp:2, gt20:3.4, nps:79.5, enc:122,
    comp:{pen:"4 s", penS:4, conv:"7:28", convS:448, convPct:85.3, esp:"2 s", espS:2, pos:"1:08", posS:68},
-   n:0, prefix:"G", u0:53, v0:23, cols:3, rows:1, card:true},
+   n:4, prefix:"G", u0:53, v0:23, cols:4, rows:1, sign:{cu:62, cv:25, dx:1, dy:45, w:64}},
   {key:"JAC", name:"JAC", short:"JAC", pareto:"C",
    rec:166, ate:145, pctAte:87.3, aba:21, dem:9, ns:93.8, tmo:"9:58", tmoS:598,
    asa:5, esp:4, gt20:6.0, nps:76.2, enc:119,
    comp:{pen:"4 s", penS:4, conv:"8:35", convS:515, convPct:86.1, esp:"4 s", espS:4, pos:"1:09", posS:69},
-   n:0, prefix:"H", u0:66, v0:23, cols:3, rows:1, card:true},
+   n:3, prefix:"H", u0:66, v0:23, cols:3, rows:1, lab:{mode:"back", dx:21, dy:-53}},
   {key:"SUZUKI", name:"SUZUKI", short:"SUZUKI", pareto:"C",
    rec:126, ate:109, pctAte:86.5, aba:17, dem:0, ns:100.0, tmo:"9:45", tmoS:585,
    asa:2, esp:1, gt20:0.0, nps:93.5, enc:124,
    comp:{pen:"3 s", penS:3, conv:"8:36", convS:516, convPct:88.1, esp:"1 s", espS:1, pos:"59 s", posS:59},
-   n:0, prefix:"I", u0:33.5, v0:31, cols:3, rows:1, card:true},
+   n:3, prefix:"I", u0:33.5, v0:31, cols:3, rows:1, sign:{cu:20, cv:28, dx:4, dy:-54, w:64}},
   {key:"LIVGMM", name:"LIVERPOOL GMM", short:"LIV GMM", pareto:"C",
    rec:85, ate:76, pctAte:89.4, aba:9, dem:2, ns:97.5, tmo:"5:28", tmoS:328,
    asa:4, esp:3, gt20:2.5, nps:95.2, enc:63,
    comp:{pen:"3 s", penS:3, conv:"4:32", convS:272, convPct:83.0, esp:"3 s", espS:3, pos:"46 s", posS:46},
-   n:0, prefix:"J", u0:46.5, v0:31, cols:3, rows:1, card:true},
+   n:0, prefix:"J", u0:46.5, v0:31, cols:3, rows:1, card:true, atienden:[["MARIO DANIEL ACUNA ALZATE",38],["JORGE LUIS TENORIO CAMPUZANO",15],["OLIVIA LUNA TOLEDO",9],["ANTONIO CASTELAN MEJIA",9],["SAMUEL RODRIGUEZ SANTOS",8],["JOSHUA DE JESUS PEREZ",3],["LINDA PAMELA GUERRERO ALANIZ",1]], atiendenFuente:"vivo"},
   {key:"MODERNA", name:"MODERNA", short:"MODERNA", pareto:"C",
    rec:60, ate:46, pctAte:76.7, aba:14, dem:1, ns:97.7, tmo:"5:31", tmoS:331,
    asa:5, esp:5, gt20:1.7, nps:null, enc:0,
    comp:{pen:"5 s", penS:5, conv:"4:51", convS:291, convPct:88.0, esp:null, espS:0, pos:"36 s", posS:36},
-   n:0, prefix:"K", u0:59.5, v0:31, cols:3, rows:1, card:true},
+   n:0, prefix:"K", u0:59.5, v0:31, cols:3, rows:1, card:true, atienden:[["ABIGAIL RAMIREZ BERNAL",21],["SERGIO ENRIQUE MENDIETA JIMENEZ",10],["HUNABKU ADAN ALDAMA MOLINOS",8],["GABRIEL ALBERTO VAZQUEZ MORA",6]], atiendenFuente:"vivo"},
   {key:"BIMBO", name:"BIMBO", short:"BIMBO", pareto:"C",
    rec:25, ate:10, pctAte:40.0, aba:15, dem:1, ns:95.2, tmo:"8:14", tmoS:494,
    asa:6, esp:5, gt20:4.8, nps:60.0, enc:15,
    comp:{pen:"6 s", penS:6, conv:"6:55", convS:415, convPct:84.7, esp:"5 s", espS:5, pos:"1:03", posS:63},
-   n:0, prefix:"L", u0:72.5, v0:31, cols:3, rows:1, card:true}
+   n:1, prefix:"L", u0:72.5, v0:31, cols:3, rows:1, sign:{cu:74, cv:30, dx:-17, dy:-32, w:64}}
 ];
 /* Totales de Dirección (DATOS.md) para el pie de tabla. */
 var TOTALES = {rec:16060, ate:13351, aba:2709, dem:1353, ns:89.9, tmo:"8:43", asa:10, nps:37.4};
 /* Carteras del filtro de Tableau sin llamadas en nov 2026: no son ceros. */
 var SIN_LLAMADAS = ["BETTERWARE", "SANTANDER"];
 
-/* ---------- ASESORES con lugar (DATOS.md · lista de 77) ----------
-   Los 77, uno por lugar, por atendidas dentro de cada cartera:
-   BRADESCARD ASISTENCIAS 38; COPPEL VIDA 31; CREDIAUTO 4;
-   BRADESCARD SEGUROS 4. n = número en la lista de 77.
-   NPS null = s/d en el tablero. Las otras 8 carteras (EMPLEADOS,
-   LIVERPOOL, LALA, JAC, SUZUKI, LIVERPOOL GMM, MODERNA, BIMBO) no
-   tienen asesores en la lista: son zonas sin lugares. */
+/* ---------- ASESORES con lugar (vista Asesores en vivo · lista de 77) ----------
+   Los 77, uno por lugar, por atendidas dentro de cada cartera dominante:
+   BRADESCARD ASISTENCIAS 32; CREDIAUTO 16; COPPEL VIDA 12;
+   LIVERPOOL 6; LALA 4; JAC 3; SUZUKI 3; BIMBO 1. n = número en la lista de 77.
+   NPS null = s/d en el tablero. EMPLEADOS, MODERNA, LIVERPOOL GMM y
+   BRADESCARD SEGUROS no tienen asesores con esa cartera como dominante:
+   son zonas sin lugares (su ficha muestra quiénes las atienden). */
 var CAMP_ASESORES = [
-["JUAN MANUEL RIVERA DEL VALLE","BRADESCARD ASISTENCIAS",497,"4:43",76.4,1],
-["LIZETH GUADALUPE JIMENEZ RAMIREZ","BRADESCARD ASISTENCIAS",477,"6:34",61.0,2],
-["MARIA LAURA HERNANDEZ JIMENEZ","BRADESCARD ASISTENCIAS",458,"5:06",null,3],
-["SANDRA PATRICIA ALVAREZ SANCHEZ","BRADESCARD ASISTENCIAS",446,"6:23",65.2,4],
-["LUIS ENRIQUE VAZQUEZ VILLALOBOS","BRADESCARD ASISTENCIAS",407,"7:32",59.6,5],
-["ANA GABRIELA HERNANDEZ GALICIA","BRADESCARD ASISTENCIAS",374,"7:06",49.6,6],
-["ALEXA VALERIA CAMACHO RUIZ","BRADESCARD ASISTENCIAS",366,"6:45",null,7],
-["ERICK MICHEL CORONEL SANCHEZ","BRADESCARD ASISTENCIAS",357,"6:40",70.8,8],
-["DAYLAN YOSHIMAR ALMAGUER ROCHA","BRADESCARD ASISTENCIAS",357,"7:11",-94.9,9],
-["NATALIA CAROLINA MENDOZA VAZQUEZ","BRADESCARD ASISTENCIAS",354,"6:53",null,10],
-["MONICA LETICIA REYES VARGAS","BRADESCARD ASISTENCIAS",352,"6:15",75.0,11],
-["ALONDRA GUADALUPE MARTINEZ RODRIGUEZ","BRADESCARD ASISTENCIAS",348,"6:39",79.5,12],
-["JENNIFER ALEXANDRA HERNANDEZ CASTANEDA","BRADESCARD ASISTENCIAS",326,"7:05",68.4,13],
-["ALEJANDRA SANCHEZ ALVAREZ","COPPEL VIDA",316,"6:45",44.4,14],
-["ADRIAN EMMANUEL DELGADO RODRIGUEZ","COPPEL VIDA",310,"6:41",62.2,15],
-["GABRIELA ESTRADA JIMENEZ","COPPEL VIDA",308,"6:26",72.1,16],
-["KAREN ITZEL GARCIA GUTIERREZ","COPPEL VIDA",305,"7:08",70.0,17],
-["JUAN JOSE RODRIGUEZ MARTINEZ","COPPEL VIDA",301,"6:33",84.6,18],
-["LESLIE ADRIANA ROSALES LOPEZ","BRADESCARD ASISTENCIAS",297,"6:31",70.6,19],
-["LUCERO ITZEL GONZALEZ TORRES","BRADESCARD ASISTENCIAS",295,"8:14",42.4,20],
-["FERNANDO GUADALUPE MARTINEZ DELGADO","BRADESCARD ASISTENCIAS",294,"6:24",64.6,21],
-["JOSE DE JESUS CERVANTES RAMIREZ","COPPEL VIDA",293,"6:41",64.7,22],
-["KEVIN RICARDO MORENO CUEVAS","COPPEL VIDA",285,"7:41",50.0,23],
-["ERIKA LIZBETH ZAVALA VAZQUEZ","COPPEL VIDA",284,"6:40",62.5,24],
-["LEONARDO SAID VEGA SALAZAR","COPPEL VIDA",281,"6:48",40.0,25],
-["MARIA FERNANDA MEZA ORTIZ","COPPEL VIDA",280,"6:50",62.5,26],
-["PAULINA ITZEL GONZALEZ PEREZ","BRADESCARD ASISTENCIAS",270,"6:20",62.5,27],
-["ITZEL GUADALUPE VELAZQUEZ LOPEZ","COPPEL VIDA",269,"7:43",77.8,28],
-["LIZBETH ADRIANA GONZALEZ BERNAL","BRADESCARD ASISTENCIAS",263,"6:47",75.0,29],
-["JESUS EMMANUEL FLORES RUIZ","COPPEL VIDA",259,"6:56",72.7,30],
-["ARANTXA BERENICE GONZALEZ MENDOZA","BRADESCARD ASISTENCIAS",252,"6:46",66.7,31],
-["JORGE LUIS HERNANDEZ ZAMORA","COPPEL VIDA",252,"7:22",58.3,32],
-["CHRISTIAN GIOVANNI TORRES BAEZ","COPPEL VIDA",250,"6:39",64.0,33],
-["MARIA GUADALUPE ORTEGA CASTRO","BRADESCARD ASISTENCIAS",247,"7:41",55.6,34],
-["MARLON JOSE LUIS CORTEZ ALANIS","BRADESCARD ASISTENCIAS",246,"6:45",60.0,35],
-["ALEXIS ALEXANDER GUTIERREZ HERNANDEZ","COPPEL VIDA",245,"6:54",73.1,36],
-["EDUARDO IVAN REYES LOPEZ","BRADESCARD ASISTENCIAS",243,"6:45",87.5,37],
-["KARLA PAOLA GARZA GUTIERREZ","BRADESCARD ASISTENCIAS",243,"7:00",76.9,38],
-["JOCELYN ALEJANDRA RAMIREZ ALVAREZ","BRADESCARD ASISTENCIAS",240,"7:48",62.5,39],
-["JORGE ARTURO TREVINO GALLEGOS","BRADESCARD ASISTENCIAS",239,"7:14",75.0,40],
-["ANGEL DAVID GARCIA GARCIA","COPPEL VIDA",238,"6:45",66.7,41],
-["ALAN DANIEL VALDEZ SANCHEZ","BRADESCARD ASISTENCIAS",237,"7:26",63.6,42],
-["MARIA DEL CARMEN HERNANDEZ GARCIA","BRADESCARD ASISTENCIAS",236,"7:00",58.3,43],
-["MONSERRAT MICHELLE LOPEZ GARZA","COPPEL VIDA",235,"6:55",57.1,44],
-["LIZETH ADRIANA VEGA GUERRERO","BRADESCARD ASISTENCIAS",234,"6:53",77.8,45],
-["ADRIANA NOHEMI HERNANDEZ GARCIA","COPPEL VIDA",233,"7:02",57.1,46],
-["ANGELICA MARIA MARTINEZ REYES","COPPEL VIDA",232,"7:15",66.7,47],
-["LOURDES ADRIANA RODRIGUEZ CORONADO","BRADESCARD ASISTENCIAS",231,"6:51",57.1,48],
-["MARTHA PATRICIA GUTIERREZ RAMIREZ","COPPEL VIDA",228,"6:36",77.8,49],
-["JOSE GUILLERMO DELGADO GARZA","COPPEL VIDA",227,"7:07",100.0,50],
-["MIGUEL ANGEL AGUILAR ZAMBRANO","BRADESCARD ASISTENCIAS",225,"6:49",90.0,51],
-["LUIS ANGEL ORTIZ MORENO","BRADESCARD ASISTENCIAS",224,"6:37",33.3,52],
-["KAREN LIZBETH MARTINEZ CORONADO","COPPEL VIDA",223,"6:58",80.0,53],
-["FERNANDA YAMILETH MONTES RIVERA","COPPEL VIDA",222,"7:22",50.0,54],
-["IVAN ALEJANDRO GARCIA GARCIA","BRADESCARD ASISTENCIAS",221,"6:59",66.7,55],
-["FATIMA LUCERO CARRILLO ALVARADO","BRADESCARD ASISTENCIAS",220,"7:39",90.9,56],
-["MIGUEL ANGEL ARREDONDO RODRIGUEZ","BRADESCARD ASISTENCIAS",220,"6:48",100.0,57],
-["ALMA YADIRA ZUNIGA GARCIA","BRADESCARD ASISTENCIAS",220,"7:15",60.0,58],
-["DANIEL ALEJANDRO GARZA GARZA","COPPEL VIDA",219,"7:12",100.0,59],
-["MARTHA GUADALUPE DELGADO GUERRERO","COPPEL VIDA",218,"7:28",100.0,60],
-["ABRIL ALEJANDRA GARCIA GONZALEZ","BRADESCARD ASISTENCIAS",213,"6:31",50.0,61],
-["ALEJANDRO ALBERTO GARCIA REYES","COPPEL VIDA",213,"6:42",100.0,62],
-["NAYELI FABIOLA MARTINEZ GARZA","COPPEL VIDA",209,"7:10",100.0,63],
-["OSCAR ULISES CASTILLO SALINAS","BRADESCARD ASISTENCIAS",208,"7:16",80.0,64],
-["FERNANDA SARAHI RODRIGUEZ RIVERA","COPPEL VIDA",203,"6:41",66.7,65],
-["CRISTIAN EDUARDO RIVERA GARCIA","COPPEL VIDA",200,"7:02",100.0,66],
-["ANGELICA LIZBETH RODRIGUEZ LOPEZ","COPPEL VIDA",197,"6:33",50.0,67],
-["JOSE EDUARDO SANCHEZ ARRIAGA","BRADESCARD ASISTENCIAS",196,"6:34",100.0,68],
-["CESAR OMAR ESPARZA HERNANDEZ","COPPEL VIDA",190,"7:05",100.0,69],
-["FRANCISCO GUERRERO LOPEZ","CREDIAUTO",188,"12:38",50.0,70],
-["ANGEL GABRIEL HERNANDEZ PEREZ","CREDIAUTO",187,"6:51",50.0,71],
-["BRISA LISSET CAMARENA HERNANDEZ","CREDIAUTO",186,"12:47",50.0,72],
-["JOSE ALBERTO RANGEL LARA","CREDIAUTO",181,"13:08",0.0,73],
-["JOSE ANDRES RANGEL RANGEL","BRADESCARD SEGUROS",172,"7:05",null,74],
-["GABRIELA YAMILETH HERNANDEZ MARTINEZ","BRADESCARD SEGUROS",160,"7:20",null,75],
-["JOSE EDUARDO IBARRA GARZA","BRADESCARD SEGUROS",112,"6:44",null,76],
-["JESUS ALEJANDRO GARCIA ROCHA","BRADESCARD SEGUROS",108,"7:30",null,77],
+["KAREN FERNANDA CARRIZOSA PALACIOS","BRADESCARD ASISTENCIAS",503,"6:17",-12.3,1],
+["JUAN MANUEL RIVERA DEL VALLE","BRADESCARD ASISTENCIAS",497,"4:43",-21.2,2],
+["NOEMI GARDUNO SANCHEZ","BRADESCARD ASISTENCIAS",489,"5:43",-23.3,3],
+["URIEL JOSUE GUZMAN GOMEZ","BRADESCARD ASISTENCIAS",479,"6:08",-55.7,4],
+["CLAUDIA ELENA GARCIA BEDOLLA","BRADESCARD ASISTENCIAS",445,"8:50",-65.0,5],
+["KARLA ANAIS TREILHARD VALDEZ","BRADESCARD ASISTENCIAS",428,"7:57",-13.3,6],
+["JOSEFINA ABIGAIL COLIN POLO","BRADESCARD ASISTENCIAS",391,"9:28",22.8,7],
+["LUIS ANGELES RODRIGUEZ","COPPEL VIDA",391,"6:01",null,8],
+["DAYLAN SAJID SANCHEZ MOHEDANO","BRADESCARD ASISTENCIAS",389,"8:20",-95.1,9],
+["MARIA ELENA GARNICA GONZALEZ","BRADESCARD ASISTENCIAS",371,"9:26",17.5,10],
+["ARIEL SERRANO MEDRANO","BRADESCARD ASISTENCIAS",366,"6:54",13.3,11],
+["CLAUDIA LETICIA FLORES ARELLANO","BRADESCARD ASISTENCIAS",359,"8:50",1.9,12],
+["FRANCISCO GUERRERO LOPEZ","BRADESCARD ASISTENCIAS",358,"12:26",-7.7,13],
+["MELANIE CASIO BUENROSTRO","BRADESCARD ASISTENCIAS",352,"8:02",-33.7,14],
+["ANGELICA ALEXANDRA LOPEZ ALVARADO","COPPEL VIDA",346,"9:21",null,15],
+["VERONICA ALEJANDRINA ROMERO RAMOS","COPPEL VIDA",337,"9:51",null,16],
+["JORGE FELIPE CHAVEZ VELASCO","BRADESCARD ASISTENCIAS",329,"9:39",22.0,17],
+["MARIANA LOYOLA FALCON","BRADESCARD ASISTENCIAS",325,"9:17",9.2,18],
+["MIRIAM LIZBETH ALVARADO LOPEZ","COPPEL VIDA",285,"8:41",null,19],
+["SEBASTIAN GUZMAN MARTINEZ","COPPEL VIDA",271,"10:06",null,20],
+["JOSE ALBERTO RANGEL LARA","COPPEL VIDA",264,"13:07",null,21],
+["ALDO GARCIA HERNANDEZ","COPPEL VIDA",229,"9:44",null,22],
+["ABNER ULICES GONZALEZ ALCANTARA","COPPEL VIDA",228,"8:43",null,23],
+["VERONICA BARRERA GOMEZ","BRADESCARD ASISTENCIAS",225,"9:18",45.1,24],
+["ASTRID SOFIA RAMIREZ ALVARADO","BRADESCARD ASISTENCIAS",218,"10:20",40.3,25],
+["ERNESTO SERVIN ESQUIVAL","BRADESCARD ASISTENCIAS",216,"9:08",20.0,26],
+["DANIEL SANCHEZ PEREZ","CREDIAUTO",199,"8:23",88.0,27],
+["MARIA NURIA MORERAS","BRADESCARD ASISTENCIAS",192,"5:38",49.2,28],
+["MARCOS CARMONA MIRANDA","BRADESCARD ASISTENCIAS",181,"11:53",-24.4,29],
+["BRISA LISSET CAMARENA HERNANDEZ","CREDIAUTO",169,"12:51",74.1,30],
+["HUNABKU ADAN ALDAMA MOLINOS","BRADESCARD ASISTENCIAS",168,"7:16",43.2,31],
+["LETICIA PEREZ MUNOZ","CREDIAUTO",167,"13:41",89.2,32],
+["YAJAIRA ARIZMENDI MENDOZA","BRADESCARD ASISTENCIAS",167,"12:23",-1.9,33],
+["SHADANY ITZEL ZAPATA NUNEZ","BRADESCARD ASISTENCIAS",164,"14:01",11.4,34],
+["CARLOS DAVID AVENDANO GUZMAN","CREDIAUTO",163,"11:59",90.4,35],
+["ASTRID SOFIA CASTILLO LEDEZMA","CREDIAUTO",160,"13:08",76.4,36],
+["JARED FRANCISCO HERNANDEZ RIOS","CREDIAUTO",153,"11:45",81.5,37],
+["ALONDRA SHANTAL BECERRIL MONTAÑO","CREDIAUTO",141,"14:13",88.5,38],
+["ARTURO DAVID RAMIREZ LEYTE","CREDIAUTO",137,"14:01",79.5,39],
+["CRISTOBAL DE JESUS RAZO FLORES","BRADESCARD ASISTENCIAS",134,"4:16",-50.0,40],
+["MARIO DANIEL ACUNA ALZATE","LIVERPOOL",132,"6:52",100.0,41],
+["ANA VIANEY NAJERA HERRERA","CREDIAUTO",129,"11:14",95.7,42],
+["KAREN ADRIANA CAMARENA GALVEZ","CREDIAUTO",122,"10:52",77.8,43],
+["KEVIN GABRIEL RIVERA","CREDIAUTO",120,"11:22",63.5,44],
+["LUIS FERNANDO LAGUNA FLORES","CREDIAUTO",120,"13:00",91.7,45],
+["MELANY BELIO TREJO","CREDIAUTO",113,"14:44",95.7,46],
+["LESLY PALMA BARAJAS","COPPEL VIDA",96,"8:25",null,47],
+["DIANA MAKZELL MARTINEZ HUERTA","JAC",88,"9:06",94.5,48],
+["VIANEY ALBARRAN CRUCES","BRADESCARD ASISTENCIAS",85,"9:01",63.0,49],
+["ALVARO TOVAR FRANCO","BRADESCARD ASISTENCIAS",81,"9:40",null,50],
+["SERGIO RODRIGUEZ MARTINEZ","BRADESCARD ASISTENCIAS",75,"9:24",25.0,51],
+["ROCIO DE LOURDES RAMIREZ MARTOS","LALA",72,"7:23",88.2,52],
+["LAURA GISELLE ROBLES MEJIA","BRADESCARD ASISTENCIAS",60,"2:14",-56.0,53],
+["JOSHUA DE JESUS PEREZ","SUZUKI",59,"6:02",94.6,54],
+["ABIGAIL RAMIREZ BERNAL","BRADESCARD ASISTENCIAS",55,"8:20",-23.1,55],
+["SALVADOR LARA RODRIGUEZ","CREDIAUTO",53,"11:10",81.0,56],
+["JORGE LUIS TENORIO CAMPUZANO","LIVERPOOL",48,"4:55",100.0,57],
+["JUAN CRUZ LOZANO","SUZUKI",48,"13:21",100.0,58],
+["SERGIO ENRIQUE MENDIETA JIMENEZ","BRADESCARD ASISTENCIAS",47,"6:08",-14.3,59],
+["ANGELES BERENICE OLIVARES COLIN","COPPEL VIDA",47,"9:46",null,60],
+["ANTONIO CASTELAN MEJIA","LIVERPOOL",45,"13:14",75.0,61],
+["ANA KAREN REYES JACOBO","LALA",40,"11:12",84.4,62],
+["OLIVIA LUNA TOLEDO","LIVERPOOL",37,"10:37",94.7,63],
+["JOAQUIN MONDRAGON","COPPEL VIDA",29,"11:26",null,64],
+["ROSA ITZEL VELASCO VAZQUEZ","LALA",25,"6:51",89.5,65],
+["SAMUEL RODRIGUEZ SANTOS","LIVERPOOL",25,"11:10",80.0,66],
+["GABRIEL ALBERTO VAZQUEZ MORA","BRADESCARD ASISTENCIAS",23,"10:15",71.4,67],
+["JOSE ANTONIO ROJAS RODRIGUEZ","CREDIAUTO",23,"12:11",100.0,68],
+["JUAN CARLOS SANTOS LOPEZ","SUZUKI",17,"12:07",37.5,69],
+["LUIS FERNANDO ALONSO ALEJO","BIMBO",8,"7:48",null,70],
+["JUAN JOSÉ RAMOS MORALES","LIVERPOOL",7,"8:19",null,71],
+["NOE SIERRA PEREZ","BRADESCARD ASISTENCIAS",7,"13:26",null,72],
+["LINDA PAMELA GUERRERO ALANIZ","LALA",5,"3:03",null,73],
+["JOANY CELESTE CRUZ ALVARADO","JAC",5,"4:04",null,74],
+["FANY ARELI LOPEZ ROSALES","CREDIAUTO",4,"10:51",null,75],
+["ALEJANDRO BELLO MARTINEZ","JAC",1,"14:27",null,76],
+["JONATHAN ARMANDO CAMERO LOAIZA","COPPEL VIDA",1,"11:09",null,77]
 ].map(function(r){
   return {n:r[5], nombre:r[0], cartera:r[1], at:r[2], tmo:r[3], nps:r[4]};
 });
@@ -3698,7 +3817,7 @@ ZONES.forEach(function(z){
   var p = [iso(z.u0-1.2, z.v0-1.2), iso(u1+1.6, z.v0-1.2), iso(u1+1.6, v1+1.6), iso(z.u0-1.2, v1+1.6)];
   el("polygon", {points: poly(p), fill:"#ffffff", stroke:"#cbd5e1", "stroke-width":1.2,
     "class":"camp-zone-platform", "data-camp-zone":z.key, tabindex:"0", role:"button",
-    "aria-label":"Zona "+z.name+", NS "+fmtPct(z.ns)+", volumen "+fmtInt(z.rec)+(z.card ? ", sin asesores identificados en Tableau" : "")}, zoneLayer);
+    "aria-label":"Zona "+z.name+", NS "+fmtPct(z.ns)+", volumen "+fmtInt(z.rec)+(z.atienden ? ", atienden " + z.atienden.length + " asesores" : (z.card ? ", sin asesores identificados en Tableau" : ""))}, zoneLayer);
   /* Error 23: el centro de COPPEL queda cubierto por las estaciones; el borde
      visible de la zona (banda de 14 px sobre su arista) es el punto clicable.
      Va en zoneLayer, bajo las estaciones, para no robarles el clic. */
@@ -3730,16 +3849,17 @@ ZONES.forEach(function(z){
     var t2 = el("text", {x: lx, y: ly+9, "text-anchor":"middle", "class":"camp-zone-sub"}, zoneLayer);
     t2.textContent = line2;
   } else if(z.card){
-    /* Zona sin asesores: totales reales + nota visible, sin pildora ni lugares. */
+    /* Zona sin asientos: totales reales + nota visible, sin pildora ni lugares.
+     Si tiene `atienden`, la nota dice cuántos la atienden (la lista va en su ficha). */
     var cc = iso((z.u0+u1)/2, (z.v0+v1)/2);
     var cl1 = el("text", {x: cc.x, y: cc.y-13, "text-anchor":"middle", "class":"camp-card-line1", "data-camp-zone":z.key}, textLayer);
     cl1.textContent = z.short;
     var cl2 = el("text", {x: cc.x, y: cc.y, "text-anchor":"middle", "class":"camp-card-line2", "data-camp-zone":z.key}, textLayer);
     cl2.textContent = "NS " + fmtPct(z.ns) + " · " + fmtInt(z.rec) + " llamadas";
     var cn1 = el("text", {x: cc.x, y: cc.y+12, "text-anchor":"middle", "class":"camp-card-note", "data-camp-zone":z.key}, textLayer);
-    cn1.textContent = "sin asesores identificados";
+    cn1.textContent = z.atienden ? ("0 lugares · atienden " + z.atienden.length) : "sin asesores identificados";
     var cn2 = el("text", {x: cc.x, y: cc.y+22, "text-anchor":"middle", "class":"camp-card-note", "data-camp-zone":z.key}, textLayer);
-    cn2.textContent = "en Tableau";
+    cn2.textContent = z.atienden ? "su asiento está en otra zona" : "en Tableau";
   }
   /* estaciones */
   var idx = 0;
@@ -3800,11 +3920,12 @@ ZONES.forEach(function(z){
 });
 
 /* ---------- Mapeo asesor real → estación (determinista) ----------
-   Por atendidas dentro de cada cartera (orden de la lista de 77):
-   ASISTENCIAS 38 → sus 38; COPPEL VIDA 31 → sus 31;
-   CREDIAUTO 4 → sus 4; BRADESCARD SEGUROS 4 → sus 4.
-   Las otras 8 carteras no tienen asesores en la lista de 77: son zonas
-   sin lugares, sin inventar nombres. */
+   Por atendidas dentro de cada cartera (orden de la lista de 77 en vivo,
+   vista Asesores 25 nov 2026): ASISTENCIAS 32; CREDIAUTO 16;
+   COPPEL VIDA 12; LIVERPOOL 6; LALA 4; JAC 3; SUZUKI 3; BIMBO 1.
+   EMPLEADOS, MODERNA, LIVERPOOL GMM y BRADESCARD SEGUROS no tienen
+   asesores con esa cartera como dominante: son zonas sin lugares
+   (muestran quiénes las atienden en su ficha), sin inventar nombres. */
 (function mapAsesores(){
   var byCartera = {};
   CAMP_ASESORES.forEach(function(a){
@@ -3847,7 +3968,7 @@ mamparas.forEach(function(m){
   el("polygon", {points: (p.x-6)+","+p.y+" "+(p.x+6)+","+p.y+" "+(p.x+4)+","+(p.y+7)+" "+(p.x-4)+","+(p.y+7),
     fill:"#b45309", stroke:"#92400e", "stroke-width":.8}, zoneLayer);
 });
-/* Letrero de zona (placa con el nombre corto) para SEGUROS, cuya pildora no cabe en el hueco. */
+/* Letreros de zona (placa con el nombre corto) para SUZUKI, LALA y BIMBO, cuyas píldoras no caben en sus huecos. */
 ZONES.forEach(function(z){
   if(!z.sign) return;
   var p = iso(z.sign.cu, z.sign.cv);
@@ -3868,7 +3989,7 @@ el("rect", {x:343.5, y:369.5, width:7, height:5, rx:1, fill:"#38bdf8"}, zoneLaye
 el("polygon", {points:"333,383 345,376 357,383 345,390", fill:"#cbd5e1", stroke:"#94a3b8", "stroke-width":1}, zoneLayer);
 el("polygon", {points:"333,383 345,390 345,394 333,387", fill:"#94a3b8"}, zoneLayer);
 el("ellipse", {cx:344, cy:396, rx:5.5, ry:3, fill:"#94a3b8", stroke:"#64748b", "stroke-width":.8}, zoneLayer);
-[["PASILLO",383,276],["PASILLO",500,440],["PASILLO",526,361]].forEach(function(l){
+[["PASILLO",700,415],["PASILLO",600,440],["PASILLO",458,399]].forEach(function(l){
   var t = el("text", {x:l[1], y:l[2], "text-anchor":"middle", "class":"camp-pasillo-label"}, svg);
   t.textContent = l[0];
 });
@@ -4383,6 +4504,32 @@ function fmtTime(ms){
   return String(m).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
 }
 function sdCell(v){ return v === null ? '<span class="camp-sin-dato">sin dato</span>' : v; }
+/* Lista de quienes atienden una cartera sin asientos (ver atiendenListHTML en Supervisor). */
+function atiendenListHTMLCamp(z){
+  var rows = z.atienden.map(function(t){
+    var dom = null;
+    var lista = window.__camp.asesores || [];
+    for(var i = 0; i < lista.length; i++){ if(lista[i].nombre === t[0]){ dom = lista[i].cartera; break; } }
+    return "<li><b>" + t[0] + "</b> — " + t[1] + " · asiento en " + (dom || "sin dato") + "</li>";
+  }).join("");
+  var fuente = z.atiendenFuente === "cruce"
+    ? "Fuente: lista reconstruida por cruce con el extracto local (no se leyó la vista Asesores filtrada de SEGUROS en vivo); ante la duda, «sin dato»."
+    : "Fuente: vista Asesores filtrada por cartera, leída en vivo 25 nov 2026, 12:51.";
+  return "<h3>Quienes atienden en esta cartera</h3><p>Nombre + atendidas en esta cartera en nov 2026. Su asiento principal está en otra zona (entre paréntesis).</p><ul>" + rows + "</ul><p>" + fuente + "</p>";
+}
+function setFichaAtienden(z){
+  var atEl = document.getElementById("camp-fichaAtienden");
+  if(!atEl){
+    atEl = document.createElement("div");
+    atEl.id = "camp-fichaAtienden"; atEl.className = "camp-atienden";
+    ficha.appendChild(atEl);
+  }
+  atEl.innerHTML = (z && z.atienden) ? atiendenListHTMLCamp(z) : "";
+}
+function limpiarAtienden(){
+  var atEl = document.getElementById("camp-fichaAtienden");
+  if(atEl) atEl.innerHTML = "";
+}
 function openFicha(zoneKey){
   var z = zoneByKey(zoneKey);
   if(!z) return;
@@ -4390,7 +4537,7 @@ function openFicha(zoneKey){
   viewKind = "ficha"; viewCall = null; viewSup = null;
   document.getElementById("camp-fichaTitle").textContent = z.name;
   document.getElementById("camp-fichaSub").textContent =
-    fmtInt(z.rec) + " recibidas en nov 2026 · " + (z.n === 0 ? "sin asesores identificados en Tableau" : z.n + (z.n === 1 ? " lugar · 1 lugar por asesor real" : " lugares · 1 lugar por asesor real")) +
+    fmtInt(z.rec) + " recibidas en nov 2026 · " + (z.n === 0 ? (z.atienden ? "0 lugares · atienden " + z.atienden.length + " asesores" : "sin asesores identificados en Tableau") : z.n + (z.n === 1 ? " lugar · 1 lugar por asesor real" : " lugares · 1 lugar por asesor real")) +
     " · " + fmtDec1(z.rec / TOTALES.rec * 100) + " % del total";
   var pb = document.getElementById("camp-fichaPareto");
   pb.textContent = "Clase Pareto " + z.pareto;
@@ -4427,13 +4574,15 @@ function openFicha(zoneKey){
       '<span class="camp-tmo-val">' + sdCell(r.val) + '</span></div>';
   }).join("");
   var notes = [];
-  if(z.card) notes.push("Sin asesores identificados en Tableau para esta cartera: sus totales son reales y no se inventan lugares ni nombres.");
+  if(z.atienden) notes.push("Esta cartera tiene llamadas y " + z.atienden.length + " asesores que la atienden, pero su asiento principal está en otra cartera: aquí no hay lugares con su nombre." + (z.atiendenFuente === "cruce" ? " La lista viene del cruce con el extracto local (no de una lectura filtrada en vivo)." : ""));
+  else if(z.card) notes.push("Sin asesores identificados en Tableau para esta cartera: sus totales son reales y no se inventan lugares ni nombres.");
   if(z.nps === null) notes.push("NPS sin dato en el tablero (0 encuestas en nov 2026).");
   if(z.comp.esp === null) notes.push("Espera dentro del TMO sin dato en el tablero.");
   notes.push("Clase Pareto según Pareto oct 2026 (demoradas + abandonadas): " +
     (z.pareto === "A" ? "grupo que concentra el grueso del volumen perdido." :
      z.pareto === "B" ? "segundo grupo por volumen perdido." : "resto de carteras."));
   document.getElementById("camp-fichaNote").textContent = notes.join(" ");
+  setFichaAtienden(z);
   document.querySelectorAll(".camp-table tbody tr").forEach(function(tr){
     tr.classList.toggle("camp-row-active", tr.getAttribute("data-camp-zone") === zoneKey);
   });
@@ -4459,6 +4608,7 @@ function findCall(callId){
 function openCallFicha(call){
   if(!call) return;
   viewKind = "call"; viewCall = call; viewSup = null;
+  limpiarAtienden();
   var z = call.target.zone;
   lastCallInfo = {callId: call.callId, to: call.target.id, zone: z.key, ns: fmtPct(z.ns)};
   window.__camp.lastCallInfo = lastCallInfo;
@@ -4503,6 +4653,7 @@ function openSupFicha(){
   var st = supTarget();
   if(!st) return;
   viewKind = "supervisor"; viewSup = st; viewCall = null;
+  limpiarAtienden();
   var reason;
   if(waiting > 0){
     reason = "Cola en espera (" + waiting + (waiting===1 ? " llamada)" : " llamadas)");
@@ -4527,10 +4678,34 @@ function openSupFicha(){
   document.getElementById("camp-fichaNote").textContent = "Por qué está aquí: " + reason + ".";
   ficha.hidden = false;
 }
+/* ---------- Fichas de muestra leídas en vivo (vista Asesores, 25 nov 2026) ----------
+   Solo estos 3 asesores tienen FCR, transferencias, ocupación y composición
+   del TMO. Para los otros 74, «sin dato». Se ata POR NOMBRE. */
+var CAMP_FICHAS = {
+  "KAREN FERNANDA CARRIZOSA PALACIOS": {fcr:"34,7 %", transf:"46,1 %", ocup:"44,7 %", tmoS:377, comp:[
+        {label:"Conversación", val:"6:03 (96,3 %)", s:363, cls:"camp-tmo-conv"},
+        {label:"Espera", val:"0 s", s:0, cls:"camp-tmo-esp"},
+        {label:"Poscierre", val:"9 s (2,5 %)", s:9, cls:"camp-tmo-pos"},
+        {label:"Pendiente", val:"4 s (1,2 %)", s:4, cls:"camp-tmo-pen"},
+  ]},
+  "LUIS ANGELES RODRIGUEZ": {fcr:null, transf:"4,1 %", ocup:"40,7 %", tmoS:361, comp:[
+        {label:"Conversación", val:"4:44 (78,8 %)", s:284, cls:"camp-tmo-conv"},
+        {label:"Espera", val:"31 s (8,7 %)", s:31, cls:"camp-tmo-esp"},
+        {label:"Poscierre", val:"43 s (11,9 %)", s:43, cls:"camp-tmo-pos"},
+        {label:"Pendiente", val:"2 s (0,6 %)", s:2, cls:"camp-tmo-pen"},
+  ]},
+  "DAYLAN SAJID SANCHEZ MOHEDANO": {fcr:null, transf:"0,0 %", ocup:"50,0 %", tmoS:500, comp:[
+        {label:"Conversación", val:"7:44 (92,7 %)", s:464, cls:"camp-tmo-conv"},
+        {label:"Espera", val:"0 s", s:0, cls:"camp-tmo-esp"},
+        {label:"Poscierre", val:"32 s (6,4 %)", s:32, cls:"camp-tmo-pos"},
+        {label:"Pendiente", val:"4 s (0,9 %)", s:4, cls:"camp-tmo-pen"},
+  ]},
+};
 /* ---------- Ficha de persona (asesor real o estación sin nombre) ---------- */
 function openPersonFicha(st){
   if(!st) return;
   viewKind = "person"; viewCall = null; viewSup = null; fichaZoneKey = null;
+  limpiarAtienden();
   document.querySelectorAll(".camp-table tbody tr").forEach(function(tr){
     tr.classList.remove("camp-row-active");
   });
@@ -4544,15 +4719,16 @@ function openPersonFicha(st){
     pb.textContent = "Asesor · " + st.zone.short;
     pb.className = "camp-pareto";
     pb.style.background = CARTERA_BADGE_BG[st.zone.key] || badgeBgForWhite(CARTERA_COLOR[st.zone.key]);
+    var F = CAMP_FICHAS[a.nombre];
     document.getElementById("camp-fichaFields").innerHTML =
       "<dt>Estación</dt><dd>" + st.id + " · " + STATES[st.state].label + "</dd>" +
       "<dt>Cartera</dt><dd>" + st.zone.name + "</dd>" +
       "<dt>Atendidas</dt><dd>" + fmtInt(a.at) + "</dd>" +
       "<dt>TMO</dt><dd>" + a.tmo + "</dd>" +
       "<dt>NPS</dt><dd>" + (a.nps === null ? '<span class="camp-sin-dato">sin dato</span>' : fmtNps(a.nps)) + "</dd>" +
-      "<dt>FCR</dt><dd>" + (a.n === 1 ? "33,3 %" : '<span class="camp-sin-dato">s/d</span>') + "</dd>" +
-      "<dt>Transferencias</dt><dd>" + (a.n === 1 ? "27,6 %" : '<span class="camp-sin-dato">s/d</span>') + "</dd>" +
-      "<dt>Ocupación</dt><dd>" + (a.n === 1 ? "76,9 %" : '<span class="camp-sin-dato">s/d</span>') + "</dd>" +
+      "<dt>FCR</dt><dd>" + (F && F.fcr !== null ? F.fcr : '<span class="camp-sin-dato">s/d</span>') + "</dd>" +
+      "<dt>Transferencias</dt><dd>" + (F && F.transf !== null ? F.transf : '<span class="camp-sin-dato">s/d</span>') + "</dd>" +
+      "<dt>Ocupación</dt><dd>" + (F && F.ocup !== null ? F.ocup : '<span class="camp-sin-dato">s/d</span>') + "</dd>" +
       "<dt>Recibidas</dt><dd><span class=\"camp-sin-dato\">sin dato</span></dd>" +
       "<dt>Demoradas</dt><dd><span class=\"camp-sin-dato\">sin dato</span></dd>" +
       "<dt>NS</dt><dd><span class=\"camp-sin-dato\">sin dato</span></dd>" +
@@ -4560,33 +4736,24 @@ function openPersonFicha(st){
       "<dt>Espera media</dt><dd><span class=\"camp-sin-dato\">sin dato</span></dd>" +
       "<dt>% espera &gt; 20 s</dt><dd><span class=\"camp-sin-dato\">sin dato</span></dd>" +
       "<dt>Encuestas NPS</dt><dd><span class=\"camp-sin-dato\">sin dato</span></dd>";
-    if(a.n === 1){
-      /* Composición del TMO del asesor n.º 1 (DATOS.md · ficha ejemplo):
-         conversación 4:21 (261 s), espera 0 s, poscierre 18 s,
-         pendiente 4 s; total 4:43 = 283 s. Solo existe para este asesor. */
-      var comp1 = [
-        {label:"Conversación", val:"4:21 (92,1 %)", s:261, cls:"camp-tmo-conv"},
-        {label:"Espera", val:"0 s", s:0, cls:"camp-tmo-esp"},
-        {label:"Poscierre", val:"18 s (6,4 %)", s:18, cls:"camp-tmo-pos"},
-        {label:"Pendiente", val:"4 s (1,6 %)", s:4, cls:"camp-tmo-pen"}
-      ];
-      document.getElementById("camp-tmoComp").innerHTML = comp1.map(function(r){
-        var pct = Math.max(0, Math.min(100, r.s / 283 * 100));
+    if(F){
+      /* Composición del TMO de este asesor (ficha leída en vivo, 25 nov 2026).
+         Solo existe para los 3 asesores con ficha leída. */
+      document.getElementById("camp-tmoComp").innerHTML = F.comp.map(function(r){
+        var pct = Math.max(0, Math.min(100, r.s / F.tmoS * 100));
         return '<div class="camp-tmo-row"><span>' + r.label + '</span>' +
           '<span class="camp-tmo-bar"><i class="' + r.cls + '" style="width:' + pct.toFixed(1) + '%"></i></span>' +
           '<span class="camp-tmo-val">' + r.val + '</span></div>';
       }).join("");
     } else {
       document.getElementById("camp-tmoComp").innerHTML =
-        '<span class="camp-sin-dato">sin dato</span> en Tableau para este asesor (la composición del TMO solo existe para el asesor n.º 1).';
+        '<span class="camp-sin-dato">sin dato</span> en Tableau para este asesor (la composición del TMO solo existe para 3 asesores con ficha leída en vivo).';
     }
     document.getElementById("camp-fichaNote").textContent =
-      "Datos reales de nov 2026 (lista de 77 asesores del tablero). FCR y transferencias " +
-      "solo existen para el asesor n.º 1 (33,3 % y 27,6 %); NS, demoradas y abandono por " +
-      "asesor: sin dato en Tableau. El estado de la estación es simulación. " +
-      "Ocupación y composición del TMO también solo existen para el asesor n.º 1 " +
-      "(ocupación 76,9 %); recibidas, ASA, espera media, % espera > 20 s, encuestas " +
-      "y curva por hora por asesor: también sin dato en Tableau.";
+      "Datos reales de nov 2026 (lista de 77 asesores del tablero, vista Asesores en vivo 25 nov 2026). FCR, transferencias, " +
+      "ocupación y composición del TMO solo existen para 3 asesores con ficha leída en vivo (Karen Fernanda Carrizosa Palacios, " +
+      "Luis Angeles Rodriguez y Daylan Sajid Sanchez Mohedano); para el resto, sin dato en Tableau. NS, demoradas y abandono por " +
+      "asesor: sin dato en Tableau. El estado de la estación es simulación.";
   } else {
     document.getElementById("camp-fichaTitle").textContent = "Estación " + st.id;
     document.getElementById("camp-fichaSub").textContent =
@@ -4713,7 +4880,7 @@ function showZoneTip(key, clientX, clientY){
   zoneTip.innerHTML = "<h3>"+z.name+"</h3><dl>"+
     "<dt>NS nov</dt><dd>"+fmtPct(z.ns)+"</dd>"+
     "<dt>Volumen nov</dt><dd>"+fmtInt(z.rec)+"</dd>"+
-    "<dt>Lugares</dt><dd>"+(z.n === 0 ? "0 — sin asesores identificados en Tableau" : z.n)+"</dd>"+
+    "<dt>Lugares</dt><dd>"+(z.n === 0 ? (z.atienden ? "0 — atienden " + z.atienden.length + " asesores (su asiento está en otra zona)" : "0 — sin asesores identificados en Tableau") : z.n)+"</dd>"+
     "<dt>En llamada ahora</dt><dd>"+inCall+"</dd></dl>";
   zoneTip.hidden = false;
   var rect = sceneEl.getBoundingClientRect();
@@ -4950,9 +5117,10 @@ window.__camp = {
       fmtPct(TOTALES.ns) + '</td><td>' + TOTALES.tmo + '</td><td>' + TOTALES.asa + ' s</td><td>' +
       fmtNps(TOTALES.nps) + '</td></tr>';
     /* Repintado del piso con dato en vivo (2026-11-25, B1): espejo de
-       __sup.aplicarVivo. Las píldoras son solo 3 (zonas con lab: ASIS,
-       COPPEL, CREDIAUTO); SEG lleva placa de nombre sin NS. Las 8 tarjetas
-       se actualizan por data-camp-zone, no por índice. z.ns es número
+       __sup.aplicarVivo. Las píldoras son 5 (ASIS, COPPEL, CRED, LIV, JAC);
+       SUZUKI, LALA y BIMBO llevan placa de nombre sin NS. Las 4 tarjetas
+       (EMPL, MODERNA, LIVGMM, SEG) se actualizan por data-camp-zone,
+       no por índice. z.ns es número
        aquí (fmtPct), z.rec es el volumen (heatColor). */
     var pillZones = ZONES.filter(function (z) { return !!z.lab; });
     var labels = document.querySelectorAll("#camp-floor .camp-zone-label");
@@ -4967,7 +5135,7 @@ window.__camp = {
     });
     document.querySelectorAll("#camp-floor .camp-zone-platform:not(.camp-zone-border)").forEach(function (p) {
       var z = zoneByKey(p.getAttribute("data-camp-zone"));
-      if (z) p.setAttribute("aria-label", "Zona " + z.name + ", NS " + fmtPct(z.ns) + ", volumen " + fmtInt(z.rec) + (z.card ? ", sin asesores identificados en Tableau" : ""));
+      if (z) p.setAttribute("aria-label", "Zona " + z.name + ", NS " + fmtPct(z.ns) + ", volumen " + fmtInt(z.rec) + (z.atienden ? ", atienden " + z.atienden.length + " asesores" : (z.card ? ", sin asesores identificados en Tableau" : "")));
     });
     document.querySelectorAll("#camp-floor .camp-heat-poly").forEach(function (h) {
       var z = zoneByKey(h.getAttribute("data-camp-zone"));
@@ -4977,6 +5145,7 @@ window.__camp = {
   },
   stations: stations,
   asesores: CAMP_ASESORES,
+  fichas: CAMP_FICHAS,
   setTimeSlot: setTimeSlot,
   getTimeSlot: getTimeSlot,
   setHour: setHour,
