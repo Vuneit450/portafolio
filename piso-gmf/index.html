@@ -16,6 +16,8 @@ a { color: #c2410c; }
 .gmf-header-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; margin-bottom: 6px; }
 .gmf-title { font-size: 1.5rem; line-height: 1.2; margin: 0; }
 .gmf-stamp { font-size: 0.85rem; color: #5f6368; margin: 0; background: #f4f6fa; border: 1px solid #dfe3ea; border-radius: 999px; padding: 4px 12px; }
+.gmf-sello-vivo { font-size: 0.8rem; font-weight: 700; color: #fff; background: #16a34a; border-radius: 999px; padding: 4px 12px; white-space: nowrap; }
+.gmf-sello-vivo--desactualizado { background: #c2410c; }
 .gmf-source { font-size: 0.9rem; color: #5f6368; margin: 0 0 16px; }
 .gmf-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 0; }
 .gmf-kpi { background: #f4f6fa; border: 1px solid #e3e7ee; border-radius: 10px; padding: 12px 14px; }
@@ -119,27 +121,28 @@ table.gmf-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
   <div class="gmf-header-top">
     <h1 class="gmf-title">Piso GMF — Cobranza</h1>
     <p class="gmf-stamp">Captura: 25 nov 2026, 15:26–15:28 CST</p>
+    <span class="gmf-sello-vivo" id="gmf-sello-vivo" hidden></span>
   </div>
   <p class="gmf-source">Fuente: libro <strong>COBRANZA GMF DAILY Y GESTIONES</strong> · vista Operación, tabla «GESTORES: PROMESAS Y CUMPLIMIENTO». Filtros: MES «Todos los meses», BUCKET «Todos los buckets». Foto fija, sin datos en vivo.</p>
   <div class="gmf-kpis">
     <div class="gmf-kpi gmf-kpi--hero">
       <p class="gmf-kpi-label">Total pagado</p>
-      <p class="gmf-kpi-value">$85.565.997,25</p>
-      <p class="gmf-kpi-sub">de $110.892.105,79 prometidos (77,2%)</p>
+      <p class="gmf-kpi-value" id="gmf-kpi-pagado">$85.565.997,25</p>
+      <p class="gmf-kpi-sub" id="gmf-kpi-pagado-sub">de $110.892.105,79 prometidos (77,2%)
     </div>
     <div class="gmf-kpi">
       <p class="gmf-kpi-label">Total promesas</p>
-      <p class="gmf-kpi-value">5.486</p>
-      <p class="gmf-kpi-sub">38 gestores</p>
+      <p class="gmf-kpi-value" id="gmf-kpi-promesas">5.486</p>
+      <p class="gmf-kpi-sub" id="gmf-kpi-promesas-sub">38 gestores</p>
     </div>
     <div class="gmf-kpi">
       <p class="gmf-kpi-label">Vencido sin pago</p>
-      <p class="gmf-kpi-value">$21.290.530,72</p>
-      <p class="gmf-kpi-sub">19,2% de lo prometido</p>
+      <p class="gmf-kpi-value" id="gmf-kpi-vencido">$21.290.530,72</p>
+      <p class="gmf-kpi-sub" id="gmf-kpi-vencido-sub">19,2% de lo prometido</p>
     </div>
     <div class="gmf-kpi">
       <p class="gmf-kpi-label">Semáforo vs meta 80%</p>
-      <p class="gmf-kpi-value">4 · 28 · 6</p>
+      <p class="gmf-kpi-value" id="gmf-kpi-semaforo">4 · 28 · 6</p>
       <p class="gmf-kpi-sub"><span class="gmf-dot gmf-dot--verde"></span>verde · <span class="gmf-dot gmf-dot--amarillo"></span>amarillo · <span class="gmf-dot gmf-dot--rojo"></span>rojo</p>
     </div>
   </div>
@@ -155,8 +158,8 @@ table.gmf-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
 
 <div class="gmf-layout">
   <section class="gmf-card" aria-label="Piso de cobranza GMF">
-    <h2 class="gmf-card-title">El piso: 38 lugares en 3 zonas Pareto</h2>
-    <p class="gmf-card-sub">Toca un lugar para ver la ficha del gestor. Zona A: los 9 primeros por pagado acumulan el 80,1% del cobro · Zona B: los 9 siguientes llegan al 95,6% · Zona C: los 20 restantes, 4,4%.</p>
+    <h2 class="gmf-card-title" id="gmf-floor-title">El piso: 38 lugares en 3 zonas Pareto</h2>
+    <p class="gmf-card-sub" id="gmf-floor-sub">Toca un lugar para ver la ficha del gestor. Zona A: los 9 primeros por pagado acumulan el 80,1% del cobro · Zona B: los 9 siguientes llegan al 95,6% · Zona C: los 20 restantes, 4,4%.</p>
     <div class="gmf-floor-wrap">
       <svg id="gmf-floor" viewBox="0 0 1000 470" role="group" aria-label="Piso isométrico GMF con 38 lugares"></svg>
     </div>
@@ -213,6 +216,7 @@ table.gmf-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
 var TOTAL_PAGADO = 85565997.25;
 var TOTAL_PROMETIDO = 110892105.79;
 var TOTAL_PROMESAS = 5486;
+var TOTAL_VENCIDO = 21290530.72;
 /* id, nombre (null = sin nombre en catálogo), promesas, prometido, pagado, vencido, % cumplidas */
 var GESTORES = [
 ["43460","MARTHA YOLANDA GARCIA BELTRAN",974,15606073.69,11772458.06,2593978.67,68.9],
@@ -378,16 +382,29 @@ function semaforo(pct){
 }
 function displayName(g){ return g.nombre || (g.id ? "Gestor " + g.id : "Sin ID"); }
 
-/* ---------- Datos enriquecidos: zona, código, participación, acumulado ---------- */
-var GEST = GESTORES.map(function(row, i){
-  var zone = i < 9 ? ZONES[0] : (i < 18 ? ZONES[1] : ZONES[2]);
-  var idxInZone = i < 9 ? i : (i < 18 ? i - 9 : i - 18);
-  return {rank: i + 1, id: row[0], nombre: row[1], promesas: row[2],
-    prometido: row[3], pagado: row[4], vencido: row[5], pct: row[6],
-    zone: zone, code: zone.prefix + "-" + String(idxInZone + 1).padStart(2, "0"),
-    part: row[4] / TOTAL_PAGADO * 100, acum: 0, sem: semaforo(row[6])};
-});
-(function(){ var acc = 0; GEST.forEach(function(g){ acc += g.part; g.acum = acc; }); })();
+/* ---------- Datos enriquecidos: zona, código, participación, acumulado ----------
+   enriquecer() es pura: recibe filas crudas [id, nombre, promesas, prometido,
+   pagado, vencido, pct] + totales y devuelve GEST ordenado por pagado desc.,
+   con zona por rango (A 9 / B 9 / C resto), código, part/acum y semáforo.
+   aplicarDatos() la usa para repintar; la foto fija es solo la primera llamada. */
+var GEST = [];
+function enriquecer(filas, totales){
+  var ordenadas = filas.slice().sort(function(a, b){ return b[4] - a[4]; });
+  var n = ordenadas.length;
+  var nA = Math.min(9, n), nB = Math.min(9, Math.max(0, n - nA));
+  ZONES[0].n = nA; ZONES[1].n = nB; ZONES[2].n = Math.max(0, n - nA - nB);
+  var acc = 0;
+  return ordenadas.map(function(row, i){
+    var zone = i < nA ? ZONES[0] : (i < nA + nB ? ZONES[1] : ZONES[2]);
+    var idxInZone = i < nA ? i : (i < nA + nB ? i - nA : i - nA - nB);
+    var part = totales.pagado ? row[4] / totales.pagado * 100 : 0;
+    acc += part;
+    return {rank: i + 1, id: row[0], nombre: row[1], promesas: row[2],
+      prometido: row[3], pagado: row[4], vencido: row[5], pct: row[6],
+      zone: zone, code: zone.prefix + "-" + String(idxInZone + 1).padStart(2, "0"),
+      part: part, acum: acc, sem: semaforo(row[6])};
+  });
+}
 function byRank(r){ return GEST[r - 1]; }
 function byId(id){ for(var i = 0; i < GEST.length; i++){ if(GEST[i].id === id) return GEST[i]; } return null; }
 
@@ -423,7 +440,13 @@ var stationLayer = el("g", {id:"gmf-stationLayer"}, svg);
 var labelLayer = el("g", {id:"gmf-labelLayer"}, svg);
 var stations = [];
 
-ZONES.forEach(function(z){
+function limpiarCapa(capa){ while(capa.firstChild) capa.removeChild(capa.firstChild); }
+/* Redibuja plataformas, etiquetas y estaciones del piso a partir de GEST.
+   Limpia las 3 capas y re-ata los listeners de cada estación. */
+function dibujarPiso(){
+  limpiarCapa(zoneLayer); limpiarCapa(stationLayer); limpiarCapa(labelLayer);
+  stations.length = 0;
+  ZONES.forEach(function(z){
   var du = 3.4, dv = 3.4;
   var u1 = z.u0 + (z.cols - 1) * du, v1 = z.v0 + (z.rows - 1) * dv;
   var p = [iso(z.u0 - 1.2, z.v0 - 1.2), iso(u1 + 1.6, z.v0 - 1.2),
@@ -479,11 +502,13 @@ ZONES.forEach(function(z){
       stations.push({rank: g.rank, code: g.code, el: grp});
     }
   }
-});
+  });
+}
 
 /* ---------- Tarjetas de zona ---------- */
-(function(){
+function dibujarTarjetasZona(){
   var wrap = document.getElementById("gmf-zoneCards");
+  wrap.innerHTML = "";
   ZONES.forEach(function(z){
     var members = GEST.filter(function(g){ return g.zone === z; });
     var totPag = members.reduce(function(a, g){ return a + g.pagado; }, 0);
@@ -498,7 +523,7 @@ ZONES.forEach(function(z){
       "<p>" + fmtMoney(totVenc) + " vencido sin pago</p>";
     wrap.appendChild(div);
   });
-})();
+}
 
 /* ---------- Ficha ---------- */
 var fichaBody = document.getElementById("gmf-fichaBody");
@@ -513,7 +538,7 @@ function openFicha(rank){
   var f = g.id ? FICHAS[g.id] : null;
   var h = "";
   h += "<h2 class=\"gmf-ficha-name\">" + esc(displayName(g)) + "</h2>";
-  h += "<p class=\"gmf-ficha-sub\">Lugar " + g.rank + " de 38 por monto pagado · Zona " + g.zone.key +
+  h += "<p class=\"gmf-ficha-sub\">Lugar " + g.rank + " de " + GEST.length + " por monto pagado · Zona " + g.zone.key +
     " (" + esc(g.zone.name) + ") · Código " + g.code + " · ID " + (g.id || "sin ID") + "</p>";
   h += "<span class=\"gmf-pill gmf-pill--" + g.sem.key + "\">● " + g.sem.label + " · " + fmtPct(g.pct) + " cumplidas</span>";
   h += "<div class=\"gmf-metrics\">" +
@@ -529,7 +554,9 @@ function openFicha(rank){
   h += "<p class=\"gmf-note\">Meta de cumplimiento: 80%. Cumplida = pagó ≥ 90% de lo prometido; parcial = pagó &lt; 90%.</p>";
   if(f){
     var diff = (f.diffMediana < 0 ? "▼" : "▲") + fmtNum(Math.abs(f.diffMediana)) + " pts vs mediana del equipo (70,0%)";
-    h += "<h3>Ficha de muestra — pestaña Gestores</h3>";
+    var enVivo = window.__gmfVivo && window.__gmfVivo.estado === "vivo";
+    h += "<h3>Ficha de muestra — pestaña Gestores" + (enVivo ? " (capturada 25 nov 2026, 15:29–15:31 CST)" : "") + "</h3>";
+    if(enVivo) h += "<p class=\"gmf-ficha-note\">Las cifras de la tabla de arriba son en vivo; el detalle de abajo es la muestra capturada y puede no coincidir con el dato actual.</p>";
     h += "<dl class=\"gmf-kv\">" +
       "<dt>% cumplidas vs mediana</dt><dd>" + diff + " · percentil " + f.percentil + "</dd>" +
       "<dt>Recuperación del monto</dt><dd>" + fmtPct(f.recuperacion) + " (mediana equipo " + fmtPct(f.recMediana) +
@@ -630,7 +657,7 @@ function renderList(){
       "<td class=\"num\">" + fmtPct(g.acum) + "</td></tr>";
   });
   tbody.innerHTML = html;
-  countEl.textContent = rows.length + " de 38 gestores";
+  countEl.textContent = rows.length + " de " + GEST.length + " gestores";
   tbody.querySelectorAll("tr").forEach(function(tr){
     tr.addEventListener("click", function(){
       openFicha(Number(tr.getAttribute("data-rank")));
@@ -643,12 +670,69 @@ function renderList(){
 searchInput.addEventListener("input", renderList);
 sortSelect.addEventListener("change", renderList);
 
+/* ---------- Repintado con datos nuevos (foto fija o en vivo) ---------- */
+function actualizarEncabezado(totales){
+  function txt(id, v){ var e = document.getElementById(id); if(e) e.textContent = v; }
+  txt("gmf-kpi-pagado", fmtMoney(totales.pagado));
+  txt("gmf-kpi-pagado-sub", "de " + fmtMoney(totales.prometido) + " prometidos (" +
+    fmtPct(totales.prometido ? totales.pagado / totales.prometido * 100 : 0) + ")");
+  txt("gmf-kpi-promesas", fmtInt(totales.promesas));
+  txt("gmf-kpi-promesas-sub", GEST.length + " gestores");
+  txt("gmf-kpi-vencido", fmtMoney(totales.vencido));
+  txt("gmf-kpi-vencido-sub", fmtPct(totales.prometido ? totales.vencido / totales.prometido * 100 : 0) + " de lo prometido");
+  var c = {verde: 0, amarillo: 0, rojo: 0};
+  GEST.forEach(function(g){ c[g.sem.key]++; });
+  txt("gmf-kpi-semaforo", c.verde + " · " + c.amarillo + " · " + c.rojo);
+  txt("gmf-floor-title", "El piso: " + GEST.length + " lugares en 3 zonas Pareto");
+  var zA = GEST.filter(function(g){ return g.zone === ZONES[0]; });
+  var zB = GEST.filter(function(g){ return g.zone === ZONES[1]; });
+  var zC = GEST.filter(function(g){ return g.zone === ZONES[2]; });
+  var suma = function(arr){ return arr.reduce(function(a, g){ return a + g.pagado; }, 0); };
+  var pagA = suma(zA), pagB = suma(zB), pagC = suma(zC);
+  var tot = totales.pagado || 1;
+  txt("gmf-floor-sub", "Toca un lugar para ver la ficha del gestor. Zona A: los " + zA.length +
+    " primeros por pagado acumulan el " + fmtPct(pagA / tot * 100) + " del cobro · Zona B: los " + zB.length +
+    " siguientes llegan al " + fmtPct((pagA + pagB) / tot * 100) + " · Zona C: los " + zC.length +
+    " restantes, " + fmtPct(pagC / tot * 100) + ".");
+}
+/* Repinta todo con filas crudas + totales. Reabre la ficha abierta por id
+   (por rango solo si el gestor no tiene id); si el gestor salió del piso,
+   abre la #1; si la ficha estaba cerrada, queda cerrada. */
+var primeraVez = true;
+function aplicarDatos(filas, totales){
+  var gSel = selectedRank ? byRank(selectedRank) : null;
+  var idSel = gSel ? gSel.id : null;
+  var rangoSel = selectedRank;
+  var fichaAbierta = selectedRank !== null;
+  TOTAL_PAGADO = totales.pagado; TOTAL_PROMETIDO = totales.prometido;
+  TOTAL_PROMESAS = totales.promesas; TOTAL_VENCIDO = totales.vencido;
+  var nuevos = enriquecer(filas, totales);
+  GEST.length = 0;
+  Array.prototype.push.apply(GEST, nuevos);
+  dibujarPiso();
+  dibujarTarjetasZona();
+  actualizarEncabezado(totales);
+  var reabierto = false;
+  if(idSel !== null){
+    var g2 = byId(idSel);
+    if(g2){ openFicha(g2.rank); reabierto = true; }
+  } else if(fichaAbierta && rangoSel && rangoSel <= GEST.length){
+    openFicha(rangoSel); reabierto = true;
+  }
+  if(!reabierto){
+    if(primeraVez){ openFicha(1); }
+    else if(fichaAbierta){ openFicha(1); }
+    else { renderList(); }
+  }
+  primeraVez = false;
+}
+
 /* ---------- Arranque y hooks de verificación ---------- */
-renderList();
-openFicha(1);
+aplicarDatos(GESTORES, {promesas: TOTAL_PROMESAS, prometido: TOTAL_PROMETIDO, pagado: TOTAL_PAGADO, vencido: TOTAL_VENCIDO});
 window.__gmf = {
   gestores: GEST,
   stations: stations,
+  aplicarDatos: aplicarDatos,
   perZone: function(){
     var out = {};
     ZONES.forEach(function(z){
@@ -667,6 +751,102 @@ window.__gmf = {
   fichaAbierta: function(){ return selectedRank !== null; },
   selectedRank: function(){ return selectedRank; }
 };
+</script>
+<script>
+"use strict";
+/* Datos en vivo GMF (espejo del bloque de piso-call-center): lee
+   https://biblioteca.jesusjonathan171.workers.dev/api/gmf.json al cargar y
+   repinta el piso con window.__gmf.aplicarDatos. Si el fetch falla o el JSON
+   no valida, no toca nada: queda la foto fija del 25 nov 2026 tal como está
+   y sin sello en vivo. Si el JSON valida pero está viejo (>60 min), se aplica
+   igual y el sello marca DESACTUALIZADO. */
+(function () {
+  'use strict';
+  var URL = 'https://biblioteca.jesusjonathan171.workers.dev/api/gmf.json';
+  if (window.__GMF_VIVO_URL) URL = window.__GMF_VIVO_URL; /* solo pruebas locales */
+  window.__gmfVivo = { estado: 'pendiente', actualizadoISO: null };
+  var resolverListo = null;
+  window.__gmfVivoListo = new Promise(function (res) { resolverListo = res; });
+  function terminar(estado, iso) {
+    window.__gmfVivo.estado = estado;
+    window.__gmfVivo.actualizadoISO = iso || null;
+    if (resolverListo) resolverListo(window.__gmfVivo);
+  }
+  function esNum(x) { return typeof x === 'number' && isFinite(x); }
+
+  /* ---------- Validación (contrato §3.4 del plan) ---------- */
+  function validar(d) {
+    if (!d || typeof d !== 'object') return 'raiz';
+    if (typeof d.actualizadoISO !== 'string' || isNaN(Date.parse(d.actualizadoISO))) return 'actualizadoISO';
+    if (d.cadenciaMinutos !== 60 || d.maxMinutos !== 60) return 'cadencia';
+    var t = d.totales;
+    if (!t || typeof t !== 'object') return 'totales';
+    if (!Number.isInteger(t.promesas) || t.promesas < 0 || !esNum(t.prometido) || t.prometido < 0 ||
+        !esNum(t.pagado) || t.pagado < 0 || !esNum(t.vencido) || t.vencido < 0) return 'totales-valores';
+    if (!Array.isArray(d.gestores) || !d.gestores.length) return 'gestores';
+    var sProm = 0, sPrometido = 0, sPagado = 0, sVencido = 0, prev = Infinity;
+    for (var i = 0; i < d.gestores.length; i++) {
+      var g = d.gestores[i];
+      if (!g || typeof g !== 'object') return 'fila';
+      if (!(g.id === null || typeof g.id === 'string')) return 'fila-id';
+      if (!(g.nombre === null || typeof g.nombre === 'string')) return 'fila-nombre';
+      if (!Number.isInteger(g.promesas) || g.promesas < 0) return 'fila-promesas';
+      if (!esNum(g.prometido) || g.prometido < 0 || !esNum(g.pagado) || g.pagado < 0 ||
+          !esNum(g.vencido) || g.vencido < 0) return 'fila-montos';
+      if (!esNum(g.pctCumplidas) || g.pctCumplidas < 0 || g.pctCumplidas > 100) return 'fila-pct';
+      if (g.pagado > prev) return 'orden';
+      prev = g.pagado;
+      sProm += g.promesas; sPrometido += g.prometido; sPagado += g.pagado; sVencido += g.vencido;
+    }
+    if (Math.abs(sProm - t.promesas) > 0.01 || Math.abs(sPrometido - t.prometido) > 0.01 ||
+        Math.abs(sPagado - t.pagado) > 0.01 || Math.abs(sVencido - t.vencido) > 0.01) return 'sumas';
+    return null;
+  }
+
+  /* ---------- Sello en vivo ---------- */
+  function hhmmDe(iso) {
+    var m = /T(\d{2}):(\d{2})/.exec(iso || '');
+    return m ? m[1] + ':' + m[2] : iso;
+  }
+  function mostrarSello(iso, maxMin) {
+    var sello = document.getElementById('gmf-sello-vivo');
+    if (!sello) return;
+    var desactualizado = (Date.now() - Date.parse(iso)) > (maxMin || 60) * 60000;
+    sello.textContent = desactualizado ? 'DESACTUALIZADO · actualizado ' + hhmmDe(iso) : 'en vivo · actualizado ' + hhmmDe(iso);
+    sello.classList.toggle('gmf-sello-vivo--desactualizado', desactualizado);
+    sello.hidden = false;
+  }
+
+  /* ---------- Aplicar datos vivos ---------- */
+  function aplicarVivo(d) {
+    var filas = d.gestores.map(function (g) {
+      return [g.id, g.nombre, g.promesas, g.prometido, g.pagado, g.vencido, g.pctCumplidas];
+    });
+    window.__gmf.aplicarDatos(filas, d.totales);
+    var stamp = document.querySelector('.gmf-stamp');
+    if (stamp) stamp.textContent = 'Actualizado ' + hhmmDe(d.actualizadoISO);
+    var source = document.querySelector('.gmf-source');
+    if (source) source.textContent = 'Datos en vivo de la vista Operación (refresco horario 7:20–22:20); foto fija del 25 nov 2026 como respaldo.';
+    mostrarSello(d.actualizadoISO, d.maxMinutos);
+  }
+
+  /* ---------- Fetch ---------- */
+  var ctrl = ('AbortController' in window) ? new AbortController() : null;
+  var temporizador = setTimeout(function () { if (ctrl) ctrl.abort(); }, 10000);
+  fetch(URL, { cache: 'no-store', signal: ctrl ? ctrl.signal : undefined }).then(function (resp) {
+    clearTimeout(temporizador);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    return resp.json();
+  }).then(function (datos) {
+    var error = validar(datos);
+    if (error) { terminar('foto-fija', null); return; }
+    try { aplicarVivo(datos); } catch (e) { terminar('foto-fija', null); return; }
+    terminar('vivo', datos.actualizadoISO);
+  }).catch(function () {
+    clearTimeout(temporizador);
+    terminar('foto-fija', null);
+  });
+})();
 </script>
 </body>
 </html>
