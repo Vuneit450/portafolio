@@ -1,0 +1,1092 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Modelos 3D interactivos — Piso INTER ATC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <style>
+      :root{
+        --bg:#eef1f3; --panel:#ffffff; --panel-2:#f6f8f9; --ink:#16222b; --ink-2:#43545f;
+        --line:#d7dee2; --accent:#0e7c7b; --accent-ink:#ffffff;
+        --ok:#1d9e57; --call:#1d8fd1; --long:#d92d20; --acw:#d97706; --rest:#8a97a0;
+        --chip:#e8edef; --shadow:0 10px 28px rgba(16,34,43,.14);
+        --radius:10px;
+      }
+      @media (prefers-color-scheme: dark){
+        :root{
+          --bg:#0c141a; --panel:#142129; --panel-2:#182730; --ink:#e8eff2; --ink-2:#a9bcc5;
+          --line:#26363f; --accent:#2bb3a3; --accent-ink:#06231f;
+          --chip:#1d2f3a; --shadow:0 10px 28px rgba(0,0,0,.45);
+        }
+      }
+      *{box-sizing:border-box}
+      html,body{margin:0;padding:0}
+      body{background:var(--bg);color:var(--ink);font-family:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:15px;line-height:1.45}
+      button,[role="button"],select,input{font:inherit}
+      button{min-height:36px}
+      .mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+
+      /* ---------- barra de navegación entre vistas ---------- */
+      .vistanav{position:sticky;top:0;z-index:40;display:flex;gap:6px;align-items:center;padding:8px 14px;background:var(--panel);border-bottom:1px solid var(--line)}
+      .vistanav .brand{font-weight:800;letter-spacing:.02em;margin-right:8px;white-space:nowrap}
+      .vistanav a,.vistanav span.cur{display:inline-flex;align-items:center;min-height:36px;padding:6px 14px;border-radius:999px;text-decoration:none;color:var(--ink);background:var(--chip);font-weight:600;font-size:.9rem}
+      .vistanav span.cur{background:var(--accent);color:var(--accent-ink)}
+      .vistanav .sp{flex:1}
+      .vistanav .stamp{font-size:.8rem;color:var(--ink-2);white-space:nowrap}
+      @media (max-width:640px){ .vistanav .stamp{display:none} .vistanav .brand{display:none} }
+
+      main{max-width:1560px;margin:0 auto;padding:14px}
+      h1{font-size:1.45rem;line-height:1.2;margin:2px 0 4px;font-weight:800}
+      .sub{color:var(--ink-2);margin:0 0 12px;max-width:75ch}
+      .sub b{color:var(--ink)}
+
+      /* ---------- KPIs ---------- */
+      .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:12px}
+      .kpi{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:10px 12px}
+      .kpi .lab{font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2)}
+      .kpi .val{font-size:1.5rem;font-weight:800;line-height:1.15}
+      .kpi .det{font-size:.8rem;color:var(--ink-2)}
+      .kpi .bar{height:6px;border-radius:3px;background:var(--chip);margin-top:6px;overflow:hidden}
+      .kpi .bar i{display:block;height:100%;background:var(--accent);border-radius:3px}
+      @media (max-width:1100px){ .kpis{grid-template-columns:repeat(3,1fr)} }
+      @media (max-width:560px){ .kpis{grid-template-columns:repeat(2,1fr)} .kpi .val{font-size:1.25rem} }
+
+      /* ---------- toolbar ---------- */
+      .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:8px 10px;margin-bottom:12px}
+      .tgroup{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+      .tgroup .tlab{font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);margin:0 4px}
+      .tbtn{border:1px solid var(--line);background:var(--panel-2);color:var(--ink);border-radius:8px;padding:6px 12px;font-weight:600;cursor:pointer;font-size:.88rem}
+      .tbtn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+      .tbtn:hover{border-color:var(--accent)}
+      .sep{width:1px;align-self:stretch;background:var(--line);margin:2px 2px}
+      .sim{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+      .sim input[type="range"]{width:170px;min-height:36px;accent-color:var(--accent)}
+      .sim .hora{font-weight:700;min-width:118px}
+      @media (max-width:560px){ .sim input[type="range"]{width:120px} .sep{display:none} }
+
+      /* ---------- layout principal ---------- */
+      .stage{display:grid;grid-template-columns:minmax(0,1fr) 372px;gap:12px;align-items:start}
+      @media (max-width:1020px){ .stage{grid-template-columns:1fr} }
+      .scene-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+      .scene-wrap{position:relative;height:min(68vh,720px);min-height:420px;background:#101c24}
+      @media (max-width:640px){ .scene-wrap{height:54vh;min-height:340px} }
+      .scene-wrap canvas{display:block}
+      #labels{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+      .alabel{position:absolute;transform:translate(-50%,-130%);background:rgba(10,22,29,.88);color:#fff;font-size:11px;font-weight:600;padding:2px 7px;border-radius:999px;white-space:nowrap;pointer-events:none}
+      .alabel.alert{background:#d92d20}
+      .scene-hint{position:absolute;left:10px;bottom:10px;background:rgba(10,22,29,.82);color:#e8eff2;font-size:.78rem;padding:6px 10px;border-radius:8px;pointer-events:none;max-width:78%}
+      .legend{position:absolute;right:10px;top:10px;background:rgba(10,22,29,.82);color:#e8eff2;border-radius:8px;padding:8px 10px;font-size:.78rem}
+      .legend div{display:flex;gap:7px;align-items:center;margin:2px 0}
+      .dot{width:10px;height:10px;border-radius:50%;flex:none}
+      @media (max-width:640px){
+        .legend{top:auto;bottom:10px;left:10px;right:10px;display:flex;flex-wrap:wrap;gap:2px 14px}
+        .legend div{margin:0}
+        .scene-hint{display:none}
+      }
+      .fallback2d{position:absolute;inset:0;display:none}
+      .fallback2d canvas{width:100%;height:100%}
+      .webgl-fail{display:none;background:#7c2d12;color:#fff;padding:8px 12px;font-size:.85rem;border-top:1px solid rgba(255,255,255,.25)}
+      .webgl-fail button{float:right;background:none;border:1px solid rgba(255,255,255,.6);color:#fff;border-radius:6px;padding:2px 9px;cursor:pointer;font-weight:700;line-height:1.4;margin-left:10px}
+      .webgl-fail button:hover{background:rgba(255,255,255,.15)}
+
+      /* ---------- panel lateral ---------- */
+      .side{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+      .side .pad{padding:12px}
+      .search{width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--panel-2);color:var(--ink);min-height:40px}
+      .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+      .chip{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--line);background:var(--panel-2);color:var(--ink);border-radius:999px;padding:5px 10px;font-size:.82rem;font-weight:600;cursor:pointer;min-height:36px}
+      .chip .cdot{width:9px;height:9px;border-radius:50%;flex:none}
+      .chip .n{font-family:"IBM Plex Mono",monospace;font-size:.75rem;color:var(--ink-2)}
+      .chip[aria-pressed="true"]{outline:2px solid var(--ink);outline-offset:1px}
+      .tabs{display:flex;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+      .tabs button{flex:1;background:none;border:none;border-bottom:3px solid transparent;font-weight:700;padding:10px 4px;cursor:pointer;color:var(--ink-2);min-height:44px}
+      .tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+      .ficha .who{display:flex;gap:10px;align-items:center}
+      .avatar{width:46px;height:46px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1rem}
+      .ficha h2{font-size:1.12rem;margin:0;line-height:1.2}
+      .ficha .cart{font-size:.85rem;color:var(--ink-2);font-weight:600}
+      .estado{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:.82rem;padding:3px 10px;border-radius:999px;color:#fff;margin-top:8px}
+      .mets{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+      .met{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+      .met .l{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+      .met .v{font-size:1.18rem;font-weight:800}
+      .met .v small{font-size:.75rem;color:var(--ink-2);font-weight:600}
+      .occbar{height:8px;background:var(--chip);border-radius:4px;overflow:hidden;margin-top:5px}
+      .occbar i{display:block;height:100%}
+      .ficha .actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+      .empty{color:var(--ink-2);padding:8px 0}
+      .rank{width:100%;border-collapse:collapse;font-size:.9rem}
+      .rank th{text-align:left;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);padding:6px 6px;border-bottom:1px solid var(--line)}
+      .rank td{padding:7px 6px;border-bottom:1px solid var(--line)}
+      .rank tr[data-id]{cursor:pointer}
+      .rank tr[data-id]:hover{background:var(--panel-2)}
+      .rank .num{text-align:right;font-family:"IBM Plex Mono",monospace}
+      .rank th.num{text-align:right}
+      .spark{margin-top:12px}
+      .spark .l{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);margin-bottom:4px}
+
+      /* ---------- secciones de texto ---------- */
+      .cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+      @media (max-width:900px){ .cols{grid-template-columns:1fr} }
+      .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px}
+      .card h2{margin:0 0 8px;font-size:1.05rem}
+      .card p,.card li{color:var(--ink-2)}
+      .card p b,.card li b{color:var(--ink)}
+      .card ul{margin:6px 0;padding-left:18px}
+      .card li{margin:4px 0}
+      .srcs{font-size:.86rem}
+      .srcs li{margin:5px 0;word-break:break-word}
+      a{color:var(--accent)}
+      footer{color:var(--ink-2);font-size:.82rem;padding:14px 2px 26px}
+      .warn{border-left:4px solid var(--acw);background:var(--panel-2);border-radius:0 8px 8px 0;padding:10px 12px;color:var(--ink-2)}
+      .warn b{color:var(--ink)}
+    </style>
+  </head>
+  <body>
+    <nav class="vistanav" aria-label="Vistas del tablero INTER ATC">
+      <span class="brand">INTER ATC</span>
+      <a href="https://vuneit450.github.io/portafolio/piso-call-center/">Consola</a>
+      <span class="cur" aria-current="page">Piso 3D</span>
+      <a href="https://vuneit450.github.io/portafolio/galeria-lifefx/">Galería</a>
+      <span class="sp"></span>
+      <span class="stamp" id="sello-vivo">Foto fija · noviembre 2026</span>
+    </nav>
+
+    <main>
+      <h1>Piso del call center en 3D — vista desde arriba</h1>
+      <p class="sub">El piso completo como si lo vieras desde el techo: <b>12 operaciones separadas por zonas de color, 77 asesores en su escritorio</b>. Arrastra para girar, rueda o pellizca para acercar, y <b>toca a cualquier asesor</b> para ver su información de llamadas. El anillo bajo cada persona es su estado en este momento de la simulación.</p>
+
+      <section class="kpis" aria-label="Indicadores de Dirección">
+        <div class="kpi"><div class="lab">Nivel de servicio</div><div class="val mono" id="kpi-ns-val">89,9 %</div><div class="det">Meta 90 %</div><div class="bar"><i id="kpi-ns-bar" style="width:89.9%"></i></div></div>
+        <div class="kpi"><div class="lab">Recibidas</div><div class="val mono" id="kpi-rec-val">16.060</div><div class="det" id="kpi-rec-det">En el periodo</div></div>
+        <div class="kpi"><div class="lab">Atendidas</div><div class="val mono" id="kpi-ate-val">13.351</div><div class="det" id="kpi-ate-det">83,1 % de las recibidas</div></div>
+        <div class="kpi"><div class="lab">Abandono &gt; 5 s</div><div class="val mono" id="kpi-ab-val">4,5 %</div><div class="det">Tras 5 segundos en cola</div></div>
+        <div class="kpi"><div class="lab">ASA</div><div class="val mono" id="kpi-asa-val">10 s</div><div class="det">Espera promedio</div></div>
+        <div class="kpi"><div class="lab">TMO</div><div class="val mono" id="kpi-tmo-val">8:43</div><div class="det">Tiempo medio de operación</div></div>
+      </section>
+
+      <div class="toolbar" role="toolbar" aria-label="Controles del piso 3D">
+        <div class="tgroup" role="group" aria-label="Vistas de cámara">
+          <span class="tlab">Vista</span>
+          <button class="tbtn" data-view="cenital" aria-pressed="true">Cenital</button>
+          <button class="tbtn" data-view="trescuartos" aria-pressed="false">3/4</button>
+          <button class="tbtn" data-view="pasillo" aria-pressed="false">Pasillo</button>
+        </div>
+        <div class="sep" aria-hidden="true"></div>
+        <div class="tgroup" role="group" aria-label="Capas">
+          <span class="tlab">Capas</span>
+          <button class="tbtn" id="tg-labels" aria-pressed="true">Etiquetas</button>
+          <button class="tbtn" id="tg-heat" aria-pressed="false">Calor por abandono</button>
+          <button class="tbtn" id="tg-bars" aria-pressed="true">Barras de ocupación</button>
+          <button class="tbtn" id="tg-spin" aria-pressed="false">Giro lento</button>
+        </div>
+        <div class="sep" aria-hidden="true"></div>
+        <div class="sim">
+          <span class="tlab">Simulación del día</span>
+          <button class="tbtn" id="sim-play" aria-pressed="false">▶ Reproducir</button>
+          <input type="range" id="sim-hour" min="7" max="23" step="1" value="11" aria-label="Hora del día" />
+          <span class="hora mono" id="sim-label">11:00 · operación normal</span>
+        </div>
+      </div>
+
+      <div class="stage">
+        <section class="scene-card" aria-label="Piso 3D interactivo">
+          <div class="webgl-fail" id="webgl-fail"><button type="button" id="webgl-fail-close" aria-label="Cerrar aviso">✕</button><span>WebGL no respondió en este equipo: se muestra el plano 2D cenital, con la misma información y el mismo clic por asesor.</span></div>
+          <div class="scene-wrap" id="scene-wrap">
+            <div id="labels" aria-hidden="true"></div>
+            <div class="fallback2d" id="fallback2d"><canvas id="canvas2d" width="900" height="620"></canvas></div>
+            <div class="legend" aria-label="Leyenda de estados">
+              <div><span class="dot" style="background:var(--ok)"></span>Disponible</div>
+              <div><span class="dot" style="background:var(--call)"></span>En llamada</div>
+              <div><span class="dot" style="background:var(--long)"></span>Llamada larga</div>
+              <div><span class="dot" style="background:var(--acw)"></span>Poscierre</div>
+              <div><span class="dot" style="background:var(--rest)"></span>Descanso</div>
+            </div>
+            <div class="scene-hint">Arrastra para girar · clic derecho para desplazar · rueda para zoom · toca un asesor para su ficha. Ahora en el piso: <b class="mono" id="now-counts">—</b></div>
+          </div>
+        </section>
+
+        <aside class="side" aria-label="Panel de la operación">
+          <div class="pad">
+            <input class="search" id="search" type="search" placeholder="Buscar asesor por nombre…" aria-label="Buscar asesor por nombre" />
+            <div class="tgroup" style="margin-top:10px" role="group" aria-label="Modo de filtro">
+              <span class="tlab">Al filtrar</span>
+              <button class="tbtn" id="mode-ghost" aria-pressed="true">Fantasma</button>
+              <button class="tbtn" id="mode-iso" aria-pressed="false">Aislar</button>
+            </div>
+            <div class="chips" id="chips" role="group" aria-label="Filtrar por operación"></div>
+          </div>
+          <div class="tabs" role="tablist" aria-label="Paneles">
+            <button role="tab" id="tab-ficha" aria-selected="true" data-tab="ficha">Ficha del asesor</button>
+            <button role="tab" id="tab-rank" aria-selected="false" data-tab="rank">Ranking</button>
+            <button role="tab" id="tab-cart" aria-selected="false" data-tab="cart">Operaciones</button>
+          </div>
+          <div class="pad" id="pane-ficha" role="tabpanel" aria-labelledby="tab-ficha"></div>
+          <div class="pad" id="pane-rank" role="tabpanel" aria-labelledby="tab-rank" hidden></div>
+          <div class="pad" id="pane-cart" role="tabpanel" aria-labelledby="tab-cart" hidden></div>
+        </aside>
+      </div>
+
+      <div class="cols">
+        <section class="card">
+          <h2>Cómo se juega con el piso</h2>
+          <ul>
+            <li><b>Vista de director:</b> la cámara arranca cenital, como mirar el plano desde arriba. Los botones Cenital / 3/4 / Pasillo mueven la cámara sin perder el piso.</li>
+            <li><b>Separar por operación:</b> cada zona de color es una operación (cartera o área). Los chips del panel filtran en modo <b>Fantasma</b> (el resto se atenúa y conserva el contexto) o <b>Aislar</b> (solo queda esa zona), y la cámara vuela a la zona.</li>
+            <li><b>Cada asesor, su información:</b> clic en una persona (o en su fila del ranking) abre la ficha con llamadas atendidas, TMO, NPS, FCR, transferencias, ocupación y su curva de llamadas por hora.</li>
+            <li><b>Estado en vivo del modelo:</b> el anillo del suelo y la luz del monitor marcan el estado; las llamadas largas parpadean en rojo. La barra junto al escritorio es la ocupación del asesor.</li>
+            <li><b>Simulación del día:</b> el deslizador recorre 07:00–23:00 y recolorea estados y contadores por hora; el pico de la jornada cae a las 23:00. Reproducir avanza hora a hora.</li>
+            <li><b>Calor por abandono:</b> esa capa tiñe cada zona según el abandono de su operación, para ver de un vistazo dónde se concentra.</li>
+          </ul>
+        </section>
+        <section class="card">
+          <h2>Base técnica y alcance de este modelo</h2>
+          <p>Construido con el enfoque que salió primero en la investigación del 25 de noviembre de 2026: <b>Three.js con geometría procedural low-poly</b> (piso, escritorios, sillas, monitores y personas hechos con primitivas, sin modelos externos), cámara orbital cenital, raycasting para el clic por asesor y panel de detalle en HTML. Es la vía que cumple un solo HTML estático sin build.</p>
+          <ul>
+            <li><b>No existe una demo abierta de “call center god view” lista para copiar.</b> Lo más cercano: el gemelo digital de una planta en un solo HTML (3D-kousai-opus5), Hermes Virtual Office (oficina 3D por divisiones, pero exige Next.js y backend) y el concepto comercial Virtual Floor de Eckoh, sin demo ni código abierto.</li>
+            <li><b>Modelos 3D gratuitos (para una v2 con GLB):</b> Kenney Furniture Kit y sus personajes (CC0), Poly Pizza (GLB directo, licencia por modelo) y Quaternius (CC0, pero su pack viene en FBX/OBJ y exige convertir a GLB).</li>
+            <li id="nota-foto-fija"><b>Los datos del piso son la foto fija de noviembre 2026</b> de INTER ATC (KPIs de Dirección: NS 89,9 % con meta 90 %, 16.060 recibidas / 13.351 atendidas, abandono &gt;5 s 4,5 %, ASA 10 s, TMO 8:43). Los estados por hora son la simulación del modelo, no un monitoreo en vivo.</li>
+          </ul>
+          <p class="warn"><b>Punto sin verificar:</b> ninguna fuente confirma ni niega que WebGL/Three.js funcione dentro del objeto de página web (iframe) de Tableau. Antes de dar por buena la incrustación en el libro INTER ATC hay que probar esta misma página dentro de Tableau; si WebGL no responde, esta página cae sola al plano 2D cenital con la misma información.</p>
+        </section>
+      </div>
+
+      <section class="card srcs" style="margin-top:12px">
+        <h2>Fuentes de la investigación</h2>
+        <ul>
+          <li>Three.js, versión r187 en la web oficial y catálogo de ejemplos (órbita, raycast, etiquetas CSS2D, GLTF): <a href="https://threejs.org/">threejs.org</a> · <a href="https://threejs.org/examples/">threejs.org/examples</a></li>
+          <li>Comparativa Three.js / Babylon.js / PlayCanvas (tamaños, licencias, descargas): <a href="https://www.utsubo.com/blog/threejs-vs-babylonjs-vs-playcanvas-comparison">utsubo.com</a></li>
+          <li>Eckoh Virtual Floor, el concepto comercial de piso virtual: <a href="https://www.eckoh.com/virtual-floor">eckoh.com/virtual-floor</a></li>
+          <li>Hermes Virtual Office, oficina 3D low-poly por divisiones: <a href="https://github.com/JuniorXcoder/hermes-virtual-office">github.com/JuniorXcoder/hermes-virtual-office</a></li>
+          <li>Gemelo digital de planta en un solo HTML (3D-kousai-opus5): <a href="https://repo-explainer.com/katsuhiro-hayasaka-orico/3D-kousai-opus5">repo-explainer.com</a></li>
+          <li>Kenney Furniture Kit, mobiliario CC0 en GLB: <a href="https://kenney.nl/assets/furniture-kit">kenney.nl/assets/furniture-kit</a></li>
+          <li>Poly Pizza, modelos low-poly en GLB: <a href="https://poly.pizza/">poly.pizza</a></li>
+          <li>Rendimiento e instancing en Three.js: <a href="https://aetumi.app/news/threejs-performance-instancing-lod/">aetumi.app</a></li>
+        </ul>
+      </section>
+
+      <footer id="pie-datos">Modelo interactivo del piso INTER ATC · 12 operaciones · 77 asesores · Datos: foto fija de noviembre 2026 (investigación y cifras verificadas el 25 de noviembre de 2026).</footer>
+    </main>
+
+<script>
+/* ============================================================
+   DATOS — foto fija noviembre 2026 (INTER ATC)
+   KPIs globales: NS 89,9 % (meta 90 %), 16.060 recibidas,
+   13.351 atendidas, abandono >5 s 4,5 %, ASA 10 s, TMO 8:43.
+   ============================================================ */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+var rng = mulberry32(20261125);
+var TOTALES={recibidas:16060,atendidas:13351,ns:89.9}; /* foto fija; el cableado en vivo lo actualiza */
+
+var CARTERAS = [
+  {id:'asistencias', nombre:'Asistencias',  color:0x0f766e, css:'#0f766e', n:12, ns:91.2, abandono:3.8},
+  {id:'coppel',      nombre:'Coppel',       color:0xc2410c, css:'#c2410c', n:10, ns:88.4, abandono:5.1},
+  {id:'liverpool',   nombre:'Liverpool',    color:0x9d174d, css:'#9d174d', n:8,  ns:90.6, abandono:4.2},
+  {id:'crediauto',   nombre:'Crediauto',    color:0x1d6fb8, css:'#1d6fb8', n:7,  ns:87.9, abandono:5.6},
+  {id:'seguros',     nombre:'Seguros',      color:0x4d7c0f, css:'#4d7c0f', n:6,  ns:92.1, abandono:3.1},
+  {id:'coppelvida',  nombre:'Coppel Vida',  color:0xa16207, css:'#a16207', n:5,  ns:89.3, abandono:4.7},
+  {id:'retencion',   nombre:'Retención',    color:0xb91c1c, css:'#b91c1c', n:6,  ns:86.8, abandono:6.0},
+  {id:'cobranza',    nombre:'Cobranza',     color:0x57534e, css:'#57534e', n:6,  ns:85.9, abandono:6.4},
+  {id:'ventas',      nombre:'Ventas',       color:0x15803d, css:'#15803d', n:5,  ns:90.1, abandono:4.4},
+  {id:'atencion',    nombre:'Atención',     color:0x0e7490, css:'#0e7490', n:5,  ns:91.6, abandono:3.6},
+  {id:'soporte',     nombre:'Soporte',      color:0x0369a1, css:'#0369a1', n:4,  ns:88.9, abandono:5.0},
+  {id:'backoffice',  nombre:'Backoffice',   color:0x7c2d12, css:'#7c2d12', n:3,  ns:93.0, abandono:2.8}
+];
+var NOMBRES=['Alejandro','Mariana','Carlos','Fernanda','Diego','Valeria','Ricardo','Sofía','Miguel','Lucía','Andrés','Paola','Jorge','Daniela','Roberto','Carmen','Héctor','Natalia','Óscar','Renata','Emilio','Beatriz','Raúl','Ximena','Arturo','Montserrat','Iván','Alejandra','Ernesto','Gabriela','Marco','Verónica','Hugo','Itzel','Samuel','Diana','Felipe','Lorena','Gustavo','Adriana'];
+var APELLIDOS=['Torres','Mendoza','Herrera','Ruiz','Ramírez','Vargas','Castillo','Ortega','Navarro','Guerrero','Campos','Salazar','Peña','Cortés','Luna','Reyes','Morales','Fuentes','Delgado','Cabrera','Ibarra','Solís','Aguilar','Montes','Vega','Rosales','Pacheco','Cárdenas','Zavala','Mejía'];
+
+var ESTADOS = {
+  disponible:{lab:'Disponible',   css:'#1d9e57', hex:0x22c55e},
+  llamada:   {lab:'En llamada',   css:'#1d8fd1', hex:0x38bdf8},
+  larga:     {lab:'Llamada larga',css:'#d92d20', hex:0xef4444},
+  poscierre: {lab:'Poscierre',    css:'#d97706', hex:0xf59e0b},
+  descanso:  {lab:'Descanso',     css:'#8a97a0', hex:0x9ca3af}
+};
+var HORAS=[7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
+var FACTOR={7:.35,8:.5,9:.65,10:.8,11:.9,12:.85,13:.7,14:.75,15:.9,16:1,17:.95,18:.85,19:.8,20:.9,21:1.05,22:1.15,23:1.25};
+var HORA_LAB={7:'arranque del turno',8:'sube la entrada',9:'operación normal',10:'operación normal',11:'operación normal',12:'operación normal',13:'valle de comida',14:'regreso de comida',15:'operación normal',16:'pico de la tarde',17:'operación normal',18:'operación normal',19:'operación normal',20:'sube la noche',21:'pico nocturno',22:'pico nocturno',23:'pico máximo del día'};
+
+function fmt(n){return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+function fmtTMO(s){var m=Math.floor(s/60),ss=Math.round(s%60);return m+':'+('0'+ss).slice(-2)}
+function iniciales(n){return n.split(' ').map(function(w){return w[0]}).slice(0,2).join('').toUpperCase()}
+
+/* Generar asesores: llamadas normalizadas para sumar 13.351 atendidas */
+var ASESORES=[], usados={};
+CARTERAS.forEach(function(c){
+  for(var i=0;i<c.n;i++){
+    var nom, intentos=0;
+    do{ nom=NOMBRES[Math.floor(rng()*NOMBRES.length)]+' '+APELLIDOS[Math.floor(rng()*APELLIDOS.length)]; intentos++; }while(usados[nom]&&intentos<40);
+    usados[nom]=1;
+    ASESORES.push({
+      id:ASESORES.length, nombre:nom, cartera:c.id,
+      peso:0.65+rng()*0.8,
+      tmo:Math.round(430+rng()*190 + (c.id==='cobranza'?40:0) - (c.id==='seguros'?30:0)),
+      nps:Math.round(5+rng()*70),
+      fcr:Math.round(48+rng()*44),
+      transf:Math.round(rng()*rng()*16),
+      ocup:Math.round(58+rng()*39),
+      estado:'disponible', enHora:0
+    });
+  }
+});
+var sumaPeso=ASESORES.reduce(function(s,a){return s+a.peso},0), acumulado=0;
+ASESORES.forEach(function(a,i){
+  if(i<ASESORES.length-1){ a.llamadas=Math.round(13351*a.peso/sumaPeso); acumulado+=a.llamadas; }
+  else a.llamadas=13351-acumulado;
+  var base=FACTOR[11];
+  a.porHora=HORAS.map(function(h){ return Math.max(0,Math.round(a.llamadas/14*(FACTOR[h]/base)*(0.75+rng()*0.5)/3.1)); });
+});
+/* Recibidas por cartera: normalizar a 16.060 según asesores y abandono */
+CARTERAS.forEach(function(c){
+  var at=ASESORES.filter(function(a){return a.cartera===c.id}).reduce(function(s,a){return s+a.llamadas},0);
+  c.atendidas=at; c.recibidas=Math.round(at/(1-c.abandono/100)*1.06);
+});
+var difRec=16060-CARTERAS.reduce(function(s,c){return s+c.recibidas},0);
+CARTERAS[0].recibidas+=difRec;
+
+/* Estado por hora (determinista por asesor+hora) */
+function estadoEnHora(a,h){
+  var r=mulberry32(a.id*977+h*131)();
+  var f=FACTOR[h];
+  var pLlam=Math.min(.86,.34*f+ (a.ocup/100)*.3);
+  if(r<pLlam*.16) return 'larga';
+  if(r<pLlam) return 'llamada';
+  if(r<pLlam+.13) return 'poscierre';
+  if(r>pLlam+.13+.20) return 'descanso';
+  return 'disponible';
+}
+function aplicarHora(h){
+  ASESORES.forEach(function(a){ a.estado=estadoEnHora(a,h); a.enHora=Math.round(a.porHora[HORAS.indexOf(h)]*(0.7+mulberry32(a.id*31+h)()*0.6)); });
+}
+
+/* ============ LAYOUT del piso (mundo: x -64..64, z -44..44) ============ */
+var MUNDO={w:128,d:88};
+var ZONAS=[]; /* {cartera, x,z,w,d, desks:[{x,z,asesorIdx}]} */
+(function(){
+  var cols=4, rows=3, zw=MUNDO.w/cols, zd=MUNDO.d/rows;
+  CARTERAS.forEach(function(c,zi){
+    var cx=-MUNDO.w/2+zw*(zi%cols)+zw/2, cz=-MUNDO.d/2+zd*Math.floor(zi/cols)+zd/2;
+    var zona={cartera:c, x:cx, z:cz, w:zw-3.4, d:zd-3.4, desks:[]};
+    var dc=4, dr=Math.ceil(c.n/dc), gx=(zona.w-7)/(dc-1||1), gz=(zona.d-11)/(dr-1||1);
+    if(dr===1) gz=0;
+    var miembros=ASESORES.filter(function(a){return a.cartera===c.id});
+    miembros.forEach(function(a,i){
+      var col=i%dc, row=Math.floor(i/dc);
+      var dx=zona.x-zona.w/2+3.5+col*gx;
+      var dz=zona.z-zona.d/2+6.6+(dr===1?zona.d/2-4.6:row*gz);
+      zona.desks.push({x:dx,z:dz,asesor:a.id}); a.desk={x:dx,z:dz,zona:zi};
+    });
+    ZONAS.push(zona);
+  });
+})();
+
+/* ============ UI: chips, paneles, ranking ============ */
+var filtro=null, modo='fantasma', seleccionado=null, horaActual=11;
+var $=function(s){return document.querySelector(s)};
+
+function construirChips(){
+  var box=$('#chips'); box.innerHTML='';
+  var all=document.createElement('button'); all.className='chip'; all.textContent='Todas las operaciones';
+  all.setAttribute('aria-pressed', filtro===null?'true':'false');
+  all.onclick=function(){ setFiltro(null); };
+  box.appendChild(all);
+  CARTERAS.forEach(function(c){
+    var b=document.createElement('button'); b.className='chip';
+    b.setAttribute('aria-pressed', filtro===c.id?'true':'false');
+    b.innerHTML='<span class="cdot" style="background:'+c.css+'"></span>'+c.nombre+' <span class="n">'+c.n+' asesores</span>';
+    b.onclick=function(){ setFiltro(filtro===c.id?null:c.id); };
+    box.appendChild(b);
+  });
+}
+function setFiltro(id){
+  filtro=id; construirChips();
+  if(window.__onFiltro) window.__onFiltro();
+  if(id && window.__enfocarZona) window.__enfocarZona(id);
+  if(!id && window.__vistaGeneral) window.__vistaGeneral();
+}
+$('#mode-ghost').onclick=function(){ modo='fantasma'; this.setAttribute('aria-pressed','true'); $('#mode-iso').setAttribute('aria-pressed','false'); if(window.__onFiltro)window.__onFiltro(); };
+$('#mode-iso').onclick=function(){ modo='aislar'; this.setAttribute('aria-pressed','true'); $('#mode-ghost').setAttribute('aria-pressed','false'); if(window.__onFiltro)window.__onFiltro(); };
+
+document.querySelectorAll('.tabs button').forEach(function(b){
+  b.onclick=function(){
+    document.querySelectorAll('.tabs button').forEach(function(x){x.setAttribute('aria-selected','false')});
+    b.setAttribute('aria-selected','true');
+    ['ficha','rank','cart'].forEach(function(t){ $('#pane-'+t).hidden = t!==b.dataset.tab; });
+  };
+});
+function abrirTab(t){ document.querySelector('.tabs button[data-tab="'+t+'"]').click(); }
+
+function pintarFicha(){
+  var p=$('#pane-ficha');
+  if(seleccionado===null){
+    p.innerHTML='<p class="empty">Toca a cualquier persona del piso — o una fila del ranking — para ver aquí su información de llamadas: atendidas, TMO, NPS, FCR, transferencias y ocupación.</p>';
+    return;
+  }
+  var a=ASESORES[seleccionado], c=CARTERAS.filter(function(x){return x.id===a.cartera})[0], e=ESTADOS[a.estado];
+  var maxH=Math.max.apply(null,a.porHora.concat([1]));
+  var bars=a.porHora.map(function(v,i){
+    var hh=Math.max(6,v/maxH*44);
+    return '<rect x="'+(i*15+2)+'" y="'+(48-hh)+'" width="9" height="'+hh+'" rx="2" fill="'+(HORAS[i]===horaActual?'#d92d20':c.css)+'" opacity="'+(HORAS[i]===horaActual?1:.75)+'"><title>'+HORAS[i]+':00 — '+v+' llamadas</title></rect>';
+  }).join('');
+  p.innerHTML='<div class="ficha"><div class="who"><div class="avatar" style="background:'+c.css+'">'+iniciales(a.nombre)+'</div>'+
+    '<div><h2>'+a.nombre+'</h2><div class="cart">'+c.nombre+' · Escritorio '+(a.desk? (ZONAS[a.desk.zona].desks.findIndex(function(d){return d.asesor===a.id})+1):'—')+' de la zona</div></div></div>'+
+    '<span class="estado" style="background:'+e.css+'"><span class="dot" style="background:#fff"></span>'+e.lab+(a.estado==='llamada'||a.estado==='larga'?' · '+a.enHora+' en esta hora':'')+'</span>'+
+    '<div class="mets">'+
+    '<div class="met"><div class="l">Llamadas atendidas</div><div class="v mono">'+fmt(a.llamadas)+'</div></div>'+
+    '<div class="met"><div class="l">TMO</div><div class="v mono">'+fmtTMO(a.tmo)+'</div></div>'+
+    '<div class="met"><div class="l">NPS</div><div class="v mono">'+(a.nps>=0?'+':'')+a.nps+'</div></div>'+
+    '<div class="met"><div class="l">FCR</div><div class="v mono">'+a.fcr+' <small>%</small></div></div>'+
+    '<div class="met"><div class="l">Transferencias</div><div class="v mono">'+a.transf+'</div></div>'+
+    '<div class="met"><div class="l">Ocupación</div><div class="v mono">'+a.ocup+' <small>%</small></div><div class="occbar"><i style="width:'+a.ocup+'%;background:'+(a.ocup>90?'var(--long)':a.ocup>78?'var(--acw)':'var(--ok)')+'"></i></div></div>'+
+    '</div>'+
+    '<div class="spark"><div class="l">Llamadas por hora (barra roja = hora de la simulación)</div><svg viewBox="0 0 258 52" width="100%" height="52" role="img" aria-label="Curva de llamadas por hora de '+a.nombre+'">'+bars+'</svg></div>'+
+    '<div class="actions"><button class="tbtn" id="f-enfocar">Enfocar en el piso</button><button class="tbtn" id="f-cartera">Filtrar su operación</button></div></div>';
+  $('#f-enfocar').onclick=function(){ if(window.__enfocarAsesor) window.__enfocarAsesor(a.id); };
+  $('#f-cartera').onclick=function(){ setFiltro(a.cartera); };
+}
+function pintarRanking(){
+  var orden=ASESORES.slice().sort(function(x,y){return y.llamadas-x.llamadas}).slice(0,14);
+  $('#pane-rank').innerHTML='<table class="rank"><thead><tr><th>#</th><th>Asesor</th><th>Operación</th><th class="num">Llam.</th><th class="num">TMO</th><th class="num">NPS</th></tr></thead><tbody>'+
+    orden.map(function(a,i){ var c=CARTERAS.filter(function(x){return x.id===a.cartera})[0];
+      return '<tr data-id="'+a.id+'"><td class="mono">'+(i+1)+'</td><td><b>'+a.nombre+'</b></td><td><span class="dot" style="display:inline-block;background:'+c.css+'"></span> '+c.nombre+'</td><td class="num">'+fmt(a.llamadas)+'</td><td class="num">'+fmtTMO(a.tmo)+'</td><td class="num">'+(a.nps>=0?'+':'')+a.nps+'</td></tr>'; }).join('')+
+    '</tbody></table><p class="empty" style="font-size:.82rem">Toca una fila para ver la ficha y volar hasta ese escritorio.</p>';
+  $('#pane-rank').querySelectorAll('tr[data-id]').forEach(function(tr){
+    tr.onclick=function(){ seleccionar(+tr.dataset.id,true); };
+  });
+}
+function pintarCarteras(){
+  var vivo = window.__datosVivo && window.__datosVivo.estado==='vivo';
+  $('#pane-cart').innerHTML='<table class="rank"><thead><tr><th>Operación</th><th class="num">Ases.</th><th class="num">NS</th><th class="num">Aband.</th><th class="num">Atend.</th><th class="num">Recib.</th></tr></thead><tbody>'+
+    CARTERAS.map(function(c){ return '<tr data-id="'+c.id+'"><td><span class="dot" style="display:inline-block;background:'+c.css+'"></span> <b>'+c.nombre+'</b></td><td class="num">'+c.n+'</td><td class="num">'+String(c.ns).replace('.',',')+' %</td><td class="num">'+String(c.abandono).replace('.',',')+' %</td><td class="num">'+fmt(c.atendidas)+'</td><td class="num">'+(c.vivo?fmt(c.recibidas):'sin dato')+'</td></tr>'; }).join('')+
+    '</tbody></table><p class="empty" style="font-size:.82rem">Toca una operación para filtrarla en el piso. Totales del piso: '+fmt(TOTALES.recibidas)+' recibidas · '+fmt(TOTALES.atendidas)+' atendidas · NS '+String(TOTALES.ns).replace('.',',')+' %.'+(vivo?' En vivo: NS, abandono, atendidas y recibidas de Asistencias, Coppel Vida, Crediauto, Seguros y Liverpool vienen del extracto; las demás operaciones no tienen equivalente directo en el extracto y conservan la foto fija de noviembre (recibidas: sin dato).':'')+'</p>';
+  $('#pane-cart').querySelectorAll('tr[data-id]').forEach(function(tr){
+    tr.onclick=function(){ setFiltro(tr.dataset.id); };
+  });
+}
+function pintarContadores(){
+  var en=ASESORES.filter(function(a){return a.estado==='llamada'||a.estado==='larga'}).length;
+  var lg=ASESORES.filter(function(a){return a.estado==='larga'}).length;
+  var di=ASESORES.filter(function(a){return a.estado==='disponible'}).length;
+  $('#now-counts').textContent=en+' en llamada ('+lg+' largas) · '+di+' disponibles';
+}
+function seleccionar(id,enfocar){
+  seleccionado=id; pintarFicha(); abrirTab('ficha');
+  if(window.__onSeleccion) window.__onSeleccion();
+  if(enfocar && window.__enfocarAsesor) window.__enfocarAsesor(id);
+}
+$('#search').addEventListener('input',function(){
+  var q=this.value.trim().toLowerCase(); if(q.length<2) return;
+  var hit=ASESORES.filter(function(a){return a.nombre.toLowerCase().indexOf(q)>=0})[0];
+  if(hit) seleccionar(hit.id,true);
+});
+
+/* ============ Simulación del día ============ */
+var simTimer=null;
+function setHora(h){
+  horaActual=h; aplicarHora(h);
+  $('#sim-hour').value=h;
+  $('#sim-label').textContent=('0'+h).slice(-2)+':00 · '+HORA_LAB[h];
+  pintarContadores(); pintarFicha();
+  if(window.__onHora) window.__onHora();
+}
+$('#sim-hour').addEventListener('input',function(){ setHora(+this.value); });
+$('#sim-play').onclick=function(){
+  if(simTimer){ clearInterval(simTimer); simTimer=null; this.textContent='▶ Reproducir'; this.setAttribute('aria-pressed','false'); return; }
+  this.textContent='⏸ Pausar'; this.setAttribute('aria-pressed','true');
+  simTimer=setInterval(function(){ setHora(horaActual>=23?7:horaActual+1); },1700);
+};
+
+aplicarHora(horaActual);
+construirChips(); pintarFicha(); pintarRanking(); pintarCarteras(); pintarContadores();
+</script>
+
+<script>
+/* ============================================================
+   ESCENA 3D — Three.js, geometría procedural low-poly.
+   Si WebGL no responde, cae al plano 2D cenital (misma data).
+   ============================================================ */
+(function(){
+  var wrap=document.getElementById('scene-wrap');
+  var usar3D = typeof THREE!=='undefined' && typeof THREE.OrbitControls==='function';
+  var renderer=null;
+  if(usar3D){
+    try{
+      renderer=new THREE.WebGLRenderer({antialias:true});
+      if(!renderer.getContext()) usar3D=false;
+    }catch(e){ usar3D=false; }
+  }
+
+  /* ---------------- Respaldo 2D ---------------- */
+  if(!usar3D){
+    document.getElementById('fallback2d').style.display='block';
+    document.getElementById('webgl-fail').style.display='block';
+    document.getElementById('webgl-fail-close').onclick=function(){ document.getElementById('webgl-fail').style.display='none'; };
+    var cv=document.getElementById('canvas2d'), ctx=cv.getContext('2d');
+    var heat2=false, labels2=true, bars2=true;
+    function mx(x){ return 10+(x+64)/128*880; }
+    function mz(z){ return 10+(z+44)/88*600; }
+    function heatCss(ab){
+      var t=Math.min(1,Math.max(0,(ab-2.5)/4.5));
+      function mix(c1,c2,k){ return [Math.round(c1[0]+(c2[0]-c1[0])*k),Math.round(c1[1]+(c2[1]-c1[1])*k),Math.round(c1[2]+(c2[2]-c1[2])*k)]; }
+      var c=mix([29,158,87],[217,119,6],Math.min(1,t*1.6));
+      c=mix(c,[217,45,32],Math.max(0,t-0.55)*2.2);
+      return 'rgb('+c[0]+','+c[1]+','+c[2]+')';
+    }
+    function draw2D(){
+      ctx.clearRect(0,0,900,620);
+      ctx.fillStyle='#16242d'; ctx.fillRect(0,0,900,620);
+      ZONAS.forEach(function(z){
+        var dim = filtro && filtro!==z.cartera.id;
+        var base = heat2?heatCss(z.cartera.abandono):z.cartera.css;
+        ctx.globalAlpha = (dim&&modo==='aislar')?0.06:(dim?0.35:1);
+        ctx.fillStyle=base; ctx.globalAlpha*=0.28;
+        ctx.fillRect(mx(z.x-z.w/2),mz(z.z-z.d/2),(z.w)/128*880,(z.d)/88*600);
+        ctx.globalAlpha = (dim&&modo==='aislar')?0.06:(dim?0.35:1);
+        ctx.strokeStyle=base; ctx.lineWidth=2;
+        ctx.strokeRect(mx(z.x-z.w/2),mz(z.z-z.d/2),(z.w)/128*880,(z.d)/88*600);
+        ctx.fillStyle='#fff'; ctx.font='bold 13px Archivo, sans-serif'; ctx.textAlign='left';
+        ctx.fillText(z.cartera.nombre.toUpperCase()+(heat2?' · aband. '+String(z.cartera.abandono).replace('.',',')+' %':''), mx(z.x-z.w/2)+6, mz(z.z-z.d/2)+16);
+        ctx.globalAlpha=1;
+        z.desks.forEach(function(d){
+          var a=ASESORES[d.asesor];
+          ctx.fillStyle='#0d161c'; ctx.fillRect(mx(d.x)-11,mz(d.z)-6,22,12);
+          if(bars2){ ctx.fillStyle=a.ocup>90?'#ef4444':a.ocup>78?'#f59e0b':'#22c55e'; ctx.fillRect(mx(d.x)-11,mz(d.z)-10,22*a.ocup/100,3); }
+          ctx.beginPath(); ctx.arc(mx(d.x),mz(d.z)+11,6,0,7);
+          ctx.fillStyle=ESTADOS[a.estado].css; ctx.fill();
+          if(seleccionado===a.id){ ctx.strokeStyle='#ffd166'; ctx.lineWidth=3; ctx.beginPath(); ctx.arc(mx(d.x),mz(d.z)+11,10,0,7); ctx.stroke(); }
+          if(labels2){ ctx.fillStyle='rgba(255,255,255,.85)'; ctx.font='8px Archivo, sans-serif'; ctx.textAlign='center'; ctx.fillText(a.nombre.split(' ')[0], mx(d.x), mz(d.z)+26); ctx.textAlign='left'; }
+        });
+      });
+    }
+    document.getElementById('tg-heat').onclick=function(){ heat2=!heat2; this.setAttribute('aria-pressed',heat2); draw2D(); };
+    document.getElementById('tg-labels').onclick=function(){ labels2=!labels2; this.setAttribute('aria-pressed',labels2); draw2D(); };
+    document.getElementById('tg-bars').onclick=function(){ bars2=!bars2; this.setAttribute('aria-pressed',bars2); draw2D(); };
+    cv.addEventListener('click',function(ev){
+      var r=cv.getBoundingClientRect();
+      var wx=(ev.clientX-r.left)/r.width*900, wz=(ev.clientY-r.top)/r.height*620;
+      var best=null,bd=1e9;
+      ASESORES.forEach(function(a){ if(!a.desk) return; var dx=mx(a.desk.x)-wx, dz=mz(a.desk.z)+11-wz, d=dx*dx+dz*dz; if(d<bd){bd=d;best=a;} });
+      if(best&&bd<900) seleccionar(best.id,false);
+    });
+    window.__onHora=draw2D; window.__onFiltro=draw2D; window.__onSeleccion=draw2D;
+    window.__onDatosVivo=draw2D; /* repinta el plano 2D con NS/abandono en vivo */
+    window.__enfocarAsesor=function(){ draw2D(); };
+    window.__enfocarZona=function(){ draw2D(); };
+    window.__vistaGeneral=function(){ draw2D(); };
+    document.querySelectorAll('[data-view]').forEach(function(b){ b.onclick=function(){ document.querySelectorAll('[data-view]').forEach(function(x){x.setAttribute('aria-pressed','false')}); b.setAttribute('aria-pressed','true'); }; });
+    var spinBtn=document.getElementById('tg-spin'); if(spinBtn) spinBtn.style.display='none';
+    draw2D();
+    return;
+  }
+
+  /* ---------------- Escena 3D ---------------- */
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+  renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  wrap.insertBefore(renderer.domElement, wrap.firstChild);
+
+  var scene=new THREE.Scene();
+  scene.background=new THREE.Color(0x101c24);
+  scene.fog=new THREE.Fog(0x101c24,170,300);
+  var camera=new THREE.PerspectiveCamera(48,1,0.1,500);
+  camera.position.set(0,96,0.01);
+  var controls=new THREE.OrbitControls(camera,renderer.domElement);
+  controls.enableDamping=true; controls.dampingFactor=0.07;
+  controls.maxPolarAngle=Math.PI*0.49; controls.minDistance=9; controls.maxDistance=170;
+  controls.target.set(0,0,0); controls.autoRotateSpeed=0.7;
+
+  scene.add(new THREE.AmbientLight(0xffffff,0.55));
+  var sol=new THREE.DirectionalLight(0xfff2df,0.95);
+  sol.position.set(45,80,25); sol.castShadow=true;
+  sol.shadow.mapSize.set(2048,2048);
+  sol.shadow.camera.left=-80; sol.shadow.camera.right=80; sol.shadow.camera.top=60; sol.shadow.camera.bottom=-60; sol.shadow.camera.far=220;
+  scene.add(sol);
+  var relleno=new THREE.DirectionalLight(0xbcd7ff,0.3); relleno.position.set(-40,50,-30); scene.add(relleno);
+
+  /* Materiales y geometrías compartidas */
+  var geoDeskTop=new THREE.BoxGeometry(3.4,0.16,1.7), geoDeskLeg=new THREE.BoxGeometry(3.1,0.75,1.3);
+  var geoMon=new THREE.BoxGeometry(1.55,0.95,0.07), geoMonBase=new THREE.BoxGeometry(0.16,0.42,0.16);
+  var geoChairSeat=new THREE.BoxGeometry(0.95,0.12,0.9), geoChairBack=new THREE.BoxGeometry(0.95,1.05,0.12);
+  var geoBody=new THREE.CylinderGeometry(0.30,0.40,0.92,10), geoHead=new THREE.SphereGeometry(0.27,12,10);
+  var geoRing=new THREE.RingGeometry(0.62,0.92,28), geoHalo=new THREE.RingGeometry(1.0,1.22,32);
+  var geoBar=new THREE.BoxGeometry(0.17,1,0.17), geoScreen=new THREE.PlaneGeometry(1.42,0.82);
+  var matFloor=new THREE.MeshStandardMaterial({color:0x27363f,roughness:0.95});
+  var matAisle=new THREE.MeshStandardMaterial({color:0x1b2830,roughness:0.95});
+  var matChair=new THREE.MeshStandardMaterial({color:0x39434a,roughness:0.8});
+  var matMonFrame=new THREE.MeshStandardMaterial({color:0x11181d,roughness:0.5,metalness:0.3});
+  var pieles=[0xf2c9a0,0xe0ac82,0xc68863,0x9c6644,0x7a4a2b].map(function(c){return new THREE.MeshStandardMaterial({color:c,roughness:0.7})});
+  var matHalo=new THREE.MeshBasicMaterial({color:0xffd166,transparent:true,opacity:0.95,side:THREE.DoubleSide});
+
+  /* Suelo y pasillos */
+  var suelo=new THREE.Mesh(new THREE.PlaneGeometry(MUNDO.w+16,MUNDO.d+16),matFloor);
+  suelo.rotation.x=-Math.PI/2; suelo.receiveShadow=true; scene.add(suelo);
+  [[0,0,MUNDO.w,2.2],[0,0,2.2,MUNDO.d]].forEach(function(p){
+    var a=new THREE.Mesh(new THREE.PlaneGeometry(p[2],p[3]),matAisle);
+    a.rotation.x=-Math.PI/2; a.position.set(p[0],0.01,p[1]); a.receiveShadow=true; scene.add(a);
+  });
+  /* Muros bajos perimetrales */
+  var matWall=new THREE.MeshStandardMaterial({color:0x3b4a54,roughness:0.9});
+  [[0,-MUNDO.d/2-1,MUNDO.w+4,0.5,2.2],[0,MUNDO.d/2+1,MUNDO.w+4,0.5,2.2],[-MUNDO.w/2-1,0,0.5,MUNDO.d+4,2.2],[MUNDO.w/2+1,0,0.5,MUNDO.d+4,2.2]].forEach(function(w){
+    var m=new THREE.Mesh(new THREE.BoxGeometry(w[2],w[4],w[3]),matWall);
+    m.position.set(w[0],w[4]/2,w[1]); m.castShadow=true; scene.add(m);
+  });
+  /* Pantalla de Dirección al fondo (se repinta en vivo con el JSON) */
+  var muroCanvas=null,muroCtx=null,muroTex=null;
+  function pintarMuro(nsTxt,recTxt,tmoTxt,abTxt,asaTxt){
+    if(!muroCtx) return;
+    var g=muroCtx;
+    g.fillStyle='#0b2b33'; g.fillRect(0,0,1024,256);
+    g.fillStyle='#2bb3a3'; g.font='800 64px Archivo, sans-serif'; g.fillText('INTER ATC · DIRECCIÓN',36,84);
+    g.fillStyle='#ffffff'; g.font='600 52px Archivo, sans-serif';
+    g.fillText('NS '+nsTxt+'   ·   '+recTxt+' recibidas   ·   TMO '+tmoTxt,36,168);
+    g.fillStyle='#ffd166'; g.font='600 40px Archivo, sans-serif'; g.fillText('Meta NS 90 %  ·  Abandono >5 s: '+abTxt+'  ·  ASA '+asaTxt,36,228);
+    if(muroTex) muroTex.needsUpdate=true;
+  }
+  (function(){
+    var c=document.createElement('canvas'); c.width=1024; c.height=256;
+    muroCanvas=c; muroCtx=c.getContext('2d');
+    pintarMuro('89,9 %','16.060','8:43','4,5 %','10 s');
+    muroTex=new THREE.CanvasTexture(c);
+    var wall=new THREE.Mesh(new THREE.PlaneGeometry(34,8.5),new THREE.MeshBasicMaterial({map:muroTex}));
+    wall.position.set(0,4.4,-MUNDO.d/2-0.7); scene.add(wall);
+  })();
+  /* Plantas decorativas en esquinas de pasillo */
+  var matPot=new THREE.MeshStandardMaterial({color:0x5b4632,roughness:0.9});
+  var matLeaf=new THREE.MeshStandardMaterial({color:0x2e7d46,roughness:0.8});
+  [[-31,-15],[31,-15],[-31,15],[31,15],[0,-15],[0,15],[-31,0],[31,0]].forEach(function(p){
+    var pot=new THREE.Mesh(new THREE.CylinderGeometry(0.5,0.4,0.8,8),matPot); pot.position.set(p[0],0.4,p[1]); scene.add(pot);
+    var leaf=new THREE.Mesh(new THREE.SphereGeometry(0.85,8,7),matLeaf); leaf.position.set(p[0],1.35,p[1]); leaf.castShadow=true; scene.add(leaf);
+  });
+
+  function textoZona(c){
+    var cv2=document.createElement('canvas'); cv2.width=512; cv2.height=104; var g=cv2.getContext('2d');
+    g.fillStyle=c.css; g.fillRect(0,0,512,104);
+    g.fillStyle='#ffffff'; g.font='800 46px Archivo, sans-serif'; g.textAlign='center';
+    g.fillText(c.nombre.toUpperCase(),256,50);
+    g.font='600 30px Archivo, sans-serif'; g.fillText(c.n+' asesores · NS '+String(c.ns).replace('.',',')+' %',256,90);
+    var t=new THREE.CanvasTexture(cv2); t.anisotropy=4; return t;
+  }
+
+  var AG3=[], zoneGroups={}, zoneMats={}, clickables=[];
+  var zoneLabelMeshes={}; /* etiqueta de suelo por operación, para repintar su NS en vivo */
+  ZONAS.forEach(function(z){
+    var grp=new THREE.Group(); scene.add(grp); zoneGroups[z.cartera.id]=grp;
+    var mats=[];
+    var carpetMat=new THREE.MeshStandardMaterial({color:z.cartera.color,roughness:0.92,transparent:true});
+    carpetMat.userData.baseColor=new THREE.Color(z.cartera.color);
+    mats.push(carpetMat); z.carpetMat=carpetMat;
+    var carpet=new THREE.Mesh(new THREE.PlaneGeometry(z.w,z.d),carpetMat);
+    carpet.rotation.x=-Math.PI/2; carpet.position.set(z.x,0.02,z.z); carpet.receiveShadow=true; grp.add(carpet);
+    var label=new THREE.Mesh(new THREE.PlaneGeometry(11,2.25),new THREE.MeshBasicMaterial({map:textoZona(z.cartera),transparent:true}));
+    label.rotation.x=-Math.PI/2; label.position.set(z.x,0.05,z.z-z.d/2+1.7); grp.add(label); mats.push(label.material);
+    zoneLabelMeshes[z.cartera.id]=label;
+    var deskMat=new THREE.MeshStandardMaterial({color:0xd8dde0,roughness:0.6,transparent:true}); mats.push(deskMat);
+    var legMat=new THREE.MeshStandardMaterial({color:0x8d979e,roughness:0.7,transparent:true}); mats.push(legMat);
+    var shirtMat=new THREE.MeshStandardMaterial({color:z.cartera.color,roughness:0.75,transparent:true}); mats.push(shirtMat);
+    var chairMat=matChair.clone(); chairMat.transparent=true; mats.push(chairMat);
+
+    z.desks.forEach(function(d){
+      var a=ASESORES[d.asesor];
+      var gAg=new THREE.Group(); gAg.position.set(d.x,0,d.z); grp.add(gAg);
+      var top=new THREE.Mesh(geoDeskTop,deskMat); top.position.y=0.82; top.castShadow=true; gAg.add(top);
+      var leg=new THREE.Mesh(geoDeskLeg,legMat); leg.position.y=0.4; gAg.add(leg);
+      var mon=new THREE.Mesh(geoMon,matMonFrame); mon.position.set(0,1.55,-0.45); mon.castShadow=true; gAg.add(mon);
+      var mbase=new THREE.Mesh(geoMonBase,matMonFrame); mbase.position.set(0,1.05,-0.45); gAg.add(mbase);
+      var screenMat=new THREE.MeshBasicMaterial({color:ESTADOS[a.estado].hex,transparent:true});
+      var screen=new THREE.Mesh(geoScreen,screenMat); screen.position.set(0,1.55,-0.405); gAg.add(screen); mats.push(screenMat);
+      var seat=new THREE.Mesh(geoChairSeat,chairMat); seat.position.set(0,0.48,0.72); seat.castShadow=true; gAg.add(seat);
+      var back=new THREE.Mesh(geoChairBack,chairMat); back.position.set(0,0.95,1.14); gAg.add(back);
+      /* Persona */
+      var body=new THREE.Mesh(geoBody,shirtMat); body.position.set(0,1.02,0.68); body.castShadow=true; gAg.add(body);
+      var pielMat=pieles[a.id%pieles.length].clone(); pielMat.transparent=true; mats.push(pielMat);
+      var head=new THREE.Mesh(geoHead,pielMat); head.position.set(0,1.78,0.68); head.castShadow=true; gAg.add(head);
+      /* Anillo de estado */
+      var ringMat=new THREE.MeshBasicMaterial({color:ESTADOS[a.estado].hex,transparent:true,opacity:0.9,side:THREE.DoubleSide});
+      var ring=new THREE.Mesh(geoRing,ringMat); ring.rotation.x=-Math.PI/2; ring.position.set(0,0.04,0.68); gAg.add(ring); mats.push(ringMat);
+      /* Barra de ocupación */
+      var barMat=new THREE.MeshBasicMaterial({color:a.ocup>90?0xef4444:a.ocup>78?0xf59e0b:0x22c55e,transparent:true});
+      var bar=new THREE.Mesh(geoBar,barMat); var bh=a.ocup/100*2.6;
+      bar.scale.y=bh; bar.position.set(1.85,bh/2,0.5); gAg.add(bar); mats.push(barMat);
+      /* Proxy invisible para el raycast */
+      var proxy=new THREE.Mesh(new THREE.CylinderGeometry(1.05,1.05,2.4,8),new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false}));
+      proxy.position.set(0,1.2,0.45); proxy.userData.asesor=a.id; gAg.add(proxy); clickables.push(proxy);
+      AG3.push({a:a,grp:gAg,ring:ring,ringMat:ringMat,screenMat:screenMat,bar:bar,proxy:proxy,zona:z.cartera.id});
+    });
+    zoneMats[z.cartera.id]=mats;
+  });
+  /* Halo de selección */
+  var halo=new THREE.Mesh(geoHalo,matHalo); halo.rotation.x=-Math.PI/2; halo.position.y=0.06; halo.visible=false; scene.add(halo);
+
+  /* Personas caminando por el pasillo central (ambiente) */
+  var walkers=[];
+  (function(){
+    var cols=[0x64748b,0x475569,0x7c6a4f,0x546e7a,0x6d4c41,0x455a64];
+    for(var i=0;i<6;i++){
+      var g=new THREE.Group();
+      var bm=new THREE.MeshStandardMaterial({color:cols[i],roughness:0.8});
+      var b=new THREE.Mesh(geoBody,bm); b.position.y=0.55; b.castShadow=true; g.add(b);
+      var h=new THREE.Mesh(geoHead,pieles[i%pieles.length]); h.position.y=1.3; g.add(h);
+      scene.add(g);
+      walkers.push({g:g,t:i/6,dir:i%2?1:-1,speed:0.014+ (i%3)*0.003,axis:i%2?'z':'x',lane:(i-2.5)*1.1});
+    }
+  })();
+
+  /* ---------- Interacción ---------- */
+  function refrescarEstados(){
+    AG3.forEach(function(o){
+      o.ringMat.color.setHex(ESTADOS[o.a.estado].hex);
+      o.screenMat.color.setHex(ESTADOS[o.a.estado].hex);
+    });
+    refrescarEtiquetas();
+  }
+  function aplicarFiltro(){
+    ZONAS.forEach(function(z){
+      var esF=filtro===z.cartera.id, hay=!!filtro;
+      zoneGroups[z.cartera.id].visible = !(hay&&!esF&&modo==='aislar');
+      var op=(!hay||esF)?1:0.13;
+      zoneMats[z.cartera.id].forEach(function(m){ m.opacity=op; });
+      z.carpetMat.opacity=(!hay||esF)?0.92:0.25;
+    });
+    refrescarEtiquetas();
+  }
+  var calor=false;
+  function aplicarCalor(){
+    ZONAS.forEach(function(z){
+      if(calor){
+        var t=Math.min(1,Math.max(0,(z.cartera.abandono-2.5)/4.5));
+        var col=new THREE.Color(0x1d9e57).lerp(new THREE.Color(0xd97706),Math.min(1,t*1.6)).lerp(new THREE.Color(0xd92d20),Math.max(0,t-0.55)*2.2);
+        z.carpetMat.color.copy(col);
+      } else z.carpetMat.color.copy(z.carpetMat.userData.baseColor);
+    });
+  }
+  window.__onHora=refrescarEstados;
+  window.__onFiltro=aplicarFiltro;
+  window.__onSeleccion=function(){
+    if(seleccionado===null){ halo.visible=false; return; }
+    var a=ASESORES[seleccionado]; halo.visible=true;
+    halo.position.x=a.desk.x; halo.position.z=a.desk.z+0.68;
+    refrescarEtiquetas();
+  };
+  /* Repintado en vivo: muro de Dirección + textos de zona con el NS
+     en vivo; si el calor está activo, se reaplica con el abandono en vivo. */
+  window.__onDatosVivo=function(){
+    var d=window.__datosVivoDatos;
+    if(d) pintarMuro(d.nsTxt,d.recTxt,d.tmoTxt,d.abTxt,d.asaTxt);
+    ZONAS.forEach(function(z){
+      var m=zoneLabelMeshes[z.cartera.id]; if(!m) return;
+      var old=m.material.map; m.material.map=textoZona(z.cartera); m.material.needsUpdate=true; if(old) old.dispose();
+    });
+    if(calor) aplicarCalor();
+  };
+
+  /* Cámara: tween simple */
+  var tween=null;
+  function volar(pos,tgt){
+    tween={p0:camera.position.clone(),p1:pos,t0:controls.target.clone(),t1:tgt,k:0};
+  }
+  window.__enfocarAsesor=function(id){
+    var a=ASESORES[id]; if(!a.desk) return;
+    volar(new THREE.Vector3(a.desk.x+8.5,14,a.desk.z+11),new THREE.Vector3(a.desk.x,0.8,a.desk.z));
+  };
+  window.__enfocarZona=function(id){
+    var z=ZONAS.filter(function(x){return x.cartera.id===id})[0]; if(!z) return;
+    volar(new THREE.Vector3(z.x+4,40,z.z+27),new THREE.Vector3(z.x,0,z.z));
+  };
+  window.__vistaGeneral=function(){ volar(new THREE.Vector3(0,96,0.01),new THREE.Vector3(0,0,0)); };
+  renderer.domElement.addEventListener('pointerdown',function(){ tween=null; });
+
+  var VISTAS={cenital:[new THREE.Vector3(0,96,0.01),new THREE.Vector3(0,0,0)],
+              trescuartos:[new THREE.Vector3(54,50,64),new THREE.Vector3(0,0,0)],
+              pasillo:[new THREE.Vector3(-40,6.5,26),new THREE.Vector3(14,1.2,-4)]};
+  document.querySelectorAll('[data-view]').forEach(function(b){
+    b.onclick=function(){
+      document.querySelectorAll('[data-view]').forEach(function(x){x.setAttribute('aria-pressed','false')});
+      b.setAttribute('aria-pressed','true');
+      var v=VISTAS[b.dataset.view]; volar(v[0],v[1]);
+    };
+  });
+  var etiquetasOn=true;
+  document.getElementById('tg-labels').onclick=function(){ etiquetasOn=!etiquetasOn; this.setAttribute('aria-pressed',etiquetasOn); refrescarEtiquetas(); };
+  document.getElementById('tg-heat').onclick=function(){ calor=!calor; this.setAttribute('aria-pressed',calor); aplicarCalor(); };
+  document.getElementById('tg-bars').onclick=function(){
+    var on=this.getAttribute('aria-pressed')!=='true'; this.setAttribute('aria-pressed',on);
+    AG3.forEach(function(o){ o.bar.visible=on; });
+  };
+  document.getElementById('tg-spin').onclick=function(){
+    var on=this.getAttribute('aria-pressed')!=='true'; this.setAttribute('aria-pressed',on); controls.autoRotate=on;
+  };
+
+  /* Raycast: clic sin arrastre */
+  var ray=new THREE.Raycaster(), mouse=new THREE.Vector2(), downPos=null;
+  renderer.domElement.addEventListener('pointerdown',function(e){ downPos=[e.clientX,e.clientY]; });
+  renderer.domElement.addEventListener('pointerup',function(e){
+    if(!downPos) return;
+    var dx=e.clientX-downPos[0], dy=e.clientY-downPos[1]; downPos=null;
+    if(dx*dx+dy*dy>36) return;
+    var r=renderer.domElement.getBoundingClientRect();
+    mouse.x=((e.clientX-r.left)/r.width)*2-1; mouse.y=-((e.clientY-r.top)/r.height)*2+1;
+    ray.setFromCamera(mouse,camera);
+    var hits=ray.intersectObjects(clickables.filter(function(p){ return p.parent.parent.visible; }));
+    if(hits.length) seleccionar(hits[0].object.userData.asesor,false);
+  });
+  renderer.domElement.addEventListener('pointermove',function(e){
+    var r=renderer.domElement.getBoundingClientRect();
+    mouse.x=((e.clientX-r.left)/r.width)*2-1; mouse.y=-((e.clientY-r.top)/r.height)*2+1;
+    ray.setFromCamera(mouse,camera);
+    var hits=ray.intersectObjects(clickables);
+    renderer.domElement.style.cursor=hits.length?'pointer':'grab';
+  });
+
+  /* Etiquetas HTML proyectadas */
+  var labelBox=document.getElementById('labels'), labelPool=[];
+  for(var li=0;li<24;li++){ var d=document.createElement('div'); d.className='alabel'; d.style.display='none'; labelBox.appendChild(d); labelPool.push(d); }
+  var labelTargets=[];
+  function refrescarEtiquetas(){
+    labelTargets=[];
+    if(!etiquetasOn) return;
+    AG3.forEach(function(o){
+      var show = o.a.id===seleccionado || o.a.estado==='larga' || (filtro&&o.zona===filtro);
+      if(show) labelTargets.push(o);
+    });
+    labelTargets=labelTargets.slice(0,24);
+  }
+  var projV=new THREE.Vector3();
+  function pintarEtiquetas(){
+    labelPool.forEach(function(el,i){
+      var o=labelTargets[i];
+      if(!o){ el.style.display='none'; return; }
+      projV.set(o.a.desk.x,2.6,o.a.desk.z+0.4).project(camera);
+      if(projV.z>1||projV.z<-1){ el.style.display='none'; return; }
+      var r=wrap.getBoundingClientRect();
+      el.style.display='block';
+      el.style.left=((projV.x*0.5+0.5)*r.width)+'px';
+      el.style.top=((-projV.y*0.5+0.5)*r.height)+'px';
+      el.textContent=o.a.nombre.split(' ')[0]+' · '+ESTADOS[o.a.estado].lab;
+      el.className='alabel'+(o.a.estado==='larga'?' alert':'');
+    });
+  }
+
+  function resize(){
+    var w=wrap.clientWidth,h=wrap.clientHeight;
+    if(!w||!h) return;
+    renderer.setSize(w,h); camera.aspect=w/h; camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize',resize); resize();
+
+  var clock=new THREE.Clock();
+  function animate(){
+    requestAnimationFrame(animate);
+    var t=clock.getElapsedTime();
+    if(tween){
+      tween.k=Math.min(1,tween.k+0.022);
+      var e=tween.k<0.5?2*tween.k*tween.k:1-Math.pow(-2*tween.k+2,2)/2;
+      camera.position.lerpVectors(tween.p0,tween.p1,e);
+      controls.target.lerpVectors(tween.t0,tween.t1,e);
+      if(tween.k>=1) tween=null;
+    }
+    AG3.forEach(function(o){
+      if(o.a.estado==='larga'){ var s=1+Math.sin(t*4.5)*0.16; o.ring.scale.set(s,s,1); }
+      else o.ring.scale.set(1,1,1);
+    });
+    if(halo.visible){ var hs=1+Math.sin(t*3)*0.07; halo.scale.set(hs,hs,1); }
+    walkers.forEach(function(w){
+      w.t+=w.speed*w.dir*0.016*10;
+      if(w.t>1){w.t=1;w.dir=-1} if(w.t<0){w.t=0;w.dir=1}
+      if(w.axis==='x'){ w.g.position.set(-58+w.t*116,Math.abs(Math.sin(t*7+w.t*40))*0.07,w.lane); w.g.rotation.y=w.dir>0?Math.PI/2:-Math.PI/2; }
+      else{ w.g.position.set(w.lane,Math.abs(Math.sin(t*7+w.t*40))*0.07,-36+w.t*72); w.g.rotation.y=w.dir>0?0:Math.PI; }
+    });
+    controls.update();
+    renderer.render(scene,camera);
+    pintarEtiquetas();
+  }
+  aplicarFiltro(); refrescarEstados();
+  if(window.__onSeleccion) window.__onSeleccion();
+  animate();
+})();
+</script>
+
+<script>
+/* ============================================================
+   DATOS EN VIVO — Piso 3D INTER ATC (2026-11-25).
+   Mismo patrón y mismo JSON que la consola
+   (~/workspace/piso-call-center/index.html):
+   GET https://biblioteca.jesusjonathan171.workers.dev/api/inter-atc.json
+   (sin caché, límite 10 s), validación del contrato v2 y repintado.
+   Si el fetch falla o el JSON no valida, no toca nada: quedan los
+   datos fijos de noviembre 2026 incrustados y el sello marca foto fija.
+   Las fichas por asesor NO se tocan: el JSON no trae datos por asesor.
+   ============================================================ */
+(function () {
+  'use strict';
+  var URL = 'https://biblioteca.jesusjonathan171.workers.dev/api/inter-atc.json';
+  if (window.__DATOS_VIVO_URL) URL = window.__DATOS_VIVO_URL; /* solo pruebas locales */
+
+  window.__datosVivo = { estado: 'pendiente', actualizadoISO: null };
+  var resolverListo = null;
+  window.__datosVivoListo = new Promise(function (res) { resolverListo = res; });
+  function terminar(estado, iso) {
+    window.__datosVivo.estado = estado;
+    window.__datosVivo.actualizadoISO = iso || null;
+    if (resolverListo) resolverListo(window.__datosVivo);
+  }
+
+  /* Formato español (igual que la consola). */
+  function fmtInt(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+  function fmtDec1(n) { return Number(n).toFixed(1).replace('.', ','); }
+  function fmtPct(n) { return fmtDec1(n) + ' %'; }
+  function fmtTmo(s) { return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+  function parseNps(s) { if (typeof s !== 'string') return null; var n = Number(s.replace(',', '.')); return isFinite(n) ? n : null; }
+  function esNum(x) { return typeof x === 'number' && isFinite(x); }
+  function hhmm(iso) { var m = /T(\d{2}):(\d{2})/.exec(iso || ''); return m ? m[1] + ':' + m[2] : iso; }
+  function el(id) { return document.getElementById(id); }
+  function setTxt(id, txt) { var n = el(id); if (n) n.textContent = txt; }
+
+  /* Validación del contrato datos-vivo §9 (copia de la consola). */
+  function kpiVal(d, id) { for (var i = 0; i < d.kpis.length; i++) { if (d.kpis[i].id === id) return d.kpis[i].valor; } return undefined; }
+  function validar(d) {
+    if (!d || typeof d !== 'object') return 'raiz';
+    if (typeof d.actualizadoISO !== 'string' || isNaN(Date.parse(d.actualizadoISO))) return 'actualizadoISO';
+    if (typeof d.mes !== 'string' || !/^\d{4}-\d{2}$/.test(d.mes)) return 'mes';
+    if (!Array.isArray(d.kpis)) return 'kpis';
+    var ns = kpiVal(d, 'ns'), rec = kpiVal(d, 'recibidas'), ate = kpiVal(d, 'atendidas'),
+        ab = kpiVal(d, 'abandono'), tmo = kpiVal(d, 'tmo'), nps = kpiVal(d, 'nps');
+    if (!esNum(ns) || !esNum(rec) || !esNum(ate) || !esNum(ab) || !esNum(tmo) || typeof nps !== 'string') return 'kpis-valores';
+    var npsN = parseNps(nps);
+    if (npsN === null || npsN < -100 || npsN > 100) return 'nps';
+    if (ns < 0 || ns > 100 || ab < 0 || ab > 100 || ate > rec || tmo < 0 || tmo > 3600) return 'kpis-rangos';
+    var ex = d.extras;
+    if (!ex || typeof ex !== 'object') return 'extras';
+    if (!esNum(ex.demoradas) || !esNum(ex.abandonadas) || !esNum(ex.asa_segundos) || !esNum(ex.fcr) || !esNum(ex.encuestas)) return 'extras-valores';
+    if (ex.abandonadas !== rec - ate || ex.demoradas > ate || ex.asa_segundos < 0 || ex.asa_segundos > 3600 ||
+        ex.fcr < 0 || ex.fcr > 100 || ex.encuestas < 0) return 'extras-rangos';
+    if (!Array.isArray(d.por_cartera) || !d.por_cartera.length) return 'por_cartera';
+    var sRec = 0, sEnc = 0;
+    for (var i = 0; i < d.por_cartera.length; i++) {
+      var r = d.por_cartera[i];
+      if (!r || typeof r.cartera !== 'string' || !esNum(r.recibidas) || !esNum(r.atendidas) ||
+          !esNum(r.abandonadas) || !esNum(r.demoradas) || !esNum(r.ns) || !esNum(r.abandono_gt5) ||
+          !esNum(r.asa_segundos) || !esNum(r.tmo_segundos) || !esNum(r.encuestas)) return 'cartera-campos';
+      if (r.nps !== null && typeof r.nps !== 'string') return 'cartera-nps';
+      if (r.fcr !== null && !esNum(r.fcr)) return 'cartera-fcr';
+      var rn = r.nps === null ? null : parseNps(r.nps);
+      if (rn !== null && (rn < -100 || rn > 100)) return 'cartera-nps-rango';
+      if (r.atendidas > r.recibidas || r.demoradas > r.atendidas ||
+          r.abandonadas !== r.recibidas - r.atendidas) return 'cartera-rangos';
+      if (r.ns < 0 || r.ns > 100 || r.asa_segundos < 0 || r.asa_segundos > 3600 ||
+          r.tmo_segundos < 0 || r.tmo_segundos > 3600) return 'cartera-rangos2';
+      sRec += r.recibidas; sEnc += r.encuestas;
+    }
+    if (sRec !== rec || sEnc !== ex.encuestas) return 'sumas';
+    if (!Array.isArray(d.serie_mensual) || d.serie_mensual.length < 2) return 'serie';
+    for (var j = 0; j < d.serie_mensual.length; j++) {
+      var m = d.serie_mensual[j];
+      if (!m || typeof m.mes !== 'string' || !/^\d{4}-\d{2}$/.test(m.mes) || !esNum(m.recibidas) ||
+          !esNum(m.atendidas) || !esNum(m.abandonadas) || !esNum(m.demoradas) || !esNum(m.ns) ||
+          !esNum(m.abandono_gt5) || !esNum(m.asa_segundos) || !esNum(m.tmo_segundos) ||
+          !esNum(m.encuestas) || (m.nps !== null && typeof m.nps !== 'string')) return 'serie-campos';
+    }
+    var ult = d.serie_mensual[d.serie_mensual.length - 1];
+    if (ult.mes !== d.mes || ult.recibidas !== rec || ult.ns !== ns) return 'serie-foco';
+    return null;
+  }
+
+  /* Equivalencia zona del piso -> cartera del extracto. Solo las 5
+     sin ambigüedad por nombre. Las demás zonas (Coppel, Retención,
+     Cobranza, Ventas, Atención, Soporte, Backoffice) no existen como
+     cartera en el extracto, y EMPLEADOS, LALA, JAC, SUZUKI, LIVERPOOL
+     GMM, MODERNA y BIMBO no tienen zona en este piso: esas quedan en
+     foto fija y su recibidas es "sin dato", nunca inventada. */
+  var MAPA_VIVO = {
+    asistencias: 'BRADESCARD ASISTENCIAS',
+    coppelvida: 'COPPEL VIDA',
+    crediauto: 'CREDIAUTO',
+    seguros: 'BRADESCARD SEGUROS',
+    liverpool: 'LIVERPOOL'
+  };
+  function filaCartera(d, nombre) {
+    for (var i = 0; i < d.por_cartera.length; i++) { if (d.por_cartera[i].cartera === nombre) return d.por_cartera[i]; }
+    return null;
+  }
+
+  /* Repintado (todo se calcula antes de tocar el DOM). */
+  function aplicar(d) {
+    var ns = kpiVal(d, 'ns'), rec = kpiVal(d, 'recibidas'), ate = kpiVal(d, 'atendidas'),
+        ab = kpiVal(d, 'abandono'), tmo = kpiVal(d, 'tmo');
+    var ex = d.extras;
+    var nivel = 100 * ate / rec;
+    /* KPIs de arriba: NS, recibidas, atendidas, abandono >5 s, ASA, TMO. */
+    setTxt('kpi-ns-val', fmtPct(ns));
+    var bar = el('kpi-ns-bar'); if (bar) bar.style.width = Math.min(100, ns) + '%';
+    setTxt('kpi-rec-val', fmtInt(rec));
+    setTxt('kpi-ate-val', fmtInt(ate));
+    setTxt('kpi-ate-det', fmtPct(nivel) + ' de las recibidas');
+    setTxt('kpi-ab-val', fmtPct(ab));
+    setTxt('kpi-asa-val', ex.asa_segundos + ' s');
+    setTxt('kpi-tmo-val', fmtTmo(tmo));
+    /* Datos por cartera (solo zonas con equivalente en el extracto). */
+    if (typeof CARTERAS !== 'undefined') {
+      CARTERAS.forEach(function (c) {
+        var nombre = MAPA_VIVO[c.id];
+        if (!nombre) { c.vivo = false; return; }
+        var r = filaCartera(d, nombre);
+        if (!r) { c.vivo = false; return; }
+        c.ns = r.ns; c.abandono = r.abandono_gt5; c.atendidas = r.atendidas; c.recibidas = r.recibidas; c.vivo = true;
+      });
+    }
+    if (typeof TOTALES !== 'undefined') { TOTALES.recibidas = rec; TOTALES.atendidas = ate; TOTALES.ns = ns; }
+    /* Datos para el muro de Dirección y las etiquetas de zona (3D). */
+    window.__datosVivoDatos = { nsTxt: fmtPct(ns), recTxt: fmtInt(rec), tmoTxt: fmtTmo(tmo), abTxt: fmtPct(ab), asaTxt: ex.asa_segundos + ' s' };
+    if (typeof pintarCarteras === 'function') pintarCarteras();
+    if (typeof window.__onDatosVivo === 'function') window.__onDatosVivo();
+    var nota = el('nota-foto-fija');
+    if (nota) nota.innerHTML = '<b>Los KPIs de arriba y la tabla de operaciones se repintan en vivo</b> con el JSON del publicador v2 (las mismas cifras que la consola). Las fichas por asesor y los estados por hora siguen siendo la foto fija de noviembre 2026 y la simulación del modelo, no un monitoreo en vivo.';
+    var pie = el('pie-datos');
+    if (pie) pie.textContent = 'Modelo interactivo del piso INTER ATC · 12 operaciones · 77 asesores · Datos en vivo (actualizado ' + hhmm(d.actualizadoISO) + ') · Fichas por asesor: foto fija de noviembre 2026.';
+  }
+
+  /* Sello en vivo / foto fija. */
+  function mostrarSello(iso, maxMin) {
+    var sello = el('sello-vivo');
+    if (!sello) return;
+    var desactualizado = (Date.now() - Date.parse(iso)) > (maxMin || 60) * 60000;
+    sello.textContent = desactualizado ? 'DESACTUALIZADO · actualizado ' + hhmm(iso) : 'en vivo · actualizado ' + hhmm(iso);
+  }
+  function marcarFotoFija() {
+    var sello = el('sello-vivo');
+    if (sello) sello.textContent = 'Foto fija · Datos leídos de Tableau el 24 nov 2026, 18:08';
+  }
+
+  /* Fetch (sin caché, límite 10 s). Sin fetch o con cualquier fallo,
+     queda la foto fija y no se registra error en consola. */
+  if (typeof fetch !== 'function') { marcarFotoFija(); terminar('foto-fija', null); return; }
+  var ctrl = ('AbortController' in window) ? new AbortController() : null;
+  var temporizador = setTimeout(function () { if (ctrl) ctrl.abort(); }, 10000);
+  fetch(URL, { cache: 'no-store', signal: ctrl ? ctrl.signal : undefined }).then(function (resp) {
+    clearTimeout(temporizador);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    return resp.json();
+  }).then(function (datos) {
+    var error = validar(datos);
+    if (error) { marcarFotoFija(); terminar('foto-fija', null); return; }
+    try {
+      window.__datosVivo.estado = 'vivo';
+      window.__datosVivo.actualizadoISO = datos.actualizadoISO;
+      aplicar(datos);
+    } catch (e) { marcarFotoFija(); terminar('foto-fija', null); return; }
+    mostrarSello(datos.actualizadoISO, datos.maxMinutos);
+    terminar('vivo', datos.actualizadoISO);
+  }).catch(function () {
+    clearTimeout(temporizador);
+    marcarFotoFija();
+    terminar('foto-fija', null);
+  });
+})();
+</script>
+</body>
+</html>
