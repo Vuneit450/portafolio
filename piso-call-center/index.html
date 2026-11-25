@@ -402,7 +402,7 @@
    verde #1a9e54, rojo #d93025, ámbar #e8a100, fondo #f4f6fa. */
 .camp-section{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
   color:#1f2937; background:#f4f6fa; border:1px solid #e5e7eb; border-radius:12px;
-  overflow:hidden; width:100%; max-width:1100px; margin:0 auto;}
+  overflow:hidden; width:100%; margin:0 auto;}
 .camp-section *{box-sizing:border-box;}
 
 /* ---------- Encabezado ---------- */
@@ -451,6 +451,7 @@
   padding:4px 9px; font-size:12px; font-weight:600; color:#1f2937; cursor:pointer; font-family:inherit;}
 .camp-filter-btn[aria-pressed="true"]{background:#1f2937; color:#fff; border-color:#1f2937;}
 .camp-filter-count{font-size:11.5px; color:#4b5563; font-weight:600; white-space:nowrap;}
+.camp-cartera-group{display:inline-flex; gap:4px; align-items:center; flex-wrap:wrap;}
 .camp-legend{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
 .camp-legend .camp-item{display:inline-flex; align-items:center; gap:5px; white-space:nowrap;}
 .camp-dot{width:11px; height:11px; border-radius:50%; flex:none; border:1.5px solid rgba(0,0,0,.25);}
@@ -468,13 +469,17 @@
   linear-gradient(180deg,#eef2f7 0%,#f4f6fa 60%,#eef2f7 100%);}
 .camp-scene svg{display:block; width:100%; height:auto;}
 .camp-zone-label{font-size:11px; font-weight:700; fill:#334155;}
+.camp-card-line1{font-size:11px; font-weight:700; fill:#334155;}
+.camp-card-line2{font-size:10px; font-weight:600; fill:#475569;}
+.camp-card-note{font-size:9px; font-weight:700; fill:#92400e;}
 .camp-zone-sub{font-size:10px; font-weight:600; fill:#475569;}
 #camp-heatLayer{pointer-events:none;}
 #camp-zoneLayer rect, #camp-zoneLayer text{pointer-events:none;}
 #camp-textLayer text{pointer-events:none;}
+#camp-textLayer text.camp-st-id{pointer-events:auto;cursor:pointer;}
 .camp-station{cursor:pointer;}
 .camp-station:hover .camp-desk-top{stroke:#ff6900; stroke-width:2;}
-.camp-station text{pointer-events:none;}
+.camp-station text{pointer-events:auto;}
 .camp-st-id{font-size:10px; font-weight:700; fill:#334155; paint-order:stroke; stroke:#fff; stroke-width:2.5px;}
 .camp-call-timer{display:none; font-size:6.5px; font-weight:800; fill:#1f2937;
   paint-order:stroke; stroke:#fff; stroke-width:2px;}
@@ -618,6 +623,7 @@
 #sup-tab .sup-filter-btn{border:1px solid #e5e7eb;background:#f8fafc;border-radius:999px;padding:4px 9px;font-size:12px;font-weight:600;color:#1f2937;cursor:pointer}
 #sup-tab .sup-filter-btn[aria-pressed="true"]{background:#1f2937;color:#fff;border-color:#1f2937}
 #sup-tab .sup-filter-count{font-size:12px;color:#4b5563;font-weight:600;white-space:nowrap}
+#sup-tab .sup-cartera-group{display:inline-flex;gap:4px;align-items:center;flex-wrap:wrap}
 #sup-tab .sup-legend{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 #sup-tab .sup-legend .sup-item{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;font-size:12px}
 #sup-tab .sup-dot{width:11px;height:11px;border-radius:50%;flex:none;border:1.5px solid rgba(0,0,0,.25)}
@@ -650,14 +656,18 @@
 #sup-tab .sup-scene{position:relative;width:100%;background:linear-gradient(180deg,#eef2f7 0%,#f8fafc 60%,#eef2f7 100%);border:1px solid #e5e7eb;border-radius:10px;overflow:hidden}
 #sup-tab .sup-scene svg{display:block;width:100%;height:auto}
 #sup-tab .sup-zone-label{font-size:11px;font-weight:700;fill:#334155}
+#sup-tab .sup-card-line1{font-size:11px;font-weight:700;fill:#334155}
+#sup-tab .sup-card-line2{font-size:10px;font-weight:600;fill:#475569}
+#sup-tab .sup-card-note{font-size:9px;font-weight:700;fill:#92400e}
 #sup-tab .sup-zone-sub{font-size:10px;font-weight:600;fill:#475569}
 #sup-tab #sup-heatLayer{pointer-events:none}
 #sup-tab #sup-zoneLayer rect,#sup-tab #sup-zoneLayer text{pointer-events:none}
 #sup-tab #sup-labelTopLayer rect,#sup-tab #sup-labelTopLayer text{pointer-events:none}
 #sup-tab #sup-textLayer text{pointer-events:none}
+#sup-tab #sup-textLayer text.sup-st-id{pointer-events:auto;cursor:pointer}
 #sup-tab .sup-station{cursor:pointer}
 #sup-tab .sup-station:hover .sup-desk-top{stroke:#0f766e;stroke-width:2}
-#sup-tab .sup-station text{pointer-events:none}
+#sup-tab .sup-station text{pointer-events:auto}
 #sup-tab .sup-st-id{font-size:10px;font-weight:700;fill:#334155;paint-order:stroke;stroke:#fff;stroke-width:2.5px}
 #sup-tab .sup-call-timer{display:none;font-size:6.5px;font-weight:800;fill:#1f2937;paint-order:stroke;stroke:#fff;stroke-width:2px}
 #sup-tab .sup-screen-glyph text{font-size:10px;fill:#fff}
@@ -758,7 +768,7 @@ html { box-sizing: border-box; }
 *, *::before, *::after { box-sizing: inherit; }
 body { margin: 0; background: #f4f6fa; color: #1a1d21;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-.console { max-width: 1120px; margin: 0 auto; padding: 16px 16px 24px; }
+.console { max-width: none; margin: 0 auto; padding: 16px 24px 24px; }
 .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 16px; }
 .tab-btn { border: 1px solid #dfe3ea; background: #fff; color: #1a1d21;
   border-radius: 999px; padding: 9px 18px; font-size: 0.95rem; font-weight: 700;
@@ -1052,7 +1062,7 @@ body { padding-top: 48px; }
     <div class="camp-title-row">
       <h2>Campañas <span>· INTER ATC</span></h2>
       <span class="camp-badge">nov 2026</span>
-      <span class="camp-sub">Piso por cartera · 12 carteras con llamadas · 37 estaciones · 1 estación ≈ 430 llamadas</span>
+      <span class="camp-sub">Piso por cartera · 12 carteras con llamadas · 77 lugares · 1 lugar por asesor real</span>
     </div>
     <div class="camp-kpis" role="group" aria-label="Indicadores globales de noviembre 2026">
       <div class="camp-kpi hot"><b>89,9 % <small>/ meta 90 %</small></b><span>Nivel de servicio</span></div>
@@ -1079,14 +1089,30 @@ body { padding-top: 48px; }
       <input class="camp-hour" id="camp-hour" type="range" min="8" max="23" step="1" value="22" aria-label="Hora del día (8 a 23)">
       <span class="camp-slot-info" id="camp-slotInfo" aria-live="polite"></span>
     </span>
-    <span class="camp-filter-group" role="group" aria-label="Filtrar estaciones por estado">
+    <span class="camp-filter-group" role="group" aria-label="Filtrar lugares por estado">
       <button class="camp-filter-btn" data-camp-filter="all" aria-pressed="true">Todos</button>
       <button class="camp-filter-btn" data-camp-filter="llamada" aria-pressed="false">En llamada</button>
       <button class="camp-filter-btn" data-camp-filter="disponible" aria-pressed="false">Disponible</button>
       <button class="camp-filter-btn" data-camp-filter="pausa" aria-pressed="false">Pausa</button>
       <button class="camp-filter-btn" data-camp-filter="post" aria-pressed="false">Post-llamada</button>
     </span>
-    <span class="camp-filter-count" id="camp-filterCount" aria-live="polite">37 / 37 visibles</span>
+    <span class="camp-cartera-group" role="group" aria-label="Filtrar por cartera">
+      <span class="camp-slot-label">Cartera:</span>
+      <button class="camp-filter-btn camp-cartera-btn" data-camp-cartera="all" aria-pressed="true">Todas</button>
+      <button class="camp-filter-btn camp-cartera-btn" data-camp-cartera="ASIS" aria-pressed="false">Asistencias</button>
+      <button class="camp-filter-btn camp-cartera-btn" data-camp-cartera="COPPEL" aria-pressed="false">Coppel Vida</button>
+      <button class="camp-filter-btn camp-cartera-btn" data-camp-cartera="CRED" aria-pressed="false">Crediauto</button>
+      <button class="camp-filter-btn camp-cartera-btn" data-camp-cartera="SEG" aria-pressed="false">Seguros</button>
+      <button class="camp-filter-btn camp-cartera-btn" data-camp-cartera="EMPL" aria-pressed="false">Empleados</button>
+      <button class="camp-filter-btn camp-cartera-btn" data-camp-cartera="LIV" aria-pressed="false">Liverpool</button>
+      <button class="camp-filter-btn camp-cartera-btn" data-camp-cartera="LALA" aria-pressed="false">Lala</button>
+      <button class="camp-filter-btn camp-cartera-btn" data-camp-cartera="JAC" aria-pressed="false">Jac</button>
+      <button class="camp-filter-btn camp-cartera-btn" data-camp-cartera="SUZUKI" aria-pressed="false">Suzuki</button>
+      <button class="camp-filter-btn camp-cartera-btn" data-camp-cartera="LIVGMM" aria-pressed="false">Liv GMM</button>
+      <button class="camp-filter-btn camp-cartera-btn" data-camp-cartera="MODERNA" aria-pressed="false">Moderna</button>
+      <button class="camp-filter-btn camp-cartera-btn" data-camp-cartera="BIMBO" aria-pressed="false">Bimbo</button>
+    </span>
+    <span class="camp-filter-count" id="camp-filterCount" aria-live="polite">77 / 77 lugares</span>
     <div class="camp-legend" aria-label="Leyenda de estados de estación">
       <span class="camp-item"><span class="camp-dot" style="background:#1a9e54"></span>Disponible</span>
       <span class="camp-item"><span class="camp-dot" style="background:#ff6900"></span>En llamada</span>
@@ -1114,8 +1140,8 @@ body { padding-top: 48px; }
   </div>
 
   <div class="camp-scene" id="camp-scene">
-    <svg id="camp-floor" viewBox="0 0 1100 650" role="img"
-         aria-label="Vista isométrica del piso del call center con 12 zonas y 37 estaciones"></svg>
+    <svg id="camp-floor" viewBox="0 0 1220 910" role="img"
+         aria-label="Vista isométrica del piso del call center con 12 zonas y 77 lugares, un lugar por asesor real"></svg>
 
     <div class="camp-zone-tip" id="camp-zoneTip" hidden></div>
     <aside class="camp-ficha" id="camp-ficha" hidden aria-live="polite">
@@ -1144,7 +1170,7 @@ body { padding-top: 48px; }
       <p class="camp-note" id="camp-fichaNote"></p>
     </aside>
 
-    <div class="camp-hint">Toca una persona para ver su ficha · Toca una zona o una estación para ver su ficha completa · Las personas se paran y caminan por los pasillos (simulación)</div>
+    <div class="camp-hint">Toca una persona o una estación para ver su ficha · Toca una zona para ver la ficha completa de la cartera · Las personas se paran y caminan por los pasillos (simulación)</div>
   </div>
 
   <div class="camp-table-wrap">
@@ -1180,15 +1206,17 @@ body { padding-top: 48px; }
 
   <footer class="camp-foot">
     Fuente: foto fija nov 2026 del libro INTER ATC (vista Dirección; leída en vivo 24 nov 2026, 18:08).
-    Zonas por cartera con su volumen y NS de noviembre; estaciones proporcionales al volumen
-    (1 ≈ 430 llamadas, mínimo 1 por cartera). Los estados de estación, las llamadas en tránsito,
+    Zonas por cartera con su volumen y NS de noviembre; 77 lugares, uno por cada asesor con
+    nombre en la lista de 77 de Tableau (BRADESCARD ASISTENCIAS 38, COPPEL VIDA 31, CREDIAUTO 4,
+    BRADESCARD SEGUROS 4). Las otras 8 carteras —EMPLEADOS, LIVERPOOL, LALA, JAC, SUZUKI,
+    LIVERPOOL GMM, MODERNA y BIMBO— tienen llamadas pero ningún asesor con nombre en Tableau:
+    sus zonas muestran sus totales reales y la nota «sin asesores identificados en Tableau»,
+    sin lugares con nombre inventado. Los estados de estación, las llamadas en tránsito,
     la franja del día y el supervisor son una simulación en vivo sobre esa foto fija; las personas
     que caminan por los pasillos también son simuladas. Cada persona lleva el color de su cartera
-    y, al tocarla, abre su ficha con su nombre y cifras reales de nov 2026 (mapeo por atendidas
-    dentro de cada cartera: los 16 primeros de BRADESCARD ASISTENCIAS, los 7 de COPPEL VIDA,
-    los 4 de CREDIAUTO y los 2 de BRADESCARD SEGUROS). Las otras 8 estaciones se identifican
-    solo por su ID, sin nombre inventado. Clase Pareto según Pareto oct 2026
-    (demoradas + abandonadas). Donde el tablero no trae el dato se lee «sin dato».
+    y, al tocarla, abre su ficha con su nombre y cifras reales de nov 2026. El filtro por cartera
+    muestra solo sus lugares y abre su ficha de cartera con totales. Clase Pareto según Pareto
+    oct 2026 (demoradas + abandonadas). Donde el tablero no trae el dato se lee «sin dato».
   </footer>
 </section>
 
@@ -1231,14 +1259,30 @@ body { padding-top: 48px; }
         <input class="sup-hour" id="sup-hour" type="range" min="8" max="23" step="1" value="22" aria-label="Hora del día (8 a 23)">
         <span class="sup-slot-info" id="sup-slotInfo" aria-live="polite"></span>
       </span>
-      <span class="sup-filter-group" role="group" aria-label="Filtrar estaciones por estado">
+      <span class="sup-filter-group" role="group" aria-label="Filtrar lugares por estado">
         <button class="sup-filter-btn" data-filter="all" aria-pressed="true">Todos</button>
         <button class="sup-filter-btn" data-filter="llamada" aria-pressed="false">En llamada</button>
         <button class="sup-filter-btn" data-filter="disponible" aria-pressed="false">Disponible</button>
         <button class="sup-filter-btn" data-filter="pausa" aria-pressed="false">Pausa</button>
         <button class="sup-filter-btn" data-filter="post" aria-pressed="false">Post-llamada</button>
       </span>
-      <span class="sup-filter-count" id="sup-filterCount" aria-live="polite">31 / 31 visibles</span>
+      <span class="sup-cartera-group" role="group" aria-label="Filtrar por cartera">
+        <span class="sup-slot-label">Cartera:</span>
+        <button class="sup-filter-btn sup-cartera-btn" data-cartera="all" aria-pressed="true">Todas</button>
+        <button class="sup-filter-btn sup-cartera-btn" data-cartera="ASIS" aria-pressed="false">Asistencias</button>
+        <button class="sup-filter-btn sup-cartera-btn" data-cartera="COPPEL" aria-pressed="false">Coppel Vida</button>
+        <button class="sup-filter-btn sup-cartera-btn" data-cartera="CRED" aria-pressed="false">Crediauto</button>
+        <button class="sup-filter-btn sup-cartera-btn" data-cartera="SEG" aria-pressed="false">Seguros</button>
+        <button class="sup-filter-btn sup-cartera-btn" data-cartera="EMPL" aria-pressed="false">Empleados</button>
+        <button class="sup-filter-btn sup-cartera-btn" data-cartera="LIV" aria-pressed="false">Liverpool</button>
+        <button class="sup-filter-btn sup-cartera-btn" data-cartera="LALA" aria-pressed="false">Lala</button>
+        <button class="sup-filter-btn sup-cartera-btn" data-cartera="JAC" aria-pressed="false">Jac</button>
+        <button class="sup-filter-btn sup-cartera-btn" data-cartera="SUZUKI" aria-pressed="false">Suzuki</button>
+        <button class="sup-filter-btn sup-cartera-btn" data-cartera="LIVGMM" aria-pressed="false">Liv GMM</button>
+        <button class="sup-filter-btn sup-cartera-btn" data-cartera="MODERNA" aria-pressed="false">Moderna</button>
+        <button class="sup-filter-btn sup-cartera-btn" data-cartera="BIMBO" aria-pressed="false">Bimbo</button>
+      </span>
+      <span class="sup-filter-count" id="sup-filterCount" aria-live="polite">77 / 77 lugares</span>
       <div class="sup-legend" aria-label="Leyenda de estados de estación">
         <span class="sup-item"><span class="sup-dot" style="background:#16a34a"></span>Disponible</span>
         <span class="sup-item"><span class="sup-dot" style="background:#ea580c"></span>En llamada</span>
@@ -1253,8 +1297,14 @@ body { padding-top: 48px; }
         <span class="sup-item"><span class="sup-dot" style="background:#7c3aed"></span>Seguros</span>
         <span class="sup-item"><span class="sup-dot" style="background:#64748b"></span>Empleados</span>
         <span class="sup-item"><span class="sup-dot" style="background:#ca8a04"></span>Liverpool</span>
+        <span class="sup-item"><span class="sup-dot" style="background:#db2777"></span>Lala</span>
+        <span class="sup-item"><span class="sup-dot" style="background:#0891b2"></span>Jac</span>
+        <span class="sup-item"><span class="sup-dot" style="background:#dc2626"></span>Suzuki</span>
+        <span class="sup-item"><span class="sup-dot" style="background:#059669"></span>Liv GMM</span>
+        <span class="sup-item"><span class="sup-dot" style="background:#a16207"></span>Moderna</span>
+        <span class="sup-item"><span class="sup-dot" style="background:#4f46e5"></span>Bimbo</span>
       </div>
-      <span class="sup-heat-scale" id="sup-heatLegend"><span>Volumen: 209&nbsp;↓</span><span class="sup-bar"></span><span>↑&nbsp;8.143</span></span>
+      <span class="sup-heat-scale" id="sup-heatLegend"><span>Volumen: 25&nbsp;↓</span><span class="sup-bar"></span><span>↑&nbsp;8.143</span></span>
       <span class="sup-reduced-note">Simulación congelada: movimiento reducido activado</span>
     </div>
 
@@ -1266,18 +1316,18 @@ body { padding-top: 48px; }
       <span>En espera: <b id="sup-c-espera">—</b></span>
     </div>
 
-    <p class="sup-aviso" role="note"><b>Este piso muestra 6 de 12 carteras:</b> solo las de mayor volumen, que concentran la operación del día. Las 6 restantes —LALA, JAC, SUZUKI, LIVERPOOL GMM, MODERNA y BIMBO— suman 639 llamadas (4,0 %) y se ven en la pestaña Campañas.</p>
+    <p class="sup-aviso" role="note"><b>Este piso muestra las 12 carteras y los 77 lugares:</b> un lugar por cada asesor con nombre en Tableau (BRADESCARD ASISTENCIAS 38, COPPEL VIDA 31, CREDIAUTO 4, BRADESCARD SEGUROS 4). Las 8 carteras sin asesores identificados —EMPLEADOS, LIVERPOOL, LALA, JAC, SUZUKI, LIVERPOOL GMM, MODERNA y BIMBO— muestran sus totales sin lugares con nombre.</p>
 
     <div class="sup-scene" id="sup-scene">
-      <svg id="sup-floor" viewBox="0 0 1000 560" role="img"
-           aria-label="Vista isométrica del piso del call center con 6 zonas y 31 estaciones (simulación)"></svg>
+      <svg id="sup-floor" viewBox="0 0 1220 910" role="img"
+           aria-label="Vista isométrica del piso del call center con 12 zonas y 77 lugares (simulación)"></svg>
       <div class="sup-zone-tip" id="sup-zoneTip" hidden></div>
       <aside class="sup-inspector" id="sup-inspector" hidden aria-live="polite">
         <button class="sup-close" id="sup-inspClose" aria-label="Cerrar panel">✕</button>
         <h2 id="sup-inspTitle">Estación A-01</h2>
         <div class="sup-cartera" id="sup-inspCartera">BRADESCARD ASISTENCIAS</div>
         <dl>
-          <dt>Estado</dt><dd><span class="sup-state-badge" id="sup-inspEstado">En llamada</span></dd>
+          <dt>Estado</dt><dd><span class="sup-state-badge" id="sup-inspEstado" style="background:#c2410c">En llamada</span></dd>
           <dt>Llamada en curso</dt><dd id="sup-inspCall">LL-4821</dd>
           <dt>Tiempo en curso</dt><dd id="sup-inspTimer">00:00</dd>
           <dt>NS de la zona</dt><dd id="sup-inspNS">88,1 %</dd>
@@ -1286,17 +1336,19 @@ body { padding-top: 48px; }
         </dl>
         <p class="sup-note" id="sup-inspNote">TMO por zona no forma parte de la foto fija de nov 2026; se muestra el TMO global (8:43). La llamada en curso es un identificador ficticio de la simulación.</p>
       </aside>
-      <div class="sup-hint">Toca una persona para ver su ficha · Toca un escritorio para ver el estado de la estación · Las personas se paran y caminan por los pasillos (simulación)</div>
+      <div class="sup-hint">Toca una persona o una estación para ver la ficha del asesor · Enter sobre una estación abre su estado · Las personas se paran y caminan por los pasillos (simulación)</div>
     </div>
     <p class="sup-foot">
       Fuente: foto fija nov 2026 del libro INTER ATC (vista Dirección), leída en vivo 24 nov 2026, 18:08.
-      Zonas por cartera —solo 6 de 12, las de mayor volumen— con su volumen y NS de noviembre; estaciones proporcionales al volumen
-      (1 ≈ 430 llamadas, redondeo visible en cada rótulo). Los estados de estación, las llamadas en
-      tránsito, la franja del día y el supervisor son una simulación en vivo sobre esa foto fija;
-      las personas que caminan por los pasillos también son simuladas. Cada persona lleva el color
-      de su cartera y, al tocarla, abre su ficha con su nombre y cifras reales de nov 2026 (mapeo
-      por atendidas dentro de cada cartera). Las estaciones de EMPLEADOS y LIVERPOOL no tienen
-      asesor en la lista de 77 y se identifican solo por ID.
+      Zonas por cartera —las 12 con llamadas— con su volumen y NS de noviembre; 77 lugares, uno por
+      cada asesor con nombre en la lista de 77 de Tableau (BRADESCARD ASISTENCIAS 38, COPPEL VIDA 31,
+      CREDIAUTO 4, BRADESCARD SEGUROS 4). Las 8 carteras sin asesores identificados —EMPLEADOS,
+      LIVERPOOL, LALA, JAC, SUZUKI, LIVERPOOL GMM, MODERNA y BIMBO— muestran sus totales reales y
+      la nota «sin asesores identificados en Tableau», sin lugares con nombre inventado. Los estados
+      de estación, las llamadas en tránsito, la franja del día y el supervisor son una simulación en
+      vivo sobre esa foto fija; las personas que caminan por los pasillos también son simuladas. Cada
+      persona lleva el color de su cartera y, al tocarla, abre su ficha con su nombre y cifras reales
+      de nov 2026. El filtro por cartera muestra solo sus lugares y abre su ficha de cartera.
     </p>
   </div>
 
@@ -1912,11 +1964,16 @@ function openFicha(n){
   selectedN = n;
   fichaBody.textContent = "";
   var h = document.createElement("h2"); h.textContent = "Ficha · " + a.nombre; fichaBody.appendChild(h);
+  var est = (window.__sup.estacionDe ? window.__sup.estacionDe(n) : null);
   var sub = document.createElement("div"); sub.className = "sup-ficha-sub";
-  sub.textContent = "Asesor n.º " + a.n + " de 77 · " + a.cartera + " · nov 2026";
+  sub.textContent = "Asesor n.º " + a.n + " de 77 · " + a.cartera +
+    (est ? " · Estación " + est : "") + " · nov 2026";
   fichaBody.appendChild(sub);
   fichaBody.appendChild(kvGrid([
-    ["Atendidas", fmtInt(a.at)], ["TMO", a.tmo], ["NPS", fmtNPS(a.nps)]
+    ["Atendidas", fmtInt(a.at)], ["TMO", a.tmo], ["NPS", fmtNPS(a.nps)],
+    ["FCR", n === 1 ? SUP_FICHA1.fcr : "s/d"],
+    ["Transferencias", n === 1 ? SUP_FICHA1.transf : "s/d"],
+    ["Ocupación", n === 1 ? SUP_FICHA1.actividad[0][1] : "s/d"]
   ]));
   if(a.nombre === "DAYLAN YOSHIMAR ALMAGUER ROCHA"){
     fichaBody.appendChild(p("NPS más bajo de los 77 asesores: −94,9. Prioridad de revisión.", "sup-muted"));
@@ -1925,9 +1982,6 @@ function openFicha(n){
     fichaBody.appendChild(p("TMO entre los 3 más altos con volumen (P3 coaching): escuchar llamadas y revisar poscierre / ACW.", "sup-muted"));
   }
   if(n === 1){
-    fichaBody.appendChild(kvGrid([
-      ["FCR", SUP_FICHA1.fcr], ["Transferencias", SUP_FICHA1.transf]
-    ]));
     fichaBody.appendChild(h3("Percentiles (vs. equipo)"));
     fichaBody.appendChild(table(["Indicador", "Percentil", "Mediana del equipo"],
       SUP_FICHA1.percentiles.map(function(r){ return [r[0], r[1], r[2]]; }), [1]));
@@ -1943,9 +1997,17 @@ function openFicha(n){
       SUP_FICHA1.actividad.map(function(r){ return [r[0], r[1]]; }), [1]));
     fichaBody.appendChild(p("Nota del tablero (sin corregir): la mediana del TMO del equipo aparece como 9:24 y como 9:39 en otra vista.", "sup-muted"));
   } else {
-    fichaBody.appendChild(p("FCR, transferencias, percentiles y ocupación solo están en la ficha de Tableau.", ""));
-    fichaBody.appendChild(p("Sin dato en Tableau para este asesor: FCR, transferencias, percentiles, ocupación, NS, demoradas y abandono por asesor, e ID de asesor.", "sup-muted"));
+    fichaBody.appendChild(h3("Composición del TMO"));
+    fichaBody.appendChild(p("Sin dato en Tableau para este asesor: la composición del TMO solo existe para el asesor n.º 1.", "sup-muted"));
+    fichaBody.appendChild(p("FCR, transferencias, ocupación y percentiles solo existen para el asesor n.º 1 en la ficha de Tableau; para el resto, sin dato en Tableau. ID de asesor: sin dato en Tableau.", "sup-muted"));
   }
+  fichaBody.appendChild(h3("Sin dato en Tableau para este asesor"));
+  fichaBody.appendChild(kvGrid([
+    ["Recibidas", "sin dato"], ["Demoradas", "sin dato"], ["NS", "sin dato"],
+    ["ASA", "sin dato"], ["Espera media", "sin dato"], ["% espera > 20 s", "sin dato"],
+    ["Encuestas", "sin dato"]
+  ]));
+  fichaBody.appendChild(p("Curva por hora: sin dato en Tableau para este asesor (el único dato por hora es el pico global de las 23:00 h, ASA 20 s).", "sup-muted"));
   ficha.hidden = false;
   renderList();
   ficha.scrollIntoView({behavior: "auto", block: "nearest"});
@@ -1959,6 +2021,7 @@ renderList();
 /* ---------- Hooks de verificación (lista de asesores) ---------- */
 window.__sup = window.__sup || {};
 window.__sup.asesores = SUP_ASESORES;
+window.__sup.ficha1 = SUP_FICHA1;
 window.__sup.listCount = function(){ return tbody.querySelectorAll("tr").length; };
 window.__sup.listFirst = function(){
   var tr = tbody.querySelector("tr");
@@ -1997,12 +2060,18 @@ var viewKind = "station", viewCall = null, viewSup = null;
 
 /* ---------- Datos reales (foto fija nov 2026, 18:08) ---------- */
 var ZONES = [
-  {key:"ASIS",  name:"BRADESCARD ASISTENCIAS", short:"ASISTENCIAS", ns:"88,1 %", vol:8143, volTxt:"8.143", n:16, prefix:"A", u0:2,   v0:2,  cols:4, rows:4, lab:{mode:"back", dx:0, dy:-37}},
-  {key:"COPPEL",name:"COPPEL VIDA",            short:"COPPEL VIDA", ns:"87,1 %", vol:3493, volTxt:"3.493", n:7,  prefix:"B", u0:17.5,v0:2,  cols:4, rows:2, lab:{dx:0,  dy:15}},
-  {key:"CRED",  name:"CREDIAUTO",              short:"CREDIAUTO",   ns:"98,6 %", vol:1983, volTxt:"1.983", n:4,  prefix:"C", u0:2,   v0:15, cols:4, rows:1, lab:{dx:-16, dy:28}},
-  {key:"SEG",   name:"BRADESCARD SEGUROS",     short:"SEGUROS",     ns:"88,9 %", vol:1214, volTxt:"1.214", n:2,  prefix:"D", u0:18,  v0:15, cols:2, rows:1, lab:{dx:-61,dy:26}},
-  {key:"EMPL",  name:"EMPLEADOS",              short:"EMPLEADOS",   ns:"97,7 %", vol:379,  volTxt:"379",   n:1,  prefix:"E", u0:24,  v0:15, cols:1, rows:1, lab:{dx:-40,dy:39}},
-  {key:"LIV",   name:"LIVERPOOL",              short:"LIVERPOOL",   ns:"96,2 %", vol:209,  volTxt:"209",   n:1,  prefix:"F", u0:29,  v0:15, cols:1, rows:1, lab:{dx:3,  dy:36}}
+  {key:"ASIS",  name:"BRADESCARD ASISTENCIAS", short:"ASISTENCIAS", ns:"88,1 %", vol:8143, volTxt:"8.143", n:38, prefix:"A", u0:0.5, v0:1,  cols:8, rows:5, lab:{mode:"back", dx:0, dy:-37}},
+  {key:"COPPEL",name:"COPPEL VIDA",            short:"COPPEL VIDA", ns:"87,1 %", vol:3493, volTxt:"3.493", n:31, prefix:"B", u0:26,  v0:1,  cols:7, rows:5, lab:{mode:"front", dx:60, dy:40}},
+  {key:"CRED",  name:"CREDIAUTO",              short:"CREDIAUTO",   ns:"98,6 %", vol:1983, volTxt:"1.983", n:4,  prefix:"C", u0:1,   v0:17, cols:4, rows:1, lab:{mode:"front", dx:-125, dy:40}},
+  {key:"SEG",   name:"BRADESCARD SEGUROS",     short:"SEGUROS",     ns:"88,9 %", vol:1214, volTxt:"1.214", n:4,  prefix:"D", u0:14,  v0:17, cols:4, rows:1, sign:{cu:12.8, cv:18.6, dx:-30, dy:34, w:64}},
+  {key:"EMPL",  name:"EMPLEADOS",              short:"EMPLEADOS",   ns:"97,7 %", vol:379,  volTxt:"379",   n:0,  prefix:"E", u0:27,  v0:23, cols:3, rows:1, card:true},
+  {key:"LIV",   name:"LIVERPOOL",              short:"LIVERPOOL",   ns:"96,2 %", vol:209,  volTxt:"209",   n:0,  prefix:"F", u0:40,  v0:23, cols:3, rows:1, card:true},
+  {key:"LALA",  name:"LALA",                   short:"LALA",        ns:"96,0 %", vol:177,  volTxt:"177",   n:0,  prefix:"G", u0:53,  v0:23, cols:3, rows:1, card:true},
+  {key:"JAC",   name:"JAC",                    short:"JAC",         ns:"93,8 %", vol:166,  volTxt:"166",   n:0,  prefix:"H", u0:66,  v0:23, cols:3, rows:1, card:true},
+  {key:"SUZUKI",name:"SUZUKI",                 short:"SUZUKI",      ns:"100,0 %", vol:126, volTxt:"126",   n:0,  prefix:"I", u0:33.5,v0:31, cols:3, rows:1, card:true},
+  {key:"LIVGMM",name:"LIVERPOOL GMM",          short:"LIV GMM",     ns:"97,5 %", vol:85,  volTxt:"85",    n:0,  prefix:"J", u0:46.5,v0:31, cols:3, rows:1, card:true},
+  {key:"MODERNA",name:"MODERNA",               short:"MODERNA",     ns:"97,7 %", vol:60,  volTxt:"60",    n:0,  prefix:"K", u0:59.5,v0:31, cols:3, rows:1, card:true},
+  {key:"BIMBO", name:"BIMBO",                  short:"BIMBO",       ns:"95,2 %", vol:25,  volTxt:"25",    n:0,  prefix:"L", u0:72.5,v0:31, cols:3, rows:1, card:true}
 ];
 var TMO_GLOBAL = "8:43";
 var STATES = {
@@ -2022,9 +2091,11 @@ function heatColor(vol){
 
 /* ---------- Personas: color de camisa por cartera ---------- */
 var CARTERA_COLOR = {ASIS:"#ff6900", COPPEL:"#0ea5e9", CRED:"#16a34a",
-  SEG:"#7c3aed", EMPL:"#64748b", LIV:"#ca8a04"};
+  SEG:"#7c3aed", EMPL:"#64748b", LIV:"#ca8a04", LALA:"#db2777", JAC:"#0891b2",
+  SUZUKI:"#dc2626", LIVGMM:"#059669", MODERNA:"#a16207", BIMBO:"#4f46e5"};
 var CARTERA_DARK = {ASIS:"#c2410c", COPPEL:"#0369a1", CRED:"#15803d",
-  SEG:"#6b21a8", EMPL:"#475569", LIV:"#92400e"};
+  SEG:"#6b21a8", EMPL:"#475569", LIV:"#92400e", LALA:"#9d174d", JAC:"#155e75",
+  SUZUKI:"#991b1b", LIVGMM:"#065f46", MODERNA:"#854d0e", BIMBO:"#3730a3"};
 /* Figura de persona isométrica (cabeza, cuerpo, diadema), en coords locales
    con origen en el frente del escritorio. standing=true añade piernas. */
 function drawPerson(g, shirt, dark, standing){
@@ -2059,15 +2130,15 @@ function el(tag, attrs, parent){
 }
 
 /* ---------- Piso base ---------- */
-var floorPts = [iso(-1,-1), iso(34,-1), iso(34,23), iso(-1,23)];
+var floorPts = [iso(-1,-1), iso(46,-1), iso(82,29), iso(82,34), iso(-1,34)];
 el("polygon", {points: poly(floorPts), fill:"#e2e8f0", stroke:"#cbd5e1", "stroke-width":1}, svg);
-var floorIn = [iso(0,0), iso(33,0), iso(33,22), iso(0,22)];
+var floorIn = [iso(0,0), iso(45,0), iso(80,28), iso(80,33), iso(0,33)];
 el("polygon", {points: poly(floorIn), fill:"#f1f5f9", stroke:"#cbd5e1", "stroke-width":1}, svg);
-[[13.7,0,15.3,0,15.3,22,13.7,22],[0,12.5,33,12.5,33,14.1,0,14.1]].forEach(function(b){
+[[23.8,0,24.8,0,24.8,34,23.8,34],[0,15.0,46,15.0,46,15.8,0,15.8],[0,19.4,46,19.4,46,20.6,0,20.6],[0,27.4,80,27.4,80,28.6,0,28.6]].forEach(function(b){
   el("polygon",{points: poly([iso(b[0],b[1]),iso(b[2],b[3]),iso(b[4],b[5]),iso(b[6],b[7])]),
     fill:"#dbe7f3"},svg);
 });
-[[14.5,0,14.5,22],[0,13.3,33,13.3]].forEach(function(l){
+[[24.3,0,24.3,34],[0,15.4,46,15.4],[0,20,46,20],[0,28,80,28]].forEach(function(l){
   var a=iso(l[0],l[1]), b=iso(l[2],l[3]);
   el("line",{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:"#94a3b8","stroke-width":1.5,
     "stroke-dasharray":"6 5",opacity:.8},svg);
@@ -2083,12 +2154,12 @@ var labelTopLayer = el("g", {id:"sup-labelTopLayer"}, svg);
 var textLayer = el("g", {id:"sup-textLayer"}, svg);
 
 ZONES.forEach(function(z){
-  var du = 3.2, dv = 3.2;
+  var du = 3.1, dv = 3.1;
   var u1 = z.u0 + (z.cols-1)*du, v1 = z.v0 + (z.rows-1)*dv;
   var p = [iso(z.u0-1.2, z.v0-1.2), iso(u1+1.6, z.v0-1.2), iso(u1+1.6, v1+1.6), iso(z.u0-1.2, v1+1.6)];
   el("polygon", {points: poly(p), fill:"#ffffff", stroke:"#cbd5e1", "stroke-width":1.2,
     "class":"sup-zone-platform", "data-zone":z.key, tabindex:"0", role:"button",
-    "aria-label":"Zona "+z.name+", NS "+z.ns+", volumen "+z.volTxt}, zoneLayer);
+    "aria-label":"Zona "+z.name+", NS "+z.ns+", volumen "+z.volTxt+(z.card ? ", sin asesores identificados en Tableau" : "")}, zoneLayer);
   /* Error 23: el centro de COPPEL queda cubierto por las estaciones; el borde
      visible de la zona (banda de 14 px sobre su arista) es el punto clicable.
      Va en zoneLayer, bajo las estaciones, para no robarles el clic. */
@@ -2101,19 +2172,32 @@ ZONES.forEach(function(z){
   var h = el("polygon", {points: poly(p), fill: heatColor(z.vol), opacity:0.38,
     stroke: heatColor(z.vol), "stroke-width":1.5, "class":"sup-heat-poly"}, heatLayer);
   h.setAttribute("data-zone", z.key);
-  var anchor = (z.lab.mode === "back")
-    ? iso(z.u0-1.2, z.v0-1.2)
-    : iso(u1+1.6, v1+1.6);
-  var lx = anchor.x + z.lab.dx, ly = anchor.y + z.lab.dy;
-  var line1 = z.short + " · NS " + z.ns;
-  var line2 = z.volTxt + " llamadas · " + (z.n === 1 ? "1 estación" : z.n + " estaciones");
-  var w = Math.max(line1.length, line2.length) * 6.8 + 24, hh = 28;
-  el("rect", {x: lx-w/2, y: ly-hh/2, width: w, height: hh, rx: 7,
-    fill:"#ffffff", stroke:"#cbd5e1", "stroke-width":1}, zoneLayer);
-  var t1 = el("text", {x: lx, y: ly-4, "text-anchor":"middle", "class":"sup-zone-label"}, zoneLayer);
-  t1.textContent = line1;
-  var t2 = el("text", {x: lx, y: ly+9, "text-anchor":"middle", "class":"sup-zone-sub"}, zoneLayer);
-  t2.textContent = line2;
+  if(z.lab){
+    var anchor = (z.lab.mode === "back")
+      ? iso(z.u0-1.2, z.v0-1.2)
+      : iso(u1+1.6, v1+1.6);
+    var lx = anchor.x + z.lab.dx, ly = anchor.y + z.lab.dy;
+    var line1 = z.short + " · NS " + z.ns;
+    var line2 = z.volTxt + " llamadas · " + (z.n === 1 ? "1 lugar" : z.n + " lugares");
+    var w = Math.max(line1.length, line2.length) * 6.8 + 24, hh = 28;
+    el("rect", {x: lx-w/2, y: ly-hh/2, width: w, height: hh, rx: 7,
+      fill:"#ffffff", stroke:"#cbd5e1", "stroke-width":1}, zoneLayer);
+    var t1 = el("text", {x: lx, y: ly-4, "text-anchor":"middle", "class":"sup-zone-label"}, zoneLayer);
+    t1.textContent = line1;
+    var t2 = el("text", {x: lx, y: ly+9, "text-anchor":"middle", "class":"sup-zone-sub"}, zoneLayer);
+    t2.textContent = line2;
+  } else if(z.card){
+    /* Zona sin asesores: totales reales + nota visible, sin pildora ni lugares. */
+    var cc = iso((z.u0+u1)/2, (z.v0+v1)/2);
+    var cl1 = el("text", {x: cc.x, y: cc.y-13, "text-anchor":"middle", "class":"sup-card-line1", "data-zone":z.key}, textLayer);
+    cl1.textContent = z.short;
+    var cl2 = el("text", {x: cc.x, y: cc.y, "text-anchor":"middle", "class":"sup-card-line2", "data-zone":z.key}, textLayer);
+    cl2.textContent = "NS " + z.ns + " · " + z.volTxt + " llamadas";
+    var cn1 = el("text", {x: cc.x, y: cc.y+12, "text-anchor":"middle", "class":"sup-card-note", "data-zone":z.key}, textLayer);
+    cn1.textContent = "sin asesores identificados";
+    var cn2 = el("text", {x: cc.x, y: cc.y+22, "text-anchor":"middle", "class":"sup-card-note", "data-zone":z.key}, textLayer);
+    cn2.textContent = "en Tableau";
+  }
   var idx = 0;
   for(var r=0; r<z.rows && idx<z.n; r++){
     for(var c=0; c<z.cols && idx<z.n; c++){
@@ -2157,10 +2241,11 @@ ZONES.forEach(function(z){
         el("rect", {x:s.x-14, y:s.y-8, width:5, height:6, rx:1, fill:"#ffffff", stroke:"#94a3b8", "stroke-width":.7}, g);
         el("path", {d:"M "+(s.x-9)+" "+(s.y-6)+" q 3.5 2 0 4", fill:"none", stroke:"#94a3b8", "stroke-width":.9}, g);
       }
-      var idT = el("text", {x:s.x+1, y:s.y+24, "text-anchor":"middle", "class":"sup-st-id"}, textLayer);
+      var idT = el("text", {x:s.x+1, y:s.y+24, "text-anchor":"middle", "class":"sup-st-id",
+        "data-station-id": id}, textLayer);
       idT.textContent = id;
       stations.push({id:id, zone:z, g:g, dot:dot, screen:screen, sx:s.x, sy:s.y, u:u, v:v,
-        asesor:asesor, asesorReal:null, walking:false,
+        asesor:asesor, asesorReal:null, walking:false, idEl:idT,
         glyphs:{phone:glyphPhone, check:glyphCheck, clock:glyphClock, pause:glyphPause},
         timerEl:timerEl,
         state:"disponible", callId:null, callStart:0, callEnd:0});
@@ -2170,10 +2255,10 @@ ZONES.forEach(function(z){
 
 /* ---------- Mapeo asesor real → estación (determinista) ----------
    Por atendidas dentro de cada cartera (orden de la lista de 77):
-   ASISTENCIAS 16 → sus 16 primeros; COPPEL VIDA 7 → sus 7 primeros;
-   CREDIAUTO 4 → sus 4 primeros; BRADESCARD SEGUROS 2 → sus 2 primeros.
-   EMPLEADOS y LIVERPOOL no tienen asesores en la lista de 77: quedan con
-   solo ID, sin inventar nombres. */
+   ASISTENCIAS 38 → sus 38; COPPEL VIDA 31 → sus 31;
+   CREDIAUTO 4 → sus 4; BRADESCARD SEGUROS 4 → sus 4.
+   Las otras 8 carteras no tienen asesores en la lista de 77: son zonas
+   sin lugares, sin inventar nombres. */
 (function mapAsesores(){
   var all = (window.__sup && window.__sup.asesores) || [];
   var byCartera = {};
@@ -2188,7 +2273,7 @@ ZONES.forEach(function(z){
   var counters = {};
   stations.forEach(function(st){
     var list = byCartera[st.zone.name];
-    if(!list) return; /* EMPLEADOS / LIVERPOOL: sin asesor en la lista */
+    if(!list) return; /* cartera sin asesores en la lista: sin lugares */
     var i = counters[st.zone.key] || 0;
     counters[st.zone.key] = i + 1;
     if(i >= list.length) return;
@@ -2199,6 +2284,12 @@ ZONES.forEach(function(z){
     st.g.setAttribute("aria-label", "Estación " + st.id + ", " + st.zone.name + ", " +
       a.nombre + ", " + fmtInt(a.at) + " atendidas");
   });
+  /* Estación de cada asesor (1:1, determinista): la ficha del asesor
+     (IIFE de la lista) la usa para mostrar su estación. */
+  window.__sup.estacionDe = function(n){
+    var st = stations.filter(function(s){ return s.asesorReal && s.asesorReal.n === n; })[0];
+    return st ? st.id : null;
+  };
 })();
 
 /* ---------- Mamparas, plantas, letreros y puesto de supervisión ---------- */
@@ -2208,7 +2299,7 @@ mamparas.forEach(function(m){
     fill:"#e5e7eb", stroke:"#cbd5e1", "stroke-width":.8}, zoneLayer);
   el("line", {x1:p.x-5.2, y1:p.y-11.4, x2:p.x+5.2, y2:p.y-16.6, stroke:"#ff6900", "stroke-width":2}, zoneLayer);
 });
-[[2.2,17.5],[16.3,6.8]].forEach(function(c){
+[[2,33],[9,33]].forEach(function(c){
   var p = iso(c[0], c[1]);
   el("circle", {cx:p.x-4, cy:p.y-5, r:4.5, fill:"#22c55e", stroke:"#16a34a", "stroke-width":.8}, zoneLayer);
   el("circle", {cx:p.x+4, cy:p.y-6, r:4.5, fill:"#22c55e", stroke:"#16a34a", "stroke-width":.8}, zoneLayer);
@@ -2217,60 +2308,55 @@ mamparas.forEach(function(m){
     fill:"#b45309", stroke:"#92400e", "stroke-width":.8}, zoneLayer);
 });
 [
-  {key:"ASIS",  cu:13.2, cv:0.8,  dx:0,   dy:-21, w:74},
-  {key:"COPPEL",cu:28.7, cv:0.8,  dx:0,   dy:-22, w:72},
-  {key:"CRED",  cu:6.7, cv:19.9, dx:-40, dy:-22, w:68},
-  {key:"SEG",   cu:16.8, cv:13.8, dx:-64, dy:-21, w:64},
-  {key:"EMPL",  cu:25.6, cv:13.8, dx:-56, dy:26, w:72},
-  {key:"LIV",   cu:30.6, cv:13.8, dx:0,   dy:-22, w:68}
+  {key:"SEG",   cu:12.8, cv:18.6, dx:-30, dy:34, w:64}
 ].forEach(function(sg){
   var z = ZONES.filter(function(zz){ return zz.key===sg.key; })[0];
   var p = iso(sg.cu, sg.cv);
   var px = p.x + sg.dx, py = p.y + sg.dy;
-  /* CRED: su placa quedaba bajo el escritorio de A-16 ("REDIAUTO"); solo esta
-     placa se dibuja en la capa superior para que ningun escritorio la tape. */
+  /* SEG: su placa queda en el hueco entre CRED y la fila de tarjetas; la
+     pildora no cabe ahi (el hueco mide ~2u y la pildora ~15u). */
   var layer = (sg.key === "CRED") ? labelTopLayer : zoneLayer;
   el("line", {x1:p.x, y1:py+15, x2:p.x, y2:p.y, stroke:"#64748b", "stroke-width":2}, layer);
   el("rect", {x:px, y:py, width:sg.w, height:15, rx:3, fill:"#ffffff", stroke:"#cbd5e1", "stroke-width":1}, layer);
   var t = el("text", {x:px+sg.w/2, y:py+11, "text-anchor":"middle", "class":"sup-sign-label"}, layer);
   t.textContent = z.short;
 });
-var supPlat = [iso(29,0), iso(33,0), iso(33,4), iso(29,4)];
+var supPlat = [iso(14,28), iso(22,28), iso(22,32), iso(14,32)];
 el("polygon", {points: poly(supPlat), fill:"#e0f2fe", stroke:"#0ea5e9", "stroke-width":1.5}, zoneLayer);
-el("rect", {x:829, y:254, width:96, height:15, rx:7, fill:"#ffffff", stroke:"#0ea5e9", "stroke-width":1}, zoneLayer);
-var supLab = el("text", {x:877, y:265, "text-anchor":"middle", "font-size":10, "font-weight":800, fill:"#0369a1"}, zoneLayer);
+el("rect", {x:296, y:352, width:96, height:15, rx:7, fill:"#ffffff", stroke:"#0ea5e9", "stroke-width":1}, zoneLayer);
+var supLab = el("text", {x:344, y:363, "text-anchor":"middle", "font-size":10, "font-weight":800, fill:"#0369a1"}, zoneLayer);
 supLab.textContent = "SUPERVISIÓN";
-el("rect", {x:875, y:270, width:10, height:8, rx:1, fill:"#334155", stroke:"#1e293b", "stroke-width":.7}, zoneLayer);
-el("rect", {x:876.5, y:271.5, width:7, height:5, rx:1, fill:"#38bdf8"}, zoneLayer);
-el("polygon", {points:"866,285 878,278 890,285 878,292", fill:"#cbd5e1", stroke:"#94a3b8", "stroke-width":1}, zoneLayer);
-el("polygon", {points:"866,285 878,292 878,296 866,289", fill:"#94a3b8"}, zoneLayer);
-el("ellipse", {cx:877, cy:298, rx:5.5, ry:3, fill:"#94a3b8", stroke:"#64748b", "stroke-width":.8}, zoneLayer);
-[["PASILLO",682,159],["PASILLO",500,262],["PASILLO",327,148],["PASILLO",756,363]].forEach(function(l){
+el("rect", {x:342, y:368, width:10, height:8, rx:1, fill:"#334155", stroke:"#1e293b", "stroke-width":.7}, zoneLayer);
+el("rect", {x:343.5, y:369.5, width:7, height:5, rx:1, fill:"#38bdf8"}, zoneLayer);
+el("polygon", {points:"333,383 345,376 357,383 345,390", fill:"#cbd5e1", stroke:"#94a3b8", "stroke-width":1}, zoneLayer);
+el("polygon", {points:"333,383 345,390 345,394 333,387", fill:"#94a3b8"}, zoneLayer);
+el("ellipse", {cx:344, cy:396, rx:5.5, ry:3, fill:"#94a3b8", stroke:"#64748b", "stroke-width":.8}, zoneLayer);
+[["PASILLO",383,276],["PASILLO",500,440],["PASILLO",526,361]].forEach(function(l){
   var t = el("text", {x:l[1], y:l[2], "text-anchor":"middle", "class":"sup-pasillo-label"}, svg);
   t.textContent = l[0];
 });
 
 /* ---------- Cola de entrada ---------- */
 var queue = el("g", {id:"sup-queue"}, svg);
-el("rect", {x:60, y:450, width:880, height:56, rx:10, fill:"#ffffff", stroke:"#7c3aed", "stroke-width":2}, queue);
-el("rect", {x:60, y:450, width:150, height:56, rx:10, fill:"#7c3aed"}, queue);
-var qt = el("text", {x:135, y:474, "text-anchor":"middle", fill:"#fff", "font-size":12, "font-weight":700}, queue);
+el("rect", {x:40, y:825, width:1130, height:56, rx:10, fill:"#ffffff", stroke:"#7c3aed", "stroke-width":2}, queue);
+el("rect", {x:40, y:825, width:150, height:56, rx:10, fill:"#7c3aed"}, queue);
+var qt = el("text", {x:115, y:849, "text-anchor":"middle", fill:"#fff", "font-size":12, "font-weight":700}, queue);
 qt.textContent = "COLA DE ENTRADA";
-var qs = el("text", {x:225, y:500, "text-anchor":"start", fill:"#7c3aed", "font-size":10.5}, queue);
+var qs = el("text", {x:205, y:875, "text-anchor":"start", fill:"#7c3aed", "font-size":10.5}, queue);
 qs.textContent = "llamadas esperando · SIMULACIÓN";
-var qCount = el("text", {x:905, y:485, "text-anchor":"end", "font-size":13, "font-weight":800, fill:"#475569"}, queue);
+var qCount = el("text", {x:1135, y:860, "text-anchor":"end", "font-size":13, "font-weight":800, fill:"#475569"}, queue);
 qCount.textContent = "En espera: 0";
-el("rect", {x:60, y:432, width:118, height:18, rx:6, fill:"#7c3aed"}, queue);
-var qTab = el("text", {x:119, y:445, "text-anchor":"middle", fill:"#fff", "font-size":10, "font-weight":800}, queue);
+el("rect", {x:40, y:807, width:118, height:18, rx:6, fill:"#7c3aed"}, queue);
+var qTab = el("text", {x:99, y:820, "text-anchor":"middle", fill:"#fff", "font-size":10, "font-weight":800}, queue);
 qTab.textContent = "ZONA DE COLA";
-el("line", {x1:560, y1:418, x2:560, y2:444, stroke:"#7c3aed", "stroke-width":2.5}, queue);
-el("polygon", {points:"560,450 552,440 568,440", fill:"#7c3aed"}, queue);
+el("line", {x1:605, y1:793, x2:605, y2:819, stroke:"#7c3aed", "stroke-width":2.5}, queue);
+el("polygon", {points:"605,825 597,815 613,815", fill:"#7c3aed"}, queue);
 var queueDots = el("g", {id:"sup-queueDots"}, queue);
 
 /* ---------- Supervisor caminando ---------- */
 var supWaypoints = [
-  {u:14.5, v:6}, {u:14.5, v:12}, {u:19, v:13.3}, {u:25, v:13.3}, {u:14.5, v:17.8},
-  {u:6, v:13.3}, {u:14.5, v:9}
+  {u:24.3, v:6}, {u:24.3, v:12}, {u:19, v:15.4}, {u:25, v:15.4}, {u:24.3, v:15.4},
+  {u:6, v:15.4}, {u:24.3, v:9}
 ].map(function(w){ var p=iso(w.u,w.v); return {x:p.x, y:p.y}; });
 var sup = el("g", {id:"sup-supervisor-walker", tabindex:"0", role:"button",
   "aria-label":"Supervisor: toca para ver a qué estación está apoyando y por qué"}, svg);
@@ -2287,14 +2373,14 @@ sup.setAttribute("transform", "translate("+supWaypoints[0].x+","+supWaypoints[0]
    volver a su estación. Mientras camina, su estación queda en pausa. */
 var walkerLayer = el("g", {id:"sup-walkerLayer"}, svg);
 var walkers = [];
-var CORRIDOR_U = 14.5;
+var CORRIDOR_U = 24.3;
 var WALK_DESTS = [
-  {u:31, v:2},     /* puesto de supervisión */
-  {u:2.2, v:17.5}, /* zona de descanso / plantas */
-  {u:14.5, v:20},  /* fondo del pasillo */
-  {u:14.5, v:6},   /* pasillo junto a Asistencias */
-  {u:20, v:13.3},  /* pasillo horizontal junto a Coppel / Seguros */
-  {u:6, v:13.3}    /* pasillo horizontal junto a Crediauto */
+  {u:18, v:30},    /* puesto de supervisión */
+  {u:2, v:33},     /* zona de descanso / plantas */
+  {u:24.3, v:20},  /* fondo del pasillo */
+  {u:24.3, v:6},   /* pasillo junto a Asistencias */
+  {u:20, v:15.4},  /* pasillo horizontal junto a Coppel / Seguros */
+  {u:6, v:15.4}    /* pasillo horizontal junto a Crediauto */
 ];
 function routePoints(fromU, fromV, toU, toV){
   var raw = [{u:fromU, v:fromV}];
@@ -2310,7 +2396,7 @@ function routePoints(fromU, fromV, toU, toV){
   return out;
 }
 function startWalker(st){
-  if(!st || !st.asesorReal || st.walking || REDUCED || paused) return false;
+  if(!st || !st.asesorReal || st.walking || REDUCED || paused || st.g.style.display === "none") return false;
   var dest = WALK_DESTS[Math.floor(Math.random()*WALK_DESTS.length)];
   var outPath = routePoints(st.u, st.v, dest.u, dest.v);
   var backPath = outPath.slice().reverse();
@@ -2525,10 +2611,10 @@ var waiting = 0;
 
 function spawnCall(){
   if(REDUCED || paused || document.hidden) return;
-  var free = stations.filter(function(s){ return s.state==="disponible"; });
+  var free = stations.filter(function(s){ return s.state==="disponible" && s.g.style.display !== "none"; });
   if(!free.length) { if(waiting < SLOTS[currentSlot].waiting) waiting++; updateQueue(); return; }
   var target = free[Math.floor(Math.random()*free.length)];
-  var from = {x: 220 + Math.random()*560, y: 477};
+  var from = {x: 220 + Math.random()*760, y: 852};
   var to = {x: target.sx, y: target.sy - 30};
   var ctrl = {x: (from.x+to.x)/2, y: Math.min(from.y, to.y) - 120};
   var callId = randCallId();
@@ -2549,11 +2635,11 @@ function updateQueue(){
   var n = Math.min(waiting, 12);
   for(var i=0; i<n; i++){
     var x = 300 + i*30;
-    el("circle", {cx:x, cy:472, r:4, fill:"#7c3aed", stroke:"#fff", "stroke-width":1}, queueDots);
-    el("rect", {x:x-4.5, y:477, width:9, height:8, rx:3.5, fill:"#a78bfa", stroke:"#fff", "stroke-width":1}, queueDots);
+    el("circle", {cx:x, cy:847, r:4, fill:"#7c3aed", stroke:"#fff", "stroke-width":1}, queueDots);
+    el("rect", {x:x-4.5, y:852, width:9, height:8, rx:3.5, fill:"#a78bfa", stroke:"#fff", "stroke-width":1}, queueDots);
   }
   if(waiting > 12){
-    var more = el("text", {x:668, y:482, "font-size":11, "font-weight":800, fill:"#7c3aed"}, queueDots);
+    var more = el("text", {x:668, y:857, "font-size":11, "font-weight":800, fill:"#7c3aed"}, queueDots);
     more.textContent = "+" + (waiting-12);
   }
   updateCounts();
@@ -2757,7 +2843,27 @@ function openInspector(st){
   document.getElementById("sup-inspVol").textContent = st.zone.volTxt;
   document.getElementById("sup-inspNote").textContent =
     "TMO por zona no forma parte de la foto fija de nov 2026; se muestra el TMO global (" + TMO_GLOBAL + "). La llamada en curso es un identificador ficticio de la simulación." +
-    (st.asesorReal ? " Toca la persona de la estación para ver su ficha completa." : "");
+    (st.asesorReal ? " Toca la persona o la estación para ver su ficha completa." : "");
+  inspector.hidden = false;
+}
+/* Inspector de cartera: totales de la zona + nota si no tiene asesores. */
+function openZoneInspector(key){
+  var z = zoneByKey(key);
+  if(!z) return;
+  current = null; viewKind = "zone"; viewCall = null; viewSup = null;
+  document.getElementById("sup-inspTitle").textContent = "Cartera · " + z.short;
+  document.getElementById("sup-inspCartera").textContent = z.name +
+    (z.n ? " · " + z.n + " lugares (1 por asesor real)" : " · sin asesores identificados en Tableau");
+  var b = document.getElementById("sup-inspEstado");
+  b.textContent = "Zona"; b.style.background = "#334155"; b.style.color = "#fff";
+  document.getElementById("sup-inspCall").textContent = "—";
+  document.getElementById("sup-inspTimer").textContent = "—";
+  document.getElementById("sup-inspNS").textContent = z.ns;
+  document.getElementById("sup-inspVol").textContent = z.volTxt;
+  document.getElementById("sup-inspNote").textContent =
+    z.card
+      ? "Esta cartera tiene llamadas pero ningún asesor con nombre en Tableau: sus totales son reales y no se inventan lugares ni nombres."
+      : "Totales de noviembre 2026. Toca un lugar del piso para ver la ficha de su asesor.";
   inspector.hidden = false;
 }
 function findCall(callId){
@@ -2843,9 +2949,21 @@ svg.addEventListener("click", function(ev){
     var wn = +walker.getAttribute("data-n");
     if(wn){ window.__sup.openFicha(wn); return; }
   }
+  /* Etiqueta con el id de la estación (capa de texto, sobre la fila de
+     abajo): abre la ficha de SU asesor, no la de la estación que queda
+     debajo del texto. */
+  var slab = ev.target.closest ? ev.target.closest(".sup-st-id") : null;
+  if(slab){
+    var lst = stations.filter(function(s){ return s.id===slab.getAttribute("data-station-id"); })[0];
+    if(lst && lst.asesorReal){ window.__sup.openFicha(lst.asesorReal.n); return; }
+    if(lst){ openInspector(lst); return; }
+  }
   var g = ev.target.closest ? ev.target.closest(".sup-station") : null;
   if(g){
     var st = stations.filter(function(s){ return s.id===g.getAttribute("data-station-id"); })[0];
+    /* Clic/toque en la estación: abre la ficha del asesor. El inspector
+       de estación se abre con Enter sobre la estación (keydown, más abajo). */
+    if(st && st.asesorReal){ window.__sup.openFicha(st.asesorReal.n); return; }
     if(st) openInspector(st);
     return;
   }
@@ -2899,7 +3017,7 @@ function showZoneTip(key, clientX, clientY){
   zoneTip.innerHTML = "<h3>"+z.name+"</h3><dl>"+
     "<dt>NS nov</dt><dd>"+z.ns+"</dd>"+
     "<dt>Volumen nov</dt><dd>"+z.volTxt+"</dd>"+
-    "<dt>Estaciones</dt><dd>"+z.n+"</dd>"+
+    "<dt>Lugares</dt><dd>"+(z.n === 0 ? "0 — sin asesores identificados en Tableau" : z.n)+"</dd>"+
     "<dt>En llamada ahora</dt><dd>"+inCall+"</dd></dl>";
   zoneTip.hidden = false;
   var rect = sceneEl.getBoundingClientRect();
@@ -2974,22 +3092,37 @@ speedBtn.addEventListener("click", function(){
   applySpeedLabel();
   if(!REDUCED) startIntervals();
 });
+var currentCartera = "all";
 function applyFilter(){
   var visible = 0;
+  var base = currentCartera === "all" ? stations.length : (zoneByKey(currentCartera) || {n:0}).n;
   stations.forEach(function(st){
-    var show = currentFilter === "all" || st.state === currentFilter;
+    var inCartera = currentCartera === "all" || st.zone.key === currentCartera;
+    var show = inCartera && (currentFilter === "all" || st.state === currentFilter);
+    st.g.style.display = inCartera ? "" : "none";
+    if(st.idEl) st.idEl.style.display = inCartera ? "" : "none";
     st.g.style.opacity = show ? "" : ".18";
     if(show) visible++;
   });
-  filterCount.textContent = visible + " / " + stations.length + " visibles";
-  root.querySelectorAll(".sup-filter-btn").forEach(function(b){
+  filterCount.textContent = visible + " / " + base + " lugares";
+  root.querySelectorAll(".sup-filter-btn[data-filter]").forEach(function(b){
     b.setAttribute("aria-pressed", String(b.getAttribute("data-filter") === currentFilter));
   });
+  root.querySelectorAll(".sup-cartera-btn").forEach(function(b){
+    b.setAttribute("aria-pressed", String(b.getAttribute("data-cartera") === currentCartera));
+  });
 }
-root.querySelectorAll(".sup-filter-btn").forEach(function(b){
+root.querySelectorAll(".sup-filter-btn[data-filter]").forEach(function(b){
   b.addEventListener("click", function(){
     currentFilter = b.getAttribute("data-filter");
     applyFilter();
+  });
+});
+root.querySelectorAll(".sup-cartera-btn").forEach(function(b){
+  b.addEventListener("click", function(){
+    currentCartera = b.getAttribute("data-cartera");
+    applyFilter();
+    if(currentCartera !== "all") openZoneInspector(currentCartera);
   });
 });
 applyFilter();
@@ -3010,8 +3143,10 @@ if(hourInput){
 window.__sup = window.__sup || {};
 window.__sup.stations = stations;
 /* Repintado con dato en vivo (2026-11-25): actualiza NS y volumen de las
-   6 zonas del piso y sus etiquetas/heatmap. Solo los campos que trae el
-   JSON; el resto (estaciones, asesores) sigue siendo la foto fija. */
+   12 zonas del piso y sus etiquetas/heatmap. Solo los campos que trae el
+   JSON; el resto (lugares, asesores) sigue siendo la foto fija. Las
+   pildoras son solo 4 (zonas con lugares); las 8 tarjetas se actualizan
+   por data-zone, no por indice. */
 window.__sup.aplicarVivo = function (rows) {
   rows.forEach(function (r) {
     var z = null;
@@ -3021,15 +3156,20 @@ window.__sup.aplicarVivo = function (rows) {
     z.vol = r.recibidas;
     z.volTxt = fmtInt(r.recibidas);
   });
+  var pillZones = ZONES.filter(function (z) { return !!z.lab; });
   var labels = document.querySelectorAll("#sup-floor .sup-zone-label");
   var subs = document.querySelectorAll("#sup-floor .sup-zone-sub");
-  ZONES.forEach(function (z, i) {
+  pillZones.forEach(function (z, i) {
     if (labels[i]) labels[i].textContent = z.short + " · NS " + z.ns;
-    if (subs[i]) subs[i].textContent = z.volTxt + " llamadas · " + (z.n === 1 ? "1 estación" : z.n + " estaciones");
+    if (subs[i]) subs[i].textContent = z.volTxt + " llamadas · " + (z.n === 1 ? "1 lugar" : z.n + " lugares");
+  });
+  document.querySelectorAll("#sup-floor .sup-card-line2").forEach(function (t) {
+    var z = zoneByKey(t.getAttribute("data-zone"));
+    if (z) t.textContent = "NS " + z.ns + " · " + z.volTxt + " llamadas";
   });
   document.querySelectorAll("#sup-floor .sup-zone-platform:not(.sup-zone-border)").forEach(function (p) {
     var z = zoneByKey(p.getAttribute("data-zone"));
-    if (z) p.setAttribute("aria-label", "Zona " + z.name + ", NS " + z.ns + ", volumen " + z.volTxt);
+    if (z) p.setAttribute("aria-label", "Zona " + z.name + ", NS " + z.ns + ", volumen " + z.volTxt + (z.card ? ", sin asesores identificados en Tableau" : ""));
   });
   document.querySelectorAll("#sup-floor .sup-heat-poly").forEach(function (h) {
     var z = zoneByKey(h.getAttribute("data-zone"));
@@ -3052,11 +3192,14 @@ window.__sup.paused = function(){ return paused; };
 window.__sup.speed = function(){ return speedFactor; };
 window.__sup.filter = function(){ return currentFilter; };
 window.__sup.setFilter = function(f){ currentFilter = f; applyFilter(); };
+window.__sup.cartera = function(){ return currentCartera; };
+window.__sup.setCartera = function(k){ currentCartera = k; applyFilter(); if(k !== "all") openZoneInspector(k); };
+window.__sup.openZoneInspector = openZoneInspector;
 window.__sup.lastCallInfo = lastCallInfo;
 window.__sup.lastSupInfo = lastSupInfo;
 window.__sup.asesoresVisibles = function(){
   var n = 0;
-  stations.forEach(function(s){ if(s.asesor.style.display !== "none") n++; });
+  stations.forEach(function(s){ if(s.asesor.style.display !== "none" && s.g.style.display !== "none") n++; });
   return n;
 };
 window.__sup.waiting = function(){ return waiting; };
@@ -3124,75 +3267,75 @@ var ZONES = [
    rec:8143, ate:6882, pctAte:84.5, aba:1261, dem:819, ns:88.1, tmo:"7:49", tmoS:469,
    asa:16, esp:15, gt20:10.4, nps:47.9, enc:2111,
    comp:{pen:"4 s", penS:4, conv:"6:37", convS:397, convPct:86.0, esp:"15 s", espS:15, pos:"46 s", posS:46},
-   n:16, prefix:"A", u0:1, v0:1, cols:4, rows:4, lab:{mode:"back", dx:0, dy:-37}},
+   n:38, prefix:"A", u0:0.5, v0:1, cols:8, rows:5, lab:{mode:"back", dx:0, dy:-37}},
   {key:"COPPEL", name:"COPPEL VIDA", short:"COPPEL VIDA", pareto:"A",
    rec:3493, ate:2901, pctAte:83.1, aba:592, dem:374, ns:87.1, tmo:"8:29", tmoS:509,
    asa:13, esp:10, gt20:14.0, nps:19.6, enc:703,
    comp:{pen:"10 s", penS:10, conv:"7:20", convS:440, convPct:86.5, esp:"10 s", espS:10, pos:"53 s", posS:53},
-   n:7, prefix:"B", u0:15, v0:1, cols:4, rows:2, lab:{mode:"back", dx:60, dy:-36}},
+   n:31, prefix:"B", u0:26, v0:1, cols:7, rows:5, lab:{mode:"front", dx:60, dy:40}},
   {key:"CRED", name:"CREDIAUTO", short:"CREDIAUTO", pareto:"A",
    rec:1983, ate:1598, pctAte:80.6, aba:385, dem:22, ns:98.6, tmo:"12:00", tmoS:720,
    asa:3, esp:2, gt20:1.3, nps:71.9, enc:1023,
    comp:{pen:"4 s", penS:4, conv:"10:18", convS:618, convPct:86.0, esp:"2 s", espS:2, pos:"1:20", posS:80},
-   n:4, prefix:"C", u0:29, v0:1, cols:4, rows:1, lab:{mode:"front", dx:-40, dy:40}},
+   n:4, prefix:"C", u0:1, v0:17, cols:4, rows:1, lab:{mode:"front", dx:-125, dy:40}},
   {key:"SEG", name:"BRADESCARD SEGUROS", short:"SEGUROS", pareto:"B",
    rec:1214, ate:943, pctAte:77.7, aba:271, dem:105, ns:88.9, tmo:"11:29", tmoS:689,
    asa:17, esp:13, gt20:11.1, nps:31.2, enc:535,
    comp:{pen:"8 s", penS:8, conv:"9:53", convS:593, convPct:86.2, esp:"13 s", espS:13, pos:"1:08", posS:68},
-   n:2, prefix:"D", u0:15, v0:9, cols:2, rows:1, sign:{cu:13.8, cv:10.6, dx:15, dy:48, w:64}},
+   n:4, prefix:"D", u0:14, v0:17, cols:4, rows:1, sign:{cu:12.8, cv:18.6, dx:-30, dy:34, w:64}},
   {key:"EMPL", name:"EMPLEADOS", short:"EMPLEADOS", pareto:"C",
    rec:379, ate:306, pctAte:80.7, aba:73, dem:7, ns:97.7, tmo:"12:42", tmoS:762,
    asa:2, esp:2, gt20:1.4, nps:88.1, enc:143,
    comp:{pen:"2 s", penS:2, conv:"10:57", convS:657, convPct:86.1, esp:"2 s", espS:2, pos:"1:21", posS:81},
-   n:1, prefix:"E", u0:22, v0:9, cols:1, rows:1, sign:{cu:20.8, cv:7.8, dx:-15, dy:48, w:72}},
+   n:0, prefix:"E", u0:27, v0:23, cols:3, rows:1, card:true},
   {key:"LIV", name:"LIVERPOOL", short:"LIVERPOOL", pareto:"C",
    rec:209, ate:186, pctAte:89.0, aba:23, dem:7, ns:96.2, tmo:"8:58", tmoS:538,
    asa:3, esp:2, gt20:2.8, nps:89.0, enc:100,
    comp:{pen:"4 s", penS:4, conv:"7:49", convS:469, convPct:87.0, esp:"2 s", espS:2, pos:"58 s", posS:58},
-   n:1, prefix:"F", u0:28, v0:9, cols:1, rows:1, sign:{cu:26.8, cv:7.8, dx:-20, dy:130, w:72}},
+   n:0, prefix:"F", u0:40, v0:23, cols:3, rows:1, card:true},
   {key:"LALA", name:"LALA", short:"LALA", pareto:"B",
    rec:177, ate:149, pctAte:84.2, aba:28, dem:6, ns:96.0, tmo:"8:45", tmoS:525,
    asa:3, esp:2, gt20:3.4, nps:79.5, enc:122,
    comp:{pen:"4 s", penS:4, conv:"7:28", convS:448, convPct:85.3, esp:"2 s", espS:2, pos:"1:08", posS:68},
-   n:1, prefix:"G", u0:34, v0:9, cols:1, rows:1, sign:{cu:32.8, cv:7.8, dx:-40, dy:48, w:64}},
+   n:0, prefix:"G", u0:53, v0:23, cols:3, rows:1, card:true},
   {key:"JAC", name:"JAC", short:"JAC", pareto:"C",
    rec:166, ate:145, pctAte:87.3, aba:21, dem:9, ns:93.8, tmo:"9:58", tmoS:598,
    asa:5, esp:4, gt20:6.0, nps:76.2, enc:119,
    comp:{pen:"4 s", penS:4, conv:"8:35", convS:515, convPct:86.1, esp:"4 s", espS:4, pos:"1:09", posS:69},
-   n:1, prefix:"H", u0:2, v0:16, cols:1, rows:1, sign:{cu:0.8, cv:14.8, dx:-25, dy:48, w:64}},
+   n:0, prefix:"H", u0:66, v0:23, cols:3, rows:1, card:true},
   {key:"SUZUKI", name:"SUZUKI", short:"SUZUKI", pareto:"C",
    rec:126, ate:109, pctAte:86.5, aba:17, dem:0, ns:100.0, tmo:"9:45", tmoS:585,
    asa:2, esp:1, gt20:0.0, nps:93.5, enc:124,
    comp:{pen:"3 s", penS:3, conv:"8:36", convS:516, convPct:88.1, esp:"1 s", espS:1, pos:"59 s", posS:59},
-   n:1, prefix:"I", u0:10, v0:16, cols:1, rows:1, sign:{cu:8.8, cv:14.8, dx:0, dy:48, w:64}},
+   n:0, prefix:"I", u0:33.5, v0:31, cols:3, rows:1, card:true},
   {key:"LIVGMM", name:"LIVERPOOL GMM", short:"LIV GMM", pareto:"C",
    rec:85, ate:76, pctAte:89.4, aba:9, dem:2, ns:97.5, tmo:"5:28", tmoS:328,
    asa:4, esp:3, gt20:2.5, nps:95.2, enc:63,
    comp:{pen:"3 s", penS:3, conv:"4:32", convS:272, convPct:83.0, esp:"3 s", espS:3, pos:"46 s", posS:46},
-   n:1, prefix:"J", u0:18, v0:16, cols:1, rows:1, sign:{cu:16.8, cv:14.8, dx:0, dy:48, w:64}},
+   n:0, prefix:"J", u0:46.5, v0:31, cols:3, rows:1, card:true},
   {key:"MODERNA", name:"MODERNA", short:"MODERNA", pareto:"C",
    rec:60, ate:46, pctAte:76.7, aba:14, dem:1, ns:97.7, tmo:"5:31", tmoS:331,
    asa:5, esp:5, gt20:1.7, nps:null, enc:0,
    comp:{pen:"5 s", penS:5, conv:"4:51", convS:291, convPct:88.0, esp:null, espS:0, pos:"36 s", posS:36},
-   n:1, prefix:"K", u0:26, v0:16, cols:1, rows:1, sign:{cu:24.8, cv:14.8, dx:0, dy:48, w:64}},
+   n:0, prefix:"K", u0:59.5, v0:31, cols:3, rows:1, card:true},
   {key:"BIMBO", name:"BIMBO", short:"BIMBO", pareto:"C",
    rec:25, ate:10, pctAte:40.0, aba:15, dem:1, ns:95.2, tmo:"8:14", tmoS:494,
    asa:6, esp:5, gt20:4.8, nps:60.0, enc:15,
    comp:{pen:"6 s", penS:6, conv:"6:55", convS:415, convPct:84.7, esp:"5 s", espS:5, pos:"1:03", posS:63},
-   n:1, prefix:"L", u0:34, v0:16, cols:1, rows:1, sign:{cu:32.8, cv:14.8, dx:0, dy:66, w:64}}
+   n:0, prefix:"L", u0:72.5, v0:31, cols:3, rows:1, card:true}
 ];
 /* Totales de Dirección (DATOS.md) para el pie de tabla. */
 var TOTALES = {rec:16060, ate:13351, aba:2709, dem:1353, ns:89.9, tmo:"8:43", asa:10, nps:37.4};
 /* Carteras del filtro de Tableau sin llamadas en nov 2026: no son ceros. */
 var SIN_LLAMADAS = ["BETTERWARE", "SANTANDER"];
 
-/* ---------- ASESORES con estación (DATOS.md · lista de 77) ----------
-   Solo los mapeados a estación, por atendidas dentro de cada cartera:
-   BRADESCARD ASISTENCIAS 16 → sus 16 primeros; COPPEL VIDA 7 → sus 7
-   primeros; CREDIAUTO 4 → sus 4 primeros; BRADESCARD SEGUROS 2 → sus 2
-   primeros. n = número en la lista de 77. NPS null = s/d en el tablero.
-   Las 8 estaciones restantes (EMPLEADOS, LIVERPOOL, LALA, JAC, SUZUKI,
-   LIVERPOOL GMM, MODERNA, BIMBO) no tienen asesor en la lista: solo ID. */
+/* ---------- ASESORES con lugar (DATOS.md · lista de 77) ----------
+   Los 77, uno por lugar, por atendidas dentro de cada cartera:
+   BRADESCARD ASISTENCIAS 38; COPPEL VIDA 31; CREDIAUTO 4;
+   BRADESCARD SEGUROS 4. n = número en la lista de 77.
+   NPS null = s/d en el tablero. Las otras 8 carteras (EMPLEADOS,
+   LIVERPOOL, LALA, JAC, SUZUKI, LIVERPOOL GMM, MODERNA, BIMBO) no
+   tienen asesores en la lista: son zonas sin lugares. */
 var CAMP_ASESORES = [
 ["JUAN MANUEL RIVERA DEL VALLE","BRADESCARD ASISTENCIAS",497,"4:43",76.4,1],
 ["LIZETH GUADALUPE JIMENEZ RAMIREZ","BRADESCARD ASISTENCIAS",477,"6:34",61.0,2],
@@ -3207,22 +3350,70 @@ var CAMP_ASESORES = [
 ["MONICA LETICIA REYES VARGAS","BRADESCARD ASISTENCIAS",352,"6:15",75.0,11],
 ["ALONDRA GUADALUPE MARTINEZ RODRIGUEZ","BRADESCARD ASISTENCIAS",348,"6:39",79.5,12],
 ["JENNIFER ALEXANDRA HERNANDEZ CASTANEDA","BRADESCARD ASISTENCIAS",326,"7:05",68.4,13],
-["LESLIE ADRIANA ROSALES LOPEZ","BRADESCARD ASISTENCIAS",297,"6:31",70.6,19],
-["LUCERO ITZEL GONZALEZ TORRES","BRADESCARD ASISTENCIAS",295,"8:14",42.4,20],
-["FERNANDO GUADALUPE MARTINEZ DELGADO","BRADESCARD ASISTENCIAS",294,"6:24",64.6,21],
 ["ALEJANDRA SANCHEZ ALVAREZ","COPPEL VIDA",316,"6:45",44.4,14],
 ["ADRIAN EMMANUEL DELGADO RODRIGUEZ","COPPEL VIDA",310,"6:41",62.2,15],
 ["GABRIELA ESTRADA JIMENEZ","COPPEL VIDA",308,"6:26",72.1,16],
 ["KAREN ITZEL GARCIA GUTIERREZ","COPPEL VIDA",305,"7:08",70.0,17],
 ["JUAN JOSE RODRIGUEZ MARTINEZ","COPPEL VIDA",301,"6:33",84.6,18],
+["LESLIE ADRIANA ROSALES LOPEZ","BRADESCARD ASISTENCIAS",297,"6:31",70.6,19],
+["LUCERO ITZEL GONZALEZ TORRES","BRADESCARD ASISTENCIAS",295,"8:14",42.4,20],
+["FERNANDO GUADALUPE MARTINEZ DELGADO","BRADESCARD ASISTENCIAS",294,"6:24",64.6,21],
 ["JOSE DE JESUS CERVANTES RAMIREZ","COPPEL VIDA",293,"6:41",64.7,22],
 ["KEVIN RICARDO MORENO CUEVAS","COPPEL VIDA",285,"7:41",50.0,23],
+["ERIKA LIZBETH ZAVALA VAZQUEZ","COPPEL VIDA",284,"6:40",62.5,24],
+["LEONARDO SAID VEGA SALAZAR","COPPEL VIDA",281,"6:48",40.0,25],
+["MARIA FERNANDA MEZA ORTIZ","COPPEL VIDA",280,"6:50",62.5,26],
+["PAULINA ITZEL GONZALEZ PEREZ","BRADESCARD ASISTENCIAS",270,"6:20",62.5,27],
+["ITZEL GUADALUPE VELAZQUEZ LOPEZ","COPPEL VIDA",269,"7:43",77.8,28],
+["LIZBETH ADRIANA GONZALEZ BERNAL","BRADESCARD ASISTENCIAS",263,"6:47",75.0,29],
+["JESUS EMMANUEL FLORES RUIZ","COPPEL VIDA",259,"6:56",72.7,30],
+["ARANTXA BERENICE GONZALEZ MENDOZA","BRADESCARD ASISTENCIAS",252,"6:46",66.7,31],
+["JORGE LUIS HERNANDEZ ZAMORA","COPPEL VIDA",252,"7:22",58.3,32],
+["CHRISTIAN GIOVANNI TORRES BAEZ","COPPEL VIDA",250,"6:39",64.0,33],
+["MARIA GUADALUPE ORTEGA CASTRO","BRADESCARD ASISTENCIAS",247,"7:41",55.6,34],
+["MARLON JOSE LUIS CORTEZ ALANIS","BRADESCARD ASISTENCIAS",246,"6:45",60.0,35],
+["ALEXIS ALEXANDER GUTIERREZ HERNANDEZ","COPPEL VIDA",245,"6:54",73.1,36],
+["EDUARDO IVAN REYES LOPEZ","BRADESCARD ASISTENCIAS",243,"6:45",87.5,37],
+["KARLA PAOLA GARZA GUTIERREZ","BRADESCARD ASISTENCIAS",243,"7:00",76.9,38],
+["JOCELYN ALEJANDRA RAMIREZ ALVAREZ","BRADESCARD ASISTENCIAS",240,"7:48",62.5,39],
+["JORGE ARTURO TREVINO GALLEGOS","BRADESCARD ASISTENCIAS",239,"7:14",75.0,40],
+["ANGEL DAVID GARCIA GARCIA","COPPEL VIDA",238,"6:45",66.7,41],
+["ALAN DANIEL VALDEZ SANCHEZ","BRADESCARD ASISTENCIAS",237,"7:26",63.6,42],
+["MARIA DEL CARMEN HERNANDEZ GARCIA","BRADESCARD ASISTENCIAS",236,"7:00",58.3,43],
+["MONSERRAT MICHELLE LOPEZ GARZA","COPPEL VIDA",235,"6:55",57.1,44],
+["LIZETH ADRIANA VEGA GUERRERO","BRADESCARD ASISTENCIAS",234,"6:53",77.8,45],
+["ADRIANA NOHEMI HERNANDEZ GARCIA","COPPEL VIDA",233,"7:02",57.1,46],
+["ANGELICA MARIA MARTINEZ REYES","COPPEL VIDA",232,"7:15",66.7,47],
+["LOURDES ADRIANA RODRIGUEZ CORONADO","BRADESCARD ASISTENCIAS",231,"6:51",57.1,48],
+["MARTHA PATRICIA GUTIERREZ RAMIREZ","COPPEL VIDA",228,"6:36",77.8,49],
+["JOSE GUILLERMO DELGADO GARZA","COPPEL VIDA",227,"7:07",100.0,50],
+["MIGUEL ANGEL AGUILAR ZAMBRANO","BRADESCARD ASISTENCIAS",225,"6:49",90.0,51],
+["LUIS ANGEL ORTIZ MORENO","BRADESCARD ASISTENCIAS",224,"6:37",33.3,52],
+["KAREN LIZBETH MARTINEZ CORONADO","COPPEL VIDA",223,"6:58",80.0,53],
+["FERNANDA YAMILETH MONTES RIVERA","COPPEL VIDA",222,"7:22",50.0,54],
+["IVAN ALEJANDRO GARCIA GARCIA","BRADESCARD ASISTENCIAS",221,"6:59",66.7,55],
+["FATIMA LUCERO CARRILLO ALVARADO","BRADESCARD ASISTENCIAS",220,"7:39",90.9,56],
+["MIGUEL ANGEL ARREDONDO RODRIGUEZ","BRADESCARD ASISTENCIAS",220,"6:48",100.0,57],
+["ALMA YADIRA ZUNIGA GARCIA","BRADESCARD ASISTENCIAS",220,"7:15",60.0,58],
+["DANIEL ALEJANDRO GARZA GARZA","COPPEL VIDA",219,"7:12",100.0,59],
+["MARTHA GUADALUPE DELGADO GUERRERO","COPPEL VIDA",218,"7:28",100.0,60],
+["ABRIL ALEJANDRA GARCIA GONZALEZ","BRADESCARD ASISTENCIAS",213,"6:31",50.0,61],
+["ALEJANDRO ALBERTO GARCIA REYES","COPPEL VIDA",213,"6:42",100.0,62],
+["NAYELI FABIOLA MARTINEZ GARZA","COPPEL VIDA",209,"7:10",100.0,63],
+["OSCAR ULISES CASTILLO SALINAS","BRADESCARD ASISTENCIAS",208,"7:16",80.0,64],
+["FERNANDA SARAHI RODRIGUEZ RIVERA","COPPEL VIDA",203,"6:41",66.7,65],
+["CRISTIAN EDUARDO RIVERA GARCIA","COPPEL VIDA",200,"7:02",100.0,66],
+["ANGELICA LIZBETH RODRIGUEZ LOPEZ","COPPEL VIDA",197,"6:33",50.0,67],
+["JOSE EDUARDO SANCHEZ ARRIAGA","BRADESCARD ASISTENCIAS",196,"6:34",100.0,68],
+["CESAR OMAR ESPARZA HERNANDEZ","COPPEL VIDA",190,"7:05",100.0,69],
 ["FRANCISCO GUERRERO LOPEZ","CREDIAUTO",188,"12:38",50.0,70],
 ["ANGEL GABRIEL HERNANDEZ PEREZ","CREDIAUTO",187,"6:51",50.0,71],
 ["BRISA LISSET CAMARENA HERNANDEZ","CREDIAUTO",186,"12:47",50.0,72],
 ["JOSE ALBERTO RANGEL LARA","CREDIAUTO",181,"13:08",0.0,73],
 ["JOSE ANDRES RANGEL RANGEL","BRADESCARD SEGUROS",172,"7:05",null,74],
-["GABRIELA YAMILETH HERNANDEZ MARTINEZ","BRADESCARD SEGUROS",160,"7:20",null,75]
+["GABRIELA YAMILETH HERNANDEZ MARTINEZ","BRADESCARD SEGUROS",160,"7:20",null,75],
+["JOSE EDUARDO IBARRA GARZA","BRADESCARD SEGUROS",112,"6:44",null,76],
+["JESUS ALEJANDRO GARCIA ROCHA","BRADESCARD SEGUROS",108,"7:30",null,77],
 ].map(function(r){
   return {n:r[5], nombre:r[0], cartera:r[1], at:r[2], tmo:r[3], nps:r[4]};
 });
@@ -3310,7 +3501,7 @@ var viewKind = "station", viewCall = null, viewSup = null;
 var fichaZoneKey = null;
 
 /* ---------- Proyección isométrica ---------- */
-function iso(u,v){ return {x: 540 + (u - v) * 13, y: 62 + (u + v) * 6.5}; }
+function iso(u,v){ return {x: 500 + (u - v) * 13, y: 62 + (u + v) * 6.5}; }
 function poly(points){ return points.map(function(p){return p.x.toFixed(1)+","+p.y.toFixed(1);}).join(" "); }
 
 var svg = document.getElementById("camp-floor");
@@ -3323,18 +3514,18 @@ function el(tag, attrs, parent){
 }
 
 /* ---------- Piso base ---------- */
-var floorPts = [iso(-1,-1), iso(42,-1), iso(42,27), iso(-1,27)];
+var floorPts = [iso(-1,-1), iso(46,-1), iso(82,29), iso(82,34), iso(-1,34)];
 el("polygon", {points: poly(floorPts), fill:"#e2e8f0", stroke:"#cbd5e1", "stroke-width":1}, svg);
-var floorIn = [iso(0,0), iso(41,0), iso(41,26), iso(0,26)];
+var floorIn = [iso(0,0), iso(45,0), iso(80,28), iso(80,33), iso(0,33)];
 el("polygon", {points: poly(floorIn), fill:"#f1f5f9", stroke:"#cbd5e1", "stroke-width":1}, svg);
 
-/* Pasillos: banda vertical entre ASIS y COPPEL/SEG, banda horizontal entre
-   la fila v=9 y la fila v=16. */
-[[12.4,0,13.6,0,13.6,26,12.4,26],[0,11.0,41,11.0,41,12.4,0,12.4]].forEach(function(b){
+/* Pasillos: banda vertical entre ASIS y COPPEL (u 23.8..24.8) y bandas
+   horizontales entre las filas de zonas (v 15.0..15.8, 19.4..20.6, 27.4..28.6). */
+[[23.8,0,24.8,0,24.8,34,23.8,34],[0,15.0,46,15.0,46,15.8,0,15.8],[0,19.4,46,19.4,46,20.6,0,20.6],[0,27.4,80,27.4,80,28.6,0,28.6]].forEach(function(b){
   el("polygon",{points: poly([iso(b[0],b[1]),iso(b[2],b[3]),iso(b[4],b[5]),iso(b[6],b[7])]),
     fill:"#dbe7f3"},svg);
 });
-[[13.0,0,13.0,26],[0,11.7,41,11.7]].forEach(function(l){
+[[24.3,0,24.3,34],[0,15.4,46,15.4],[0,20,46,20],[0,28,80,28]].forEach(function(l){
   var a=iso(l[0],l[1]), b=iso(l[2],l[3]);
   el("line",{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:"#94a3b8","stroke-width":1.5,
     "stroke-dasharray":"6 5",opacity:.8},svg);
@@ -3355,7 +3546,7 @@ ZONES.forEach(function(z){
   var p = [iso(z.u0-1.2, z.v0-1.2), iso(u1+1.6, z.v0-1.2), iso(u1+1.6, v1+1.6), iso(z.u0-1.2, v1+1.6)];
   el("polygon", {points: poly(p), fill:"#ffffff", stroke:"#cbd5e1", "stroke-width":1.2,
     "class":"camp-zone-platform", "data-camp-zone":z.key, tabindex:"0", role:"button",
-    "aria-label":"Zona "+z.name+", NS "+fmtPct(z.ns)+", volumen "+fmtInt(z.rec)}, zoneLayer);
+    "aria-label":"Zona "+z.name+", NS "+fmtPct(z.ns)+", volumen "+fmtInt(z.rec)+(z.card ? ", sin asesores identificados en Tableau" : "")}, zoneLayer);
   /* Error 23: el centro de COPPEL queda cubierto por las estaciones; el borde
      visible de la zona (banda de 14 px sobre su arista) es el punto clicable.
      Va en zoneLayer, bajo las estaciones, para no robarles el clic. */
@@ -3369,8 +3560,8 @@ ZONES.forEach(function(z){
     stroke: heatColor(z.rec), "stroke-width":1.5, "class":"camp-heat-poly"}, heatLayer);
   h.setAttribute("data-camp-zone", z.key);
   if(z.lab){
-    /* Píldora con nombre + NS y volumen (zonas grandes). COPPEL usa la
-       esquina frontal-izquierda para no tapar la plataforma de EMPLEADOS. */
+    /* Píldora con nombre + NS y volumen (zonas con lugares). COPPEL usa la
+       esquina frontal para no tapar estaciones. */
     var anchor = (z.lab.mode === "back")
       ? iso(z.u0-1.2, z.v0-1.2)
       : (z.lab.corner === "left-front"
@@ -3378,7 +3569,7 @@ ZONES.forEach(function(z){
         : iso(u1+1.6, v1+1.6));
     var lx = anchor.x + z.lab.dx, ly = anchor.y + z.lab.dy;
     var line1 = z.short + " · NS " + fmtPct(z.ns);
-    var line2 = fmtInt(z.rec) + " llamadas · " + (z.n === 1 ? "1 estación" : z.n + " estaciones");
+    var line2 = fmtInt(z.rec) + " llamadas · " + (z.n === 1 ? "1 lugar" : z.n + " lugares");
     var w = Math.max(line1.length, line2.length) * 6.8 + 24, hh = 28;
     el("rect", {x: lx-w/2, y: ly-hh/2, width: w, height: hh, rx: 7,
       fill:"#ffffff", stroke:"#cbd5e1", "stroke-width":1, "class":"camp-zone-pill"}, zoneLayer);
@@ -3386,6 +3577,17 @@ ZONES.forEach(function(z){
     t1.textContent = line1;
     var t2 = el("text", {x: lx, y: ly+9, "text-anchor":"middle", "class":"camp-zone-sub"}, zoneLayer);
     t2.textContent = line2;
+  } else if(z.card){
+    /* Zona sin asesores: totales reales + nota visible, sin pildora ni lugares. */
+    var cc = iso((z.u0+u1)/2, (z.v0+v1)/2);
+    var cl1 = el("text", {x: cc.x, y: cc.y-13, "text-anchor":"middle", "class":"camp-card-line1", "data-camp-zone":z.key}, textLayer);
+    cl1.textContent = z.short;
+    var cl2 = el("text", {x: cc.x, y: cc.y, "text-anchor":"middle", "class":"camp-card-line2", "data-camp-zone":z.key}, textLayer);
+    cl2.textContent = "NS " + fmtPct(z.ns) + " · " + fmtInt(z.rec) + " llamadas";
+    var cn1 = el("text", {x: cc.x, y: cc.y+12, "text-anchor":"middle", "class":"camp-card-note", "data-camp-zone":z.key}, textLayer);
+    cn1.textContent = "sin asesores identificados";
+    var cn2 = el("text", {x: cc.x, y: cc.y+22, "text-anchor":"middle", "class":"camp-card-note", "data-camp-zone":z.key}, textLayer);
+    cn2.textContent = "en Tableau";
   }
   /* estaciones */
   var idx = 0;
@@ -3431,10 +3633,11 @@ ZONES.forEach(function(z){
         el("rect", {x:s.x-14, y:s.y-8, width:5, height:6, rx:1, fill:"#ffffff", stroke:"#94a3b8", "stroke-width":.7}, g);
         el("path", {d:"M "+(s.x-9)+" "+(s.y-6)+" q 3.5 2 0 4", fill:"none", stroke:"#94a3b8", "stroke-width":.9}, g);
       }
-      var idT = el("text", {x:s.x+1, y:s.y+24, "text-anchor":"middle", "class":"camp-st-id"}, textLayer);
+      var idT = el("text", {x:s.x+1, y:s.y+24, "text-anchor":"middle", "class":"camp-st-id",
+        "data-camp-station-id": id}, textLayer);
       idT.textContent = id;
       stations.push({id:id, zone:z, g:g, dot:dot, screen:screen, sx:s.x, sy:s.y, u:u, v:v,
-        asesor:asesor, asesorReal:null, walking:false, glyphs:{phone:glyphPhone, check:glyphCheck, clock:glyphClock, pause:glyphPause},
+        asesor:asesor, asesorReal:null, walking:false, idEl:idT, glyphs:{phone:glyphPhone, check:glyphCheck, clock:glyphClock, pause:glyphPause},
         timerEl:timerEl,
         state:"disponible", callId:null, callStart:0, callEnd:0});
     }
@@ -3443,10 +3646,10 @@ ZONES.forEach(function(z){
 
 /* ---------- Mapeo asesor real → estación (determinista) ----------
    Por atendidas dentro de cada cartera (orden de la lista de 77):
-   ASISTENCIAS 16 → sus 16 primeros; COPPEL VIDA 7 → sus 7 primeros;
-   CREDIAUTO 4 → sus 4 primeros; BRADESCARD SEGUROS 2 → sus 2 primeros.
-   Las 8 estaciones restantes no tienen asesor en la lista de 77: quedan
-   con solo ID, sin inventar nombres. */
+   ASISTENCIAS 38 → sus 38; COPPEL VIDA 31 → sus 31;
+   CREDIAUTO 4 → sus 4; BRADESCARD SEGUROS 4 → sus 4.
+   Las otras 8 carteras no tienen asesores en la lista de 77: son zonas
+   sin lugares, sin inventar nombres. */
 (function mapAsesores(){
   var byCartera = {};
   CAMP_ASESORES.forEach(function(a){
@@ -3480,7 +3683,7 @@ mamparas.forEach(function(m){
     fill:"#e5e7eb", stroke:"#cbd5e1", "stroke-width":.8}, zoneLayer);
   el("line", {x1:p.x-5.2, y1:p.y-11.4, x2:p.x+5.2, y2:p.y-16.6, stroke:"#ff6900", "stroke-width":2}, zoneLayer);
 });
-[[2.2,24.5],[39.5,24.5]].forEach(function(c){
+[[2,33],[9,33]].forEach(function(c){
   var p = iso(c[0], c[1]);
   el("circle", {cx:p.x-4, cy:p.y-5, r:4.5, fill:"#22c55e", stroke:"#16a34a", "stroke-width":.8}, zoneLayer);
   el("circle", {cx:p.x+4, cy:p.y-6, r:4.5, fill:"#22c55e", stroke:"#16a34a", "stroke-width":.8}, zoneLayer);
@@ -3488,7 +3691,7 @@ mamparas.forEach(function(m){
   el("polygon", {points: (p.x-6)+","+p.y+" "+(p.x+6)+","+p.y+" "+(p.x+4)+","+(p.y+7)+" "+(p.x-4)+","+(p.y+7),
     fill:"#b45309", stroke:"#92400e", "stroke-width":.8}, zoneLayer);
 });
-/* Letreros de zona (placa con el nombre corto) para las 8 zonas de 1-2 estaciones. */
+/* Letrero de zona (placa con el nombre corto) para SEGUROS, cuya pildora no cabe en el hueco. */
 ZONES.forEach(function(z){
   if(!z.sign) return;
   var p = iso(z.sign.cu, z.sign.cv);
@@ -3498,43 +3701,43 @@ ZONES.forEach(function(z){
   var t = el("text", {x:px+z.sign.w/2, y:py+11, "text-anchor":"middle", "class":"camp-sign-label"}, zoneLayer);
   t.textContent = z.short;
 });
-/* Puesto del supervisor: plataforma en la esquina inferior derecha del piso (u 30..38, v 20..24) */
-var supPlat = [iso(30,20), iso(38,20), iso(38,24), iso(30,24)];
+/* Puesto del supervisor: plataforma en el hueco inferior izquierdo del piso (u 14..22, v 28..32) */
+var supPlat = [iso(14,28), iso(22,28), iso(22,32), iso(14,32)];
 el("polygon", {points: poly(supPlat), fill:"#e0f2fe", stroke:"#0ea5e9", "stroke-width":1.5}, zoneLayer);
-el("rect", {x:660, y:398, width:96, height:15, rx:7, fill:"#ffffff", stroke:"#0ea5e9", "stroke-width":1}, zoneLayer);
-var supLab = el("text", {x:708, y:409, "text-anchor":"middle", "font-size":10, "font-weight":800, fill:"#0369a1"}, zoneLayer);
+el("rect", {x:296, y:352, width:96, height:15, rx:7, fill:"#ffffff", stroke:"#0ea5e9", "stroke-width":1}, zoneLayer);
+var supLab = el("text", {x:344, y:363, "text-anchor":"middle", "font-size":10, "font-weight":800, fill:"#0369a1"}, zoneLayer);
 supLab.textContent = "SUPERVISIÓN";
-el("rect", {x:706, y:414, width:10, height:8, rx:1, fill:"#334155", stroke:"#1e293b", "stroke-width":.7}, zoneLayer);
-el("rect", {x:707.5, y:415.5, width:7, height:5, rx:1, fill:"#38bdf8"}, zoneLayer);
-el("polygon", {points:"697,429 709,422 721,429 709,436", fill:"#cbd5e1", stroke:"#94a3b8", "stroke-width":1}, zoneLayer);
-el("polygon", {points:"697,429 709,436 709,440 697,433", fill:"#94a3b8"}, zoneLayer);
-el("ellipse", {cx:708, cy:442, rx:5.5, ry:3, fill:"#94a3b8", stroke:"#64748b", "stroke-width":.8}, zoneLayer);
-[["PASILLO",700,94],["PASILLO",540,300],["PASILLO",760,470]].forEach(function(l){
+el("rect", {x:342, y:368, width:10, height:8, rx:1, fill:"#334155", stroke:"#1e293b", "stroke-width":.7}, zoneLayer);
+el("rect", {x:343.5, y:369.5, width:7, height:5, rx:1, fill:"#38bdf8"}, zoneLayer);
+el("polygon", {points:"333,383 345,376 357,383 345,390", fill:"#cbd5e1", stroke:"#94a3b8", "stroke-width":1}, zoneLayer);
+el("polygon", {points:"333,383 345,390 345,394 333,387", fill:"#94a3b8"}, zoneLayer);
+el("ellipse", {cx:344, cy:396, rx:5.5, ry:3, fill:"#94a3b8", stroke:"#64748b", "stroke-width":.8}, zoneLayer);
+[["PASILLO",383,276],["PASILLO",500,440],["PASILLO",526,361]].forEach(function(l){
   var t = el("text", {x:l[1], y:l[2], "text-anchor":"middle", "class":"camp-pasillo-label"}, svg);
   t.textContent = l[0];
 });
 
 /* ---------- Cola de entrada ---------- */
 var queue = el("g", {id:"camp-queue"}, svg);
-el("rect", {x:60, y:545, width:980, height:56, rx:10, fill:"#ffffff", stroke:"#7c3aed", "stroke-width":2}, queue);
-el("rect", {x:60, y:545, width:150, height:56, rx:10, fill:"#7c3aed"}, queue);
-var qt = el("text", {x:135, y:569, "text-anchor":"middle", fill:"#fff", "font-size":12, "font-weight":700}, queue);
+el("rect", {x:40, y:825, width:1130, height:56, rx:10, fill:"#ffffff", stroke:"#7c3aed", "stroke-width":2}, queue);
+el("rect", {x:40, y:825, width:150, height:56, rx:10, fill:"#7c3aed"}, queue);
+var qt = el("text", {x:115, y:849, "text-anchor":"middle", fill:"#fff", "font-size":12, "font-weight":700}, queue);
 qt.textContent = "COLA DE ENTRADA";
-var qs = el("text", {x:135, y:586, "text-anchor":"middle", fill:"#e9d5ff", "font-size":10.5}, queue);
+var qs = el("text", {x:115, y:866, "text-anchor":"middle", fill:"#e9d5ff", "font-size":10.5}, queue);
 qs.textContent = "llamadas esperando";
-var qCount = el("text", {x:1005, y:580, "text-anchor":"end", "font-size":13, "font-weight":800, fill:"#475569"}, queue);
+var qCount = el("text", {x:1135, y:860, "text-anchor":"end", "font-size":13, "font-weight":800, fill:"#475569"}, queue);
 qCount.textContent = "En espera: 0";
-el("rect", {x:60, y:527, width:118, height:18, rx:6, fill:"#7c3aed"}, queue);
-var qTab = el("text", {x:119, y:540, "text-anchor":"middle", fill:"#fff", "font-size":10, "font-weight":800}, queue);
+el("rect", {x:40, y:807, width:118, height:18, rx:6, fill:"#7c3aed"}, queue);
+var qTab = el("text", {x:99, y:820, "text-anchor":"middle", fill:"#fff", "font-size":10, "font-weight":800}, queue);
 qTab.textContent = "ZONA DE COLA";
-el("line", {x1:560, y1:513, x2:560, y2:539, stroke:"#7c3aed", "stroke-width":2.5}, queue);
-el("polygon", {points:"560,545 552,535 568,535", fill:"#7c3aed"}, queue);
+el("line", {x1:605, y1:793, x2:605, y2:819, stroke:"#7c3aed", "stroke-width":2.5}, queue);
+el("polygon", {points:"605,825 597,815 613,815", fill:"#7c3aed"}, queue);
 var queueDots = el("g", {id:"camp-queueDots"}, queue);
 
 /* ---------- Supervisor ---------- */
 var supWaypoints = [
-  {u:13.0, v:5}, {u:13.0, v:11}, {u:20, v:11.7}, {u:28, v:11.7}, {u:13.0, v:17},
-  {u:6, v:11.7}, {u:13.0, v:9}
+  {u:24.3, v:6}, {u:24.3, v:12}, {u:19, v:15.4}, {u:25, v:15.4}, {u:24.3, v:15.4},
+  {u:6, v:15.4}, {u:24.3, v:9}
 ].map(function(w){ var p=iso(w.u,w.v); return {x:p.x, y:p.y}; });
 var sup = el("g", {id:"camp-supervisor", tabindex:"0", role:"button",
   "aria-label":"Supervisor: toca para ver a qué estación está apoyando y por qué"}, svg);
@@ -3550,15 +3753,15 @@ sup.setAttribute("transform", "translate("+supWaypoints[0].x+","+supWaypoints[0]
    continua por el pasillo central hasta su destino), quedarse un rato y
    volver a su estación. Mientras camina, su estación queda en pausa. */
 var walkers = [];
-var CORRIDOR_U = 13.0;
+var CORRIDOR_U = 24.3;
 var WALK_DESTS = [
-  {u:34, v:22},    /* puesto de supervisión */
-  {u:2.2, v:24.5}, /* zona de descanso / plantas */
-  {u:39.5, v:24.5},/* plantas de la derecha */
-  {u:13.0, v:24},  /* fondo del pasillo */
-  {u:13.0, v:5},   /* pasillo junto a Asistencias */
-  {u:20, v:11.7},  /* pasillo horizontal junto a Coppel / Seguros */
-  {u:6, v:11.7}    /* pasillo horizontal junto a Crediauto */
+  {u:18, v:30},    /* puesto de supervisión */
+  {u:2, v:33},     /* zona de descanso / plantas */
+  {u:9, v:33},     /* plantas */
+  {u:24.3, v:20},  /* fondo del pasillo */
+  {u:24.3, v:6},   /* pasillo junto a Asistencias */
+  {u:20, v:15.4},  /* pasillo horizontal junto a Coppel / Seguros */
+  {u:6, v:15.4}    /* pasillo horizontal junto a Crediauto */
 ];
 function routePoints(fromU, fromV, toU, toV){
   var raw = [{u:fromU, v:fromV}];
@@ -3578,7 +3781,7 @@ function stationById(id){
   return null;
 }
 function startWalker(st){
-  if(!st || !st.asesorReal || st.walking || REDUCED || paused) return false;
+  if(!st || !st.asesorReal || st.walking || REDUCED || paused || st.g.style.display === "none") return false;
   var dest = WALK_DESTS[Math.floor(Math.random()*WALK_DESTS.length)];
   var outPath = routePoints(st.u, st.v, dest.u, dest.v);
   var backPath = outPath.slice().reverse();
@@ -3788,10 +3991,10 @@ var waiting = 0;
 
 function spawnCall(){
   if(REDUCED || paused || document.hidden) return;
-  var free = stations.filter(function(s){ return s.state==="disponible"; });
+  var free = stations.filter(function(s){ return s.state==="disponible" && s.g.style.display !== "none"; });
   if(!free.length) { if(waiting < SLOTS[currentSlot].waiting) waiting++; updateQueue(); return; }
   var target = free[Math.floor(Math.random()*free.length)];
-  var from = {x: 220 + Math.random()*600, y: 572};
+  var from = {x: 220 + Math.random()*760, y: 852};
   var to = {x: target.sx, y: target.sy - 30};
   var ctrl = {x: (from.x+to.x)/2, y: Math.min(from.y, to.y) - 120};
   var callId = randCallId();
@@ -3812,11 +4015,11 @@ function updateQueue(){
   var n = Math.min(waiting, 12);
   for(var i=0; i<n; i++){
     var x = 300 + i*30;
-    el("circle", {cx:x, cy:567, r:4, fill:"#7c3aed", stroke:"#fff", "stroke-width":1}, queueDots);
-    el("rect", {x:x-4.5, y:572, width:9, height:8, rx:3.5, fill:"#a78bfa", stroke:"#fff", "stroke-width":1}, queueDots);
+    el("circle", {cx:x, cy:847, r:4, fill:"#7c3aed", stroke:"#fff", "stroke-width":1}, queueDots);
+    el("rect", {x:x-4.5, y:852, width:9, height:8, rx:3.5, fill:"#a78bfa", stroke:"#fff", "stroke-width":1}, queueDots);
   }
   if(waiting > 12){
-    var more = el("text", {x:668, y:577, "font-size":11, "font-weight":800, fill:"#7c3aed"}, queueDots);
+    var more = el("text", {x:668, y:857, "font-size":11, "font-weight":800, fill:"#7c3aed"}, queueDots);
     more.textContent = "+" + (waiting-12);
   }
 }
@@ -3987,8 +4190,8 @@ function openFicha(zoneKey){
   viewKind = "ficha"; viewCall = null; viewSup = null;
   document.getElementById("camp-fichaTitle").textContent = z.name;
   document.getElementById("camp-fichaSub").textContent =
-    fmtInt(z.rec) + " recibidas en nov 2026 · " + z.n + (z.n === 1 ? " estación" : " estaciones") +
-    " (1 ≈ 430 llamadas) · " + fmtDec1(z.rec / TOTALES.rec * 100) + " % del total";
+    fmtInt(z.rec) + " recibidas en nov 2026 · " + (z.n === 0 ? "sin asesores identificados en Tableau" : z.n + (z.n === 1 ? " lugar · 1 lugar por asesor real" : " lugares · 1 lugar por asesor real")) +
+    " · " + fmtDec1(z.rec / TOTALES.rec * 100) + " % del total";
   var pb = document.getElementById("camp-fichaPareto");
   pb.textContent = "Clase Pareto " + z.pareto;
   pb.className = "camp-pareto camp-pareto-" + z.pareto.toLowerCase();
@@ -4024,6 +4227,7 @@ function openFicha(zoneKey){
       '<span class="camp-tmo-val">' + sdCell(r.val) + '</span></div>';
   }).join("");
   var notes = [];
+  if(z.card) notes.push("Sin asesores identificados en Tableau para esta cartera: sus totales son reales y no se inventan lugares ni nombres.");
   if(z.nps === null) notes.push("NPS sin dato en el tablero (0 encuestas en nov 2026).");
   if(z.comp.esp === null) notes.push("Espera dentro del TMO sin dato en el tablero.");
   notes.push("Clase Pareto según Pareto oct 2026 (demoradas + abandonadas): " +
@@ -4145,11 +4349,44 @@ function openPersonFicha(st){
       "<dt>Cartera</dt><dd>" + st.zone.name + "</dd>" +
       "<dt>Atendidas</dt><dd>" + fmtInt(a.at) + "</dd>" +
       "<dt>TMO</dt><dd>" + a.tmo + "</dd>" +
-      "<dt>NPS</dt><dd>" + (a.nps === null ? '<span class="camp-sin-dato">sin dato</span>' : fmtNps(a.nps)) + "</dd>";
-    document.getElementById("camp-tmoComp").innerHTML = "";
+      "<dt>NPS</dt><dd>" + (a.nps === null ? '<span class="camp-sin-dato">sin dato</span>' : fmtNps(a.nps)) + "</dd>" +
+      "<dt>FCR</dt><dd>" + (a.n === 1 ? "33,3 %" : '<span class="camp-sin-dato">s/d</span>') + "</dd>" +
+      "<dt>Transferencias</dt><dd>" + (a.n === 1 ? "27,6 %" : '<span class="camp-sin-dato">s/d</span>') + "</dd>" +
+      "<dt>Ocupación</dt><dd>" + (a.n === 1 ? "76,9 %" : '<span class="camp-sin-dato">s/d</span>') + "</dd>" +
+      "<dt>Recibidas</dt><dd><span class=\"camp-sin-dato\">sin dato</span></dd>" +
+      "<dt>Demoradas</dt><dd><span class=\"camp-sin-dato\">sin dato</span></dd>" +
+      "<dt>NS</dt><dd><span class=\"camp-sin-dato\">sin dato</span></dd>" +
+      "<dt>ASA</dt><dd><span class=\"camp-sin-dato\">sin dato</span></dd>" +
+      "<dt>Espera media</dt><dd><span class=\"camp-sin-dato\">sin dato</span></dd>" +
+      "<dt>% espera &gt; 20 s</dt><dd><span class=\"camp-sin-dato\">sin dato</span></dd>" +
+      "<dt>Encuestas NPS</dt><dd><span class=\"camp-sin-dato\">sin dato</span></dd>";
+    if(a.n === 1){
+      /* Composición del TMO del asesor n.º 1 (DATOS.md · ficha ejemplo):
+         conversación 4:21 (261 s), espera 0 s, poscierre 18 s,
+         pendiente 4 s; total 4:43 = 283 s. Solo existe para este asesor. */
+      var comp1 = [
+        {label:"Conversación", val:"4:21 (92,1 %)", s:261, cls:"camp-tmo-conv"},
+        {label:"Espera", val:"0 s", s:0, cls:"camp-tmo-esp"},
+        {label:"Poscierre", val:"18 s (6,4 %)", s:18, cls:"camp-tmo-pos"},
+        {label:"Pendiente", val:"4 s (1,6 %)", s:4, cls:"camp-tmo-pen"}
+      ];
+      document.getElementById("camp-tmoComp").innerHTML = comp1.map(function(r){
+        var pct = Math.max(0, Math.min(100, r.s / 283 * 100));
+        return '<div class="camp-tmo-row"><span>' + r.label + '</span>' +
+          '<span class="camp-tmo-bar"><i class="' + r.cls + '" style="width:' + pct.toFixed(1) + '%"></i></span>' +
+          '<span class="camp-tmo-val">' + r.val + '</span></div>';
+      }).join("");
+    } else {
+      document.getElementById("camp-tmoComp").innerHTML =
+        '<span class="camp-sin-dato">sin dato</span> en Tableau para este asesor (la composición del TMO solo existe para el asesor n.º 1).';
+    }
     document.getElementById("camp-fichaNote").textContent =
-      "Datos reales de nov 2026 (lista de 77 asesores del tablero). NS, demoradas y " +
-      "abandono por asesor: sin dato en Tableau. El estado de la estación es simulación.";
+      "Datos reales de nov 2026 (lista de 77 asesores del tablero). FCR y transferencias " +
+      "solo existen para el asesor n.º 1 (33,3 % y 27,6 %); NS, demoradas y abandono por " +
+      "asesor: sin dato en Tableau. El estado de la estación es simulación. " +
+      "Ocupación y composición del TMO también solo existen para el asesor n.º 1 " +
+      "(ocupación 76,9 %); recibidas, ASA, espera media, % espera > 20 s, encuestas " +
+      "y curva por hora por asesor: también sin dato en Tableau.";
   } else {
     document.getElementById("camp-fichaTitle").textContent = "Estación " + st.id;
     document.getElementById("camp-fichaSub").textContent =
@@ -4201,8 +4438,24 @@ svg.addEventListener("click", function(ev){
     var wst = stationById(walker.getAttribute("data-camp-station-id"));
     if(wst){ openPersonFicha(wst); return; }
   }
+  /* Etiqueta con el id de la estación (capa de texto, sobre la fila de
+     abajo): abre la ficha de SU asesor, no la de la estación que queda
+     debajo del texto. */
+  var lab = ev.target.closest ? ev.target.closest(".camp-st-id") : null;
+  if(lab){
+    var lst = stationById(lab.getAttribute("data-camp-station-id"));
+    if(lst && lst.asesorReal){ openPersonFicha(lst); return; }
+    if(lst){ openFicha(lst.zone.key); return; }
+  }
   var g = ev.target.closest ? ev.target.closest(".camp-station") : null;
-  if(g){ openFicha(g.getAttribute("data-camp-zone")); return; }
+  if(g){
+    /* Clic/toque en la estación: abre la ficha del asesor. La ficha de
+       cartera se abre tocando la zona o con Enter sobre la estación
+       (keydown, más abajo). */
+    var gst = stationById(g.getAttribute("data-camp-station-id"));
+    if(gst && gst.asesorReal){ openPersonFicha(gst); return; }
+    openFicha(g.getAttribute("data-camp-zone")); return;
+  }
   var dot = ev.target.closest ? ev.target.closest(".camp-call-dot-click") : null;
   if(dot){ openCallFicha(findCall(dot.getAttribute("data-camp-call-id"))); return; }
   var s = ev.target.closest ? ev.target.closest("#camp-supervisor") : null;
@@ -4244,7 +4497,7 @@ function showZoneTip(key, clientX, clientY){
   zoneTip.innerHTML = "<h3>"+z.name+"</h3><dl>"+
     "<dt>NS nov</dt><dd>"+fmtPct(z.ns)+"</dd>"+
     "<dt>Volumen nov</dt><dd>"+fmtInt(z.rec)+"</dd>"+
-    "<dt>Estaciones</dt><dd>"+z.n+"</dd>"+
+    "<dt>Lugares</dt><dd>"+(z.n === 0 ? "0 — sin asesores identificados en Tableau" : z.n)+"</dd>"+
     "<dt>En llamada ahora</dt><dd>"+inCall+"</dd></dl>";
   zoneTip.hidden = false;
   var rect = sceneEl.getBoundingClientRect();
@@ -4319,22 +4572,37 @@ speedBtn.addEventListener("click", function(){
   applySpeedLabel();
   if(!REDUCED) startIntervals();
 });
+var currentCartera = "all";
 function applyFilter(){
   var visible = 0;
+  var base = currentCartera === "all" ? stations.length : (zoneByKey(currentCartera) || {n:0}).n;
   stations.forEach(function(st){
-    var show = currentFilter === "all" || st.state === currentFilter;
+    var inCartera = currentCartera === "all" || st.zone.key === currentCartera;
+    var show = inCartera && (currentFilter === "all" || st.state === currentFilter);
+    st.g.style.display = inCartera ? "" : "none";
+    if(st.idEl) st.idEl.style.display = inCartera ? "" : "none";
     st.g.style.opacity = show ? "" : ".18";
     if(show) visible++;
   });
-  filterCount.textContent = visible + " / " + stations.length + " visibles";
-  document.querySelectorAll(".camp-filter-btn").forEach(function(b){
+  filterCount.textContent = visible + " / " + base + " lugares";
+  document.querySelectorAll(".camp-filter-btn[data-camp-filter]").forEach(function(b){
     b.setAttribute("aria-pressed", String(b.getAttribute("data-camp-filter") === currentFilter));
   });
+  document.querySelectorAll(".camp-cartera-btn").forEach(function(b){
+    b.setAttribute("aria-pressed", String(b.getAttribute("data-camp-cartera") === currentCartera));
+  });
 }
-document.querySelectorAll(".camp-filter-btn").forEach(function(b){
+document.querySelectorAll(".camp-filter-btn[data-camp-filter]").forEach(function(b){
   b.addEventListener("click", function(){
     currentFilter = b.getAttribute("data-camp-filter");
     applyFilter();
+  });
+});
+document.querySelectorAll(".camp-cartera-btn").forEach(function(b){
+  b.addEventListener("click", function(){
+    currentCartera = b.getAttribute("data-camp-cartera");
+    applyFilter();
+    if(currentCartera !== "all") openFicha(currentCartera);
   });
 });
 applyFilter();
@@ -4465,6 +4733,30 @@ window.__camp = {
       '</td><td>' + fmtInt(TOTALES.aba) + '</td><td>' + fmtInt(TOTALES.dem) + '</td><td>' +
       fmtPct(TOTALES.ns) + '</td><td>' + TOTALES.tmo + '</td><td>' + TOTALES.asa + ' s</td><td>' +
       fmtNps(TOTALES.nps) + '</td></tr>';
+    /* Repintado del piso con dato en vivo (2026-11-25, B1): espejo de
+       __sup.aplicarVivo. Las píldoras son solo 3 (zonas con lab: ASIS,
+       COPPEL, CREDIAUTO); SEG lleva placa de nombre sin NS. Las 8 tarjetas
+       se actualizan por data-camp-zone, no por índice. z.ns es número
+       aquí (fmtPct), z.rec es el volumen (heatColor). */
+    var pillZones = ZONES.filter(function (z) { return !!z.lab; });
+    var labels = document.querySelectorAll("#camp-floor .camp-zone-label");
+    var subs = document.querySelectorAll("#camp-floor .camp-zone-sub");
+    pillZones.forEach(function (z, i) {
+      if (labels[i]) labels[i].textContent = z.short + " · NS " + fmtPct(z.ns);
+      if (subs[i]) subs[i].textContent = fmtInt(z.rec) + " llamadas · " + (z.n === 1 ? "1 lugar" : z.n + " lugares");
+    });
+    document.querySelectorAll("#camp-floor .camp-card-line2").forEach(function (t) {
+      var z = zoneByKey(t.getAttribute("data-camp-zone"));
+      if (z) t.textContent = "NS " + fmtPct(z.ns) + " · " + fmtInt(z.rec) + " llamadas";
+    });
+    document.querySelectorAll("#camp-floor .camp-zone-platform:not(.camp-zone-border)").forEach(function (p) {
+      var z = zoneByKey(p.getAttribute("data-camp-zone"));
+      if (z) p.setAttribute("aria-label", "Zona " + z.name + ", NS " + fmtPct(z.ns) + ", volumen " + fmtInt(z.rec) + (z.card ? ", sin asesores identificados en Tableau" : ""));
+    });
+    document.querySelectorAll("#camp-floor .camp-heat-poly").forEach(function (h) {
+      var z = zoneByKey(h.getAttribute("data-camp-zone"));
+      if (z) { h.setAttribute("fill", heatColor(z.rec)); h.setAttribute("stroke", heatColor(z.rec)); }
+    });
     renderTable();
   },
   stations: stations,
@@ -4497,6 +4789,8 @@ window.__camp = {
   paused: function(){ return paused; },
   speed: function(){ return speedFactor; },
   filter: function(){ return currentFilter; },
+  cartera: function(){ return currentCartera; },
+  setCartera: function(k){ currentCartera = k; applyFilter(); if(k !== "all") openFicha(k); },
   fichaZone: function(){ return fichaZoneKey; },
   sortState: function(){ return {key: sortKey, dir: sortDir}; },
   lastCallInfo: lastCallInfo,
@@ -4504,7 +4798,7 @@ window.__camp = {
   openFicha: openFicha,
   asesoresVisibles: function(){
     var n = 0;
-    stations.forEach(function(s){ if(s.asesor.style.display !== "none") n++; });
+    stations.forEach(function(s){ if(s.asesor.style.display !== "none" && s.g.style.display !== "none") n++; });
     return n;
   }
 };
@@ -4803,9 +5097,7 @@ window.__camp = {
     if (window.__sup && window.__sup.aplicarVivo) window.__sup.aplicarVivo(d.por_cartera);
     var supLeyenda = document.querySelectorAll('#sup-heatLegend > span');
     if (supLeyenda.length === 3) {
-      var supRecs = d.por_cartera.filter(function (r) {
-        return ['BRADESCARD ASISTENCIAS', 'COPPEL VIDA', 'CREDIAUTO', 'BRADESCARD SEGUROS', 'EMPLEADOS', 'LIVERPOOL'].indexOf(r.cartera) !== -1;
-      }).map(function (r) { return r.recibidas; });
+      var supRecs = d.por_cartera.map(function (r) { return r.recibidas; });
       supLeyenda[0].textContent = 'Volumen: ' + fmtInt(Math.min.apply(null, supRecs)) + ' \u2193';
       supLeyenda[2].textContent = '\u2191 ' + fmtInt(Math.max.apply(null, supRecs));
     }
