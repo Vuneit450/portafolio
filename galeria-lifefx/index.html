@@ -10,13 +10,29 @@
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #0d1620; --card: #14202c; --fg: #e6edf4; --mut: #9aa9b9; --line: #263445; --accent: #3fc1c7; --navy: #8fb7e6; --chip: #173338; --code: #1b2a38; color-scheme: dark } }
 :root[data-theme="dark"] { --bg: #0d1620; --card: #14202c; --fg: #e6edf4; --mut: #9aa9b9; --line: #263445; --accent: #3fc1c7; --navy: #8fb7e6; --chip: #173338; --code: #1b2a38; color-scheme: dark }
-body { background: var(--bg); color: var(--fg); font-family: var(--f-body); font-size: 14px; line-height: 1.5; padding-top: 48px }
-/* Barra de navegación fija Consola / Piso / Galería (cableado 2026-11-25; misma barra que la consola). */
-.lfx-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: 48px; display: flex; align-items: center; justify-content: center; gap: 4px; background: #12355b; box-shadow: 0 1px 8px rgba(10, 25, 45, .35); padding-inline: max(12px, env(safe-area-inset-left, 0px)) max(12px, env(safe-area-inset-right, 0px)) }
-.lfx-nav a { font: 600 14px var(--f-body); color: #dbe7f3; text-decoration: none; padding: 8px 16px; border-radius: 8px; white-space: nowrap }
-.lfx-nav a:hover { color: #fff; background: rgba(255, 255, 255, .12) }
-.lfx-nav a[aria-current="page"] { color: #fff; background: #0f7f86 }
-.lfx-nav a:focus-visible { outline: 2px solid #fff; outline-offset: 2px }
+body { background: var(--bg); color: var(--fg); font-family: var(--f-body); font-size: 14px; line-height: 1.5; padding-top: 72px }
+/* ---------- Barra de navegación del portafolio (rediseño 2026-11-25) ----------
+   Misma estructura y clases en piso-call-center y galeria-lifefx.
+   Tres destinos con etiqueta + descriptor corto; botón activo inconfundible
+   (relleno naranja + marcador ● + aria-current). Botones de min. 52 px de alto
+   (por encima del mínimo táctil de 44 px); body lleva padding-top 72 px para
+   que la barra (64 px mín., algo más si el descriptor parte en dos líneas
+   a 400 px) nunca tape el contenido. */
+.portafolio-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; box-sizing: border-box; min-height: 64px; display: flex; align-items: stretch; gap: 6px; padding: 6px 12px; background: #1a1d21; box-shadow: 0 1px 8px rgba(10, 25, 45, .35); font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif }
+.portafolio-nav-btn { flex: 1 1 0; min-width: 0; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; min-height: 52px; padding: 6px 8px; border-radius: 12px; color: #e5e7eb; background: transparent; border: 1px solid #3f444b; font-size: 14px; text-decoration: none; text-align: center; white-space: normal }
+.portafolio-nav-btn-label { font-size: 0.95rem; font-weight: 700; line-height: 1.2; white-space: nowrap }
+.portafolio-nav-btn-desc { font-size: 0.72rem; font-weight: 500; line-height: 1.25; color: #cbd5e1 }
+.portafolio-nav-btn:hover { color: #fff; border-color: #ff6900; background: rgba(255, 255, 255, .06) }
+.portafolio-nav-btn--activo { background: #c2410c; border-color: #c2410c; color: #fff }
+.portafolio-nav-btn--activo .portafolio-nav-btn-desc { color: #ffedd5 }
+.portafolio-nav-btn--activo .portafolio-nav-btn-label::before { content: "● " }
+.portafolio-nav-btn:focus-visible { outline: 3px solid #ff6900; outline-offset: 2px }
+@media (max-width: 480px) {
+  .portafolio-nav { gap: 4px; padding: 6px 8px }
+  .portafolio-nav-btn { padding: 6px 4px }
+  .portafolio-nav-btn-label { font-size: 0.9rem }
+  .portafolio-nav-btn-desc { font-size: 0.68rem }
+}
 #app { max-width: 1240px; margin: 0 auto; padding-block: 28px 48px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; gap: 22px }
 header.top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px }
 h1 { font-family: var(--f-head); font-size: clamp(26px, 4vw, 36px); margin: 0; color: var(--navy); text-wrap: balance; letter-spacing: -.01em }
@@ -54,10 +70,10 @@ footer { color: var(--mut); font-size: 12px }
 .rm { display: none; background: #fff1d6; color: #5c3b00; border-radius: 8px; padding: 8px 12px; font-size: 13px }
 </style>
 
-<nav class="lfx-nav" aria-label="Navegación de Tableau">
-  <a href="https://vuneit450.github.io/portafolio/piso-call-center/">Consola</a>
-  <a href="https://vuneit450.github.io/portafolio/piso-call-center/?tab=campanas">Piso</a>
-  <a href="https://vuneit450.github.io/portafolio/galeria-lifefx/" aria-current="page">Galería</a>
+<nav class="portafolio-nav" aria-label="Navegación del portafolio">
+  <a class="portafolio-nav-btn" data-nav-pagina="consola" href="https://vuneit450.github.io/portafolio/piso-call-center/"><span class="portafolio-nav-btn-label">Consola</span><span class="portafolio-nav-btn-desc">Dirección y Supervisor</span></a>
+  <a class="portafolio-nav-btn" data-nav-pagina="piso" href="https://vuneit450.github.io/portafolio/piso-call-center/?tab=campanas"><span class="portafolio-nav-btn-label">Piso</span><span class="portafolio-nav-btn-desc">Campañas · 77 asesores</span></a>
+  <a class="portafolio-nav-btn portafolio-nav-btn--activo" data-nav-pagina="galeria" href="https://vuneit450.github.io/portafolio/galeria-lifefx/" aria-current="page"><span class="portafolio-nav-btn-label">Galería</span><span class="portafolio-nav-btn-desc">Efectos LifeFX</span></a>
 </nav>
 <div id="app">
   <header class="top">

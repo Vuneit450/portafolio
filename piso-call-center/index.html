@@ -869,16 +869,35 @@ body { margin: 0; background: #f4f6fa; color: #1a1d21;
    para que no tape el encabezado ni las pestañas. Oscura (#1a1d21, el
    color de texto de la consola) con el acento naranja #c2410c del botón
    de pestaña activa. */
-body { padding-top: 48px; }
+/* ---------- Barra de navegación del portafolio (rediseño 2026-11-25) ----------
+   Misma estructura y clases en piso-call-center y galeria-lifefx.
+   Tres destinos con etiqueta + descriptor corto; botón activo inconfundible
+   (relleno naranja + marcador ● + aria-current). Botones de min. 52 px de alto
+   (por encima del mínimo táctil de 44 px); body lleva padding-top 72 px para
+   que la barra (64 px mín., algo más si el descriptor parte en dos líneas
+   a 400 px) nunca tape el contenido. */
+body { padding-top: 72px; }
 .portafolio-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-  height: 48px; display: flex; align-items: center; gap: 8px; padding: 0 12px;
-  background: #1a1d21; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-.portafolio-nav-btn { display: inline-block; padding: 8px 16px; border-radius: 999px;
-  color: #e5e7eb; background: transparent; border: 1px solid transparent;
-  font-size: 0.9rem; font-weight: 700; text-decoration: none; white-space: nowrap; }
-.portafolio-nav-btn:hover { color: #fff; border-color: #ff6900; }
-.portafolio-nav-btn--activo { background: #c2410c; color: #fff; }
+  box-sizing: border-box; min-height: 64px; display: flex; align-items: stretch; gap: 6px;
+  padding: 6px 12px; background: #1a1d21;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+.portafolio-nav-btn { flex: 1 1 0; min-width: 0; box-sizing: border-box;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+  min-height: 52px; padding: 6px 8px; border-radius: 12px; color: #e5e7eb;
+  background: transparent; border: 1px solid #3f444b; text-decoration: none; text-align: center; }
+.portafolio-nav-btn-label { font-size: 0.95rem; font-weight: 700; line-height: 1.2; white-space: nowrap; }
+.portafolio-nav-btn-desc { font-size: 0.72rem; font-weight: 500; line-height: 1.25; color: #cbd5e1; }
+.portafolio-nav-btn:hover { color: #fff; border-color: #ff6900; background: rgba(255, 255, 255, .06); }
+.portafolio-nav-btn--activo { background: #c2410c; border-color: #c2410c; color: #fff; }
+.portafolio-nav-btn--activo .portafolio-nav-btn-desc { color: #ffedd5; }
+.portafolio-nav-btn--activo .portafolio-nav-btn-label::before { content: "● "; }
 .portafolio-nav-btn:focus-visible { outline: 3px solid #ff6900; outline-offset: 2px; }
+@media (max-width: 480px) {
+  .portafolio-nav { gap: 4px; padding: 6px 8px; }
+  .portafolio-nav-btn { padding: 6px 4px; }
+  .portafolio-nav-btn-label { font-size: 0.9rem; }
+  .portafolio-nav-btn-desc { font-size: 0.68rem; }
+}
 
 /* ---------- Sello de dato en vivo (2026-11-25) ----------
    Solo se muestra cuando el fetch del JSON en vivo tuvo éxito; en
@@ -892,9 +911,9 @@ body { padding-top: 48px; }
 <body>
 <a class="skip-link" href="#tabs-principales">Saltar al contenido</a>
 <nav class="portafolio-nav" aria-label="Navegación del portafolio">
-  <a class="portafolio-nav-btn portafolio-nav-btn--activo" data-nav-pagina="consola" href="https://vuneit450.github.io/portafolio/piso-call-center/" aria-current="page">Consola</a>
-  <a class="portafolio-nav-btn" data-nav-pagina="piso" href="https://vuneit450.github.io/portafolio/piso-call-center/?tab=campanas">Piso</a>
-  <a class="portafolio-nav-btn" data-nav-pagina="galeria" href="https://vuneit450.github.io/portafolio/galeria-lifefx/">Galería</a>
+  <a class="portafolio-nav-btn portafolio-nav-btn--activo" data-nav-pagina="consola" href="https://vuneit450.github.io/portafolio/piso-call-center/" aria-current="page"><span class="portafolio-nav-btn-label">Consola</span><span class="portafolio-nav-btn-desc">Dirección y Supervisor</span></a>
+  <a class="portafolio-nav-btn" data-nav-pagina="piso" href="https://vuneit450.github.io/portafolio/piso-call-center/?tab=campanas"><span class="portafolio-nav-btn-label">Piso</span><span class="portafolio-nav-btn-desc">Campañas · 77 asesores</span></a>
+  <a class="portafolio-nav-btn" data-nav-pagina="galeria" href="https://vuneit450.github.io/portafolio/galeria-lifefx/"><span class="portafolio-nav-btn-label">Galería</span><span class="portafolio-nav-btn-desc">Efectos LifeFX</span></a>
 </nav>
 <div class="console">
 <!-- ============ ENCABEZADO GLOBAL ============ -->
