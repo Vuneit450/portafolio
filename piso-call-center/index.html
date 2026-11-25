@@ -785,14 +785,43 @@ body { margin: 0; background: #f4f6fa; color: #1a1d21;
     scroll-behavior: auto !important; }
 }
 
+/* ---------- Barra de navegación del portafolio (2026-11-25) ----------
+   Fija arriba de la consola; body lleva padding-top igual a su altura
+   para que no tape el encabezado ni las pestañas. Oscura (#1a1d21, el
+   color de texto de la consola) con el acento naranja #c2410c del botón
+   de pestaña activa. */
+body { padding-top: 48px; }
+.portafolio-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  height: 48px; display: flex; align-items: center; gap: 8px; padding: 0 12px;
+  background: #1a1d21; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+.portafolio-nav-btn { display: inline-block; padding: 8px 16px; border-radius: 999px;
+  color: #e5e7eb; background: transparent; border: 1px solid transparent;
+  font-size: 0.9rem; font-weight: 700; text-decoration: none; white-space: nowrap; }
+.portafolio-nav-btn:hover { color: #fff; border-color: #ff6900; }
+.portafolio-nav-btn--activo { background: #c2410c; color: #fff; }
+.portafolio-nav-btn:focus-visible { outline: 3px solid #ff6900; outline-offset: 2px; }
+
+/* ---------- Sello de dato en vivo (2026-11-25) ----------
+   Solo se muestra cuando el fetch del JSON en vivo tuvo éxito; en
+   fallback (foto fija) sigue oculto. */
+.dir-sello-vivo { font-size: 0.8rem; font-weight: 700; color: #fff; background: #1a9e54;
+  border-radius: 999px; padding: 4px 12px; white-space: nowrap; }
+.dir-sello-vivo--desactualizado { background: #c2410c; }
+
 </style>
 </head>
 <body>
+<nav class="portafolio-nav" aria-label="Navegación del portafolio">
+  <a class="portafolio-nav-btn portafolio-nav-btn--activo" data-nav-pagina="consola" href="https://vuneit450.github.io/portafolio/piso-call-center/" aria-current="page">Consola</a>
+  <a class="portafolio-nav-btn" data-nav-pagina="piso" href="https://vuneit450.github.io/portafolio/piso-call-center/#campanas">Piso</a>
+  <a class="portafolio-nav-btn" data-nav-pagina="galeria" href="https://vuneit450.github.io/portafolio/galeria-lifefx/">Galería</a>
+</nav>
 <div class="console">
 <!-- ============ ENCABEZADO GLOBAL ============ -->
 <header class="dir-header" id="dir-header">
   <div class="dir-header-top">
     <h1 class="dir-title">Operación INTER ATC · nov 2026</h1>
+    <span class="dir-sello-vivo" id="dir-sello-vivo" hidden></span>
     <p class="dir-stamp">Datos leídos de Tableau el 24 nov 2026, 18:08</p>
   </div>
   <dl class="dir-kpis" id="dir-kpis">
@@ -1576,6 +1605,19 @@ body { margin: 0; background: #f4f6fa; color: #1a1d21;
     });
     dirSimActualizar();
   }
+
+  /* ---------- Repintado con dato en vivo (2026-11-25) ----------
+     Lo usa el bloque de datos en vivo al final del documento: sustituye
+     las series de la foto fija por las del JSON y vuelve a pintar. */
+  window.__dirRepaint = function (d) {
+    if (d.meses) DIR_MESES = d.meses;
+    if (d.ranking) DIR_RANKING = d.ranking;
+    if (d.nps) DIR_NPS = d.nps;
+    dirRenderRanking();
+    dirRenderTendencia();
+    dirRenderChart();
+    dirRenderNps();
+  };
 
   /* ---------- Init ---------- */
   dirRenderRanking();
@@ -2967,6 +3009,33 @@ if(hourInput){
 /* ---------- Hooks de verificación ---------- */
 window.__sup = window.__sup || {};
 window.__sup.stations = stations;
+/* Repintado con dato en vivo (2026-11-25): actualiza NS y volumen de las
+   6 zonas del piso y sus etiquetas/heatmap. Solo los campos que trae el
+   JSON; el resto (estaciones, asesores) sigue siendo la foto fija. */
+window.__sup.aplicarVivo = function (rows) {
+  rows.forEach(function (r) {
+    var z = null;
+    for (var i = 0; i < ZONES.length; i++) { if (ZONES[i].name === r.cartera) { z = ZONES[i]; break; } }
+    if (!z) return;
+    z.ns = Number(r.ns).toFixed(1).replace('.', ',') + " %";
+    z.vol = r.recibidas;
+    z.volTxt = fmtInt(r.recibidas);
+  });
+  var labels = document.querySelectorAll("#sup-floor .sup-zone-label");
+  var subs = document.querySelectorAll("#sup-floor .sup-zone-sub");
+  ZONES.forEach(function (z, i) {
+    if (labels[i]) labels[i].textContent = z.short + " · NS " + z.ns;
+    if (subs[i]) subs[i].textContent = z.volTxt + " llamadas · " + (z.n === 1 ? "1 estación" : z.n + " estaciones");
+  });
+  document.querySelectorAll("#sup-floor .sup-zone-platform:not(.sup-zone-border)").forEach(function (p) {
+    var z = zoneByKey(p.getAttribute("data-zone"));
+    if (z) p.setAttribute("aria-label", "Zona " + z.name + ", NS " + z.ns + ", volumen " + z.volTxt);
+  });
+  document.querySelectorAll("#sup-floor .sup-heat-poly").forEach(function (h) {
+    var z = zoneByKey(h.getAttribute("data-zone"));
+    if (z) { h.setAttribute("fill", heatColor(z.vol)); h.setAttribute("stroke", heatColor(z.vol)); }
+  });
+};
 window.__sup.counts = function(){
   var c = {llamada:0, disponible:0, pausa:0, post:0};
   stations.forEach(function(s){ c[s.state]++; });
@@ -4369,6 +4438,35 @@ if(REDUCED){
 /* ---------- Hooks de verificación ---------- */
 window.__camp = {
   zones: ZONES,
+  /* Repintado con dato en vivo (2026-11-25): actualiza las 12 carteras
+     con los campos que trae el JSON (recibidas, atendidas, abandonadas,
+     demoradas, NS, TMO, ASA, NPS, encuestas) y vuelve a pintar la tabla
+     y su pie. Lo que el JSON no trae (espera media, % >20 s, composición
+     del TMO, Pareto, asesores) sigue siendo la foto fija. */
+  aplicarVivo: function (rows, tot) {
+    rows.forEach(function (r) {
+      var z = null;
+      for (var i = 0; i < ZONES.length; i++) { if (ZONES[i].name === r.cartera) { z = ZONES[i]; break; } }
+      if (!z) return;
+      z.rec = r.recibidas; z.ate = r.atendidas; z.aba = r.abandonadas; z.dem = r.demoradas;
+      z.ns = r.ns; z.tmoS = r.tmo_segundos;
+      z.tmo = Math.floor(r.tmo_segundos / 60) + ":" + String(r.tmo_segundos % 60).padStart(2, "0");
+      z.asa = r.asa_segundos;
+      z.nps = r.nps === null ? null : Number(String(r.nps).replace(",", "."));
+      z.enc = r.encuestas;
+      z.pctAte = z.rec ? +(100 * z.ate / z.rec).toFixed(1) : 0;
+    });
+    if (tot) {
+      TOTALES.rec = tot.rec; TOTALES.ate = tot.ate; TOTALES.aba = tot.aba; TOTALES.dem = tot.dem;
+      TOTALES.ns = tot.ns; TOTALES.tmo = tot.tmo; TOTALES.asa = tot.asa; TOTALES.nps = tot.nps;
+    }
+    document.getElementById("camp-tableFoot").innerHTML =
+      '<tr><td>Total nov 2026</td><td>' + fmtInt(TOTALES.rec) + '</td><td>' + fmtInt(TOTALES.ate) +
+      '</td><td>' + fmtInt(TOTALES.aba) + '</td><td>' + fmtInt(TOTALES.dem) + '</td><td>' +
+      fmtPct(TOTALES.ns) + '</td><td>' + TOTALES.tmo + '</td><td>' + TOTALES.asa + ' s</td><td>' +
+      fmtNps(TOTALES.nps) + '</td></tr>';
+    renderTable();
+  },
   stations: stations,
   asesores: CAMP_ASESORES,
   setTimeSlot: setTimeSlot,
@@ -4435,7 +4533,26 @@ window.__camp = {
     Object.keys(panels).forEach(function (k) {
       if (panels[k]) panels[k].hidden = (k !== id);
     });
+    /* Barra del portafolio + deep link #campanas (2026-11-25): la pestaña
+       Campañas es el "Piso"; el resto es la "Consola". replaceState no
+       crea entradas de historial ni desplaza la página. */
+    document.querySelectorAll('.portafolio-nav-btn').forEach(function (b) {
+      var activo = b.getAttribute('data-nav-pagina') === (id === 'campanas' ? 'piso' : 'consola');
+      b.classList.toggle('portafolio-nav-btn--activo', activo);
+      if (activo) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+    });
+    try { history.replaceState(null, '', id === 'campanas' ? '#campanas' : location.pathname + location.search); } catch (e) {}
   }
+  /* Deep link: #campanas abre directo en Campañas (el piso). Se lee al
+     cargar y en cada cambio de hash (p. ej. el dashboard de Tableau que
+     incrusta la consola con #campanas, o ir/venir con el navegador). */
+  function abrirDesdeHash() {
+    var h = (location.hash || '').toLowerCase();
+    if (h === '#campanas') select('campanas', false);
+    else if (h === '' || h === '#direccion') select('direccion', false);
+  }
+  window.addEventListener('hashchange', abrirDesdeHash);
+  abrirDesdeHash();
   tabs.forEach(function (t, i) {
     t.addEventListener('click', function () { select(t.getAttribute('data-tab'), false); });
     t.addEventListener('keydown', function (ev) {
@@ -4448,6 +4565,281 @@ window.__camp = {
     });
   });
   window.__consola = { select: select };
+})();
+
+</script>
+<script>
+/* DATOS EN VIVO — Consola INTER ATC (2026-11-25).
+   Al cargar, pide el JSON del publicador v2 y repinta KPIs de Dirección,
+   tablas por cartera, serie mensual y semáforo. Si el fetch falla o el
+   JSON no valida, no toca nada: queda la foto fija de noviembre 2026 tal
+   como está (NS 89,9 % / 16.060) y sin sello en vivo. Las cifras se
+   muestran tal como las trae la fuente (NPS +33,9 / FCR 58,6 del
+   extracto), sin ajustarlas al tablero. */
+(function () {
+  'use strict';
+  var URL = 'https://biblioteca.jesusjonathan171.workers.dev/api/inter-atc.json';
+  if (window.__DATOS_VIVO_URL) URL = window.__DATOS_VIVO_URL; /* solo pruebas locales */
+  var MESES_CORTO = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+  var MESES_LARGO = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+
+  window.__datosVivo = { estado: 'pendiente', actualizadoISO: null };
+  var resolverListo = null;
+  window.__datosVivoListo = new Promise(function (res) { resolverListo = res; });
+  function terminar(estado, iso) {
+    window.__datosVivo.estado = estado;
+    window.__datosVivo.actualizadoISO = iso || null;
+    if (resolverListo) resolverListo(window.__datosVivo);
+  }
+
+  /* ---------- Formato español ---------- */
+  function fmtInt(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+  function fmtDec1(n) { return Number(n).toFixed(1).replace('.', ','); }
+  function fmtPct(n) { return fmtDec1(n) + ' %'; }
+  function fmtTmo(s) { return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+  function signo(n, dec) {
+    var v = (dec === undefined ? 1 : dec) === 0 ? String(Math.round(n)) : Number(n).toFixed(dec).replace('.', ',');
+    return (n > 0 ? '+' : n < 0 ? '\u2212' : '') + v.replace(/^-/, '');
+  }
+  function parseNps(s) {
+    if (typeof s !== 'string') return null;
+    var n = Number(s.replace(',', '.'));
+    return isFinite(n) ? n : null;
+  }
+  function esNum(x) { return typeof x === 'number' && isFinite(x); }
+  function mesCorto(iso) { var p = iso.split('-'); return MESES_CORTO[+p[1] - 1] + ' ' + p[0].slice(2); }
+  function mesLargo(iso) { var p = iso.split('-'); return MESES_CORTO[+p[1] - 1] + ' ' + p[0]; }
+  function mesNombre(iso) { return MESES_LARGO[+iso.split('-')[1] - 1]; }
+
+  /* ---------- Validación (contrato datos-vivo §9) ---------- */
+  function kpiVal(d, id) {
+    for (var i = 0; i < d.kpis.length; i++) { if (d.kpis[i].id === id) return d.kpis[i].valor; }
+    return undefined;
+  }
+  function validar(d) {
+    if (!d || typeof d !== 'object') return 'raiz';
+    if (typeof d.actualizadoISO !== 'string' || isNaN(Date.parse(d.actualizadoISO))) return 'actualizadoISO';
+    if (typeof d.mes !== 'string' || !/^\d{4}-\d{2}$/.test(d.mes)) return 'mes';
+    if (!Array.isArray(d.kpis)) return 'kpis';
+    var ns = kpiVal(d, 'ns'), rec = kpiVal(d, 'recibidas'), ate = kpiVal(d, 'atendidas'),
+        ab = kpiVal(d, 'abandono'), tmo = kpiVal(d, 'tmo'), nps = kpiVal(d, 'nps');
+    if (!esNum(ns) || !esNum(rec) || !esNum(ate) || !esNum(ab) || !esNum(tmo) || typeof nps !== 'string') return 'kpis-valores';
+    var npsN = parseNps(nps);
+    if (npsN === null || npsN < -100 || npsN > 100) return 'nps';
+    if (ns < 0 || ns > 100 || ab < 0 || ab > 100 || ate > rec || tmo < 0 || tmo > 3600) return 'kpis-rangos';
+    var ex = d.extras;
+    if (!ex || typeof ex !== 'object') return 'extras';
+    if (!esNum(ex.demoradas) || !esNum(ex.abandonadas) || !esNum(ex.asa_segundos) || !esNum(ex.fcr) || !esNum(ex.encuestas)) return 'extras-valores';
+    if (ex.abandonadas !== rec - ate || ex.demoradas > ate || ex.asa_segundos < 0 || ex.asa_segundos > 3600 ||
+        ex.fcr < 0 || ex.fcr > 100 || ex.encuestas < 0) return 'extras-rangos';
+    if (!Array.isArray(d.por_cartera) || !d.por_cartera.length) return 'por_cartera';
+    var sRec = 0, sEnc = 0;
+    for (var i = 0; i < d.por_cartera.length; i++) {
+      var r = d.por_cartera[i];
+      if (!r || typeof r.cartera !== 'string' || !esNum(r.recibidas) || !esNum(r.atendidas) ||
+          !esNum(r.abandonadas) || !esNum(r.demoradas) || !esNum(r.ns) || !esNum(r.abandono_gt5) ||
+          !esNum(r.asa_segundos) || !esNum(r.tmo_segundos) || !esNum(r.encuestas)) return 'cartera-campos';
+      if (r.nps !== null && typeof r.nps !== 'string') return 'cartera-nps';
+      if (r.fcr !== null && !esNum(r.fcr)) return 'cartera-fcr';
+      var rn = r.nps === null ? null : parseNps(r.nps);
+      if (rn !== null && (rn < -100 || rn > 100)) return 'cartera-nps-rango';
+      if (r.atendidas > r.recibidas || r.demoradas > r.atendidas ||
+          r.abandonadas !== r.recibidas - r.atendidas) return 'cartera-rangos';
+      if (r.ns < 0 || r.ns > 100 || r.asa_segundos < 0 || r.asa_segundos > 3600 ||
+          r.tmo_segundos < 0 || r.tmo_segundos > 3600) return 'cartera-rangos2';
+      sRec += r.recibidas; sEnc += r.encuestas;
+    }
+    if (sRec !== rec || sEnc !== ex.encuestas) return 'sumas';
+    if (!Array.isArray(d.serie_mensual) || d.serie_mensual.length < 2) return 'serie';
+    for (var j = 0; j < d.serie_mensual.length; j++) {
+      var m = d.serie_mensual[j];
+      if (!m || typeof m.mes !== 'string' || !/^\d{4}-\d{2}$/.test(m.mes) || !esNum(m.recibidas) ||
+          !esNum(m.atendidas) || !esNum(m.abandonadas) || !esNum(m.demoradas) || !esNum(m.ns) ||
+          !esNum(m.abandono_gt5) || !esNum(m.asa_segundos) || !esNum(m.tmo_segundos) ||
+          !esNum(m.encuestas) || (m.nps !== null && typeof m.nps !== 'string')) return 'serie-campos';
+    }
+    var ult = d.serie_mensual[d.serie_mensual.length - 1];
+    if (ult.mes !== d.mes || ult.recibidas !== rec || ult.ns !== ns) return 'serie-foco';
+    return null;
+  }
+
+  /* ---------- Repintado (todo se calcula antes de tocar el DOM) ---------- */
+  function aplicar(d) {
+    var ns = kpiVal(d, 'ns'), rec = kpiVal(d, 'recibidas'), ate = kpiVal(d, 'atendidas'),
+        ab = kpiVal(d, 'abandono'), tmo = kpiVal(d, 'tmo'), npsTxt = kpiVal(d, 'nps');
+    var ex = d.extras, npsN = parseNps(npsTxt);
+    var nivel = 100 * ate / rec;
+    var faltan = ns < 90 ? Math.max(0, Math.ceil(0.9 * ate - (ate - ex.demoradas))) : 0;
+    var serie = d.serie_mensual, prev = serie[serie.length - 2];
+    var deltaNs = prev ? ns - prev.ns : null;
+    var deltaNps = (prev && prev.nps !== null && prev.nps !== undefined) ? npsN - parseNps(prev.nps) : null;
+    var brades = null;
+    d.por_cartera.forEach(function (r) { if (r.cartera === 'BRADESCARD ASISTENCIAS') brades = r; });
+
+    /* KPIs del encabezado de Dirección (por etiqueta). */
+    document.querySelectorAll('#dir-kpis .dir-kpi').forEach(function (k) {
+      var etiqueta = k.querySelector('.dir-kpi-label');
+      var valor = k.querySelector('.dir-kpi-value');
+      var sub = k.querySelector('.dir-kpi-sub');
+      if (!etiqueta || !valor) return;
+      var t = etiqueta.textContent.trim();
+      if (t === 'Nivel de servicio') valor.textContent = fmtPct(ns);
+      else if (t === 'Recibidas') valor.textContent = fmtInt(rec);
+      else if (t === 'Atendidas') { valor.textContent = fmtInt(ate); if (sub) sub.textContent = fmtPct(nivel); }
+      else if (t === 'Abandonadas') valor.textContent = fmtInt(ex.abandonadas);
+      else if (t === 'Abandono >5 s') valor.textContent = fmtPct(ab);
+      else if (t === 'TMO') valor.textContent = fmtTmo(tmo);
+      else if (t === 'ASA') valor.textContent = ex.asa_segundos + ' s';
+      else if (t === 'NPS') valor.textContent = npsTxt;
+      else if (t === 'FCR') valor.textContent = fmtPct(ex.fcr);
+      if (k.classList.contains('dir-kpi--hero') && sub) {
+        sub.textContent = ns < 90 ? 'meta 90 % · faltan ~' + fmtInt(faltan) + ' llamadas' : 'meta 90 % · cumplida';
+      }
+    });
+
+    /* Semáforo de NS. */
+    var sem = document.getElementById('dir-semaforo');
+    if (sem) {
+      var big = sem.querySelector('.dir-ns-big');
+      var cls = ns >= 95 ? 'dir-dot--verde' : ns >= 90 ? 'dir-dot--amarillo' : 'dir-dot--rojo';
+      if (big) big.innerHTML = '<span class="dir-dot ' + cls + '" aria-hidden="true"></span>' + fmtPct(ns);
+      var estado = sem.querySelector('.dir-ns-estado');
+      if (estado) estado.textContent = ns < 90 ? 'En rojo de meta — por debajo del 90 %' :
+        ns >= 95 ? 'En verde de meta — 95 % o más' : 'En amarillo de meta — en el 90 % o más';
+      var items = sem.querySelectorAll('.dir-list li');
+      if (items[0]) items[0].innerHTML = 'Brecha vs meta: <strong>' + signo(ns - 90, 1) + ' pts</strong>';
+      if (items[1]) items[1].innerHTML = ns < 90 ?
+        'Faltan <strong>~' + fmtInt(faltan) + ' llamadas</strong> contestadas a tiempo para llegar a 90 %' :
+        'Meta <strong>cumplida</strong> — NS en 90 % o más';
+      if (items[2] && prev) items[2].innerHTML = 'Contra ' + mesNombre(prev.mes) + ' (' + fmtPct(prev.ns) + '): <strong>' + signo(deltaNs, 1) + ' pts</strong>';
+    }
+
+    /* Lectura de Dirección: solo las citas que son restatement de los
+       KPIs (Situación, Riesgo, Decisión). "Por qué" depende de la
+       contribución vs octubre, que el JSON no trae: queda como está. */
+    var citas = document.querySelectorAll('#dir-textos .dir-cita');
+    if (citas[0]) citas[0].textContent = '«Entraron ' + fmtInt(rec) + ' llamadas y se atendieron ' +
+      fmtInt(ate) + ' (' + fmtPct(nivel) + '). El nivel de servicio fue ' + fmtPct(ns) +
+      (ns < 90 ? ', debajo de la meta de 90 %.»' : ', por encima de la meta de 90 %.»');
+    if (citas[2] && brades) citas[2].textContent = '«BRADESCARD ASISTENCIAS concentra ' +
+      fmtInt(brades.demoradas) + ' de las ' + fmtInt(ex.demoradas) + ' llamadas demoradas.»';
+    if (citas[3]) citas[3].textContent = ns < 90 ?
+      '«Para llegar a 90 % hacía falta contestar a tiempo ~' + fmtInt(faltan) + ' llamadas más. Reforzar la plantilla en las franjas pico de BRADESCARD ASISTENCIAS.»' :
+      '«La meta de 90 % está cumplida. Reforzar la plantilla en las franjas pico de BRADESCARD ASISTENCIAS.»';
+
+    /* Tablas de Dirección: ranking, tendencia (tabla + gráfico) y NPS. */
+    if (window.__dirRepaint) {
+      var meses = serie.map(function (m) {
+        return { mes: mesCorto(m.mes), recibidas: m.recibidas, ns: m.ns, ab: m.abandono_gt5 };
+      });
+      var ranking = d.por_cartera.slice().sort(function (a, b) { return b.ns - a.ns; }).map(function (r) {
+        return { cartera: r.cartera, ns: r.ns, rec: r.recibidas };
+      });
+      var npsRows = d.por_cartera.slice().sort(function (a, b) {
+        var na = a.nps === null ? -Infinity : parseNps(a.nps);
+        var nb = b.nps === null ? -Infinity : parseNps(b.nps);
+        return nb - na;
+      }).map(function (r) {
+        return { cartera: r.cartera, nps: r.nps === null ? null : parseNps(r.nps), enc: r.encuestas };
+      });
+      window.__dirRepaint({ meses: meses, ranking: ranking, nps: npsRows });
+      var chart = document.getElementById('dir-chart');
+      if (chart) chart.setAttribute('aria-label', 'Gráfico de barras del nivel de servicio por mes: ' +
+        serie.map(function (m) { return mesLargo(m.mes) + ' ' + fmtDec1(m.ns) + ' %'; }).join(', ') + '. Meta 90 %.');
+    }
+
+    /* Título y nota de NPS por cartera. */
+    var npsTitulo = document.getElementById('dir-nps-titulo');
+    if (npsTitulo) npsTitulo.textContent = 'NPS por cartera — ' + mesLargo(d.mes) + ' (' + fmtInt(ex.encuestas) + ' encuestas en el mes)';
+    var npsNota = document.querySelector('#dir-nps .dir-nota');
+    if (npsNota) {
+      var sinDato = d.por_cartera.filter(function (r) { return r.encuestas === 0; }).map(function (r) {
+        return r.cartera + ': <strong>s/d</strong> (0 encuestas)';
+      }).join('. ');
+      var deltaTxt = deltaNps === null ? '' : ' (' + (deltaNps < 0 ? '\u25bc' : '\u25b2') + fmtDec1(Math.abs(deltaNps)) + ')';
+      npsNota.innerHTML = 'NPS del mes: <strong>' + npsTxt + '</strong>' + deltaTxt + '. ' + sinDato + '.';
+    }
+
+    /* Nota del pronóstico: real del mes en curso. */
+    var pronNota = document.querySelector('#dir-pronostico .dir-nota');
+    if (pronNota) pronNota.innerHTML = 'Real ' + MESES_CORTO[+d.mes.split('-')[1] - 1] + ' en curso: <strong>' +
+      fmtInt(rec) + '</strong>, por debajo del pronóstico.';
+
+    /* Campañas: KPIs del encabezado, tabla por cartera y leyenda de volumen. */
+    document.querySelectorAll('.camp-kpi').forEach(function (k) {
+      var etiqueta = k.querySelector('span');
+      var valor = k.querySelector('b');
+      if (!etiqueta || !valor) return;
+      var t = etiqueta.textContent.trim();
+      if (t === 'Nivel de servicio') valor.innerHTML = fmtPct(ns) + ' <small>/ meta 90 %</small>';
+      else if (t === 'Llamadas recibidas') valor.textContent = fmtInt(rec);
+      else if (t === 'Atendidas') valor.innerHTML = fmtInt(ate) + ' <small>· ' + fmtPct(nivel) + '</small>';
+      else if (t === 'Abandonadas') valor.textContent = fmtInt(ex.abandonadas);
+      else if (t === 'Demoradas > 20 s') valor.textContent = fmtInt(ex.demoradas);
+      else if (t === 'TMO') valor.textContent = fmtTmo(tmo);
+      else if (t === 'NPS') valor.textContent = npsTxt;
+    });
+    if (window.__camp && window.__camp.aplicarVivo) {
+      window.__camp.aplicarVivo(d.por_cartera, { rec: rec, ate: ate, aba: ex.abandonadas, dem: ex.demoradas,
+        ns: ns, tmo: fmtTmo(tmo), asa: ex.asa_segundos, nps: npsN });
+    }
+    var campLeyenda = document.querySelectorAll('#camp-heatLegend > span');
+    if (campLeyenda.length === 3) {
+      var recs = d.por_cartera.map(function (r) { return r.recibidas; });
+      campLeyenda[0].textContent = 'Volumen: ' + fmtInt(Math.min.apply(null, recs)) + ' \u2193';
+      campLeyenda[2].textContent = '\u2191 ' + fmtInt(Math.max.apply(null, recs));
+    }
+
+    /* Supervisor: datos reales de cola y zonas del piso. */
+    document.querySelectorAll('.sup-dato').forEach(function (k) {
+      var etiqueta = k.querySelector('span');
+      var valor = k.querySelector('b');
+      if (!etiqueta || !valor) return;
+      var t = etiqueta.textContent.trim();
+      if (t.indexOf('ASA nov 2026') === 0) valor.textContent = ex.asa_segundos + ' s';
+      else if (t.indexOf('Demoradas > 20 s') === 0) valor.textContent = fmtInt(ex.demoradas);
+      else if (t.indexOf('Abandono > 5 s') === 0) valor.textContent = fmtPct(ab);
+    });
+    if (window.__sup && window.__sup.aplicarVivo) window.__sup.aplicarVivo(d.por_cartera);
+    var supLeyenda = document.querySelectorAll('#sup-heatLegend > span');
+    if (supLeyenda.length === 3) {
+      var supRecs = d.por_cartera.filter(function (r) {
+        return ['BRADESCARD ASISTENCIAS', 'COPPEL VIDA', 'CREDIAUTO', 'BRADESCARD SEGUROS', 'EMPLEADOS', 'LIVERPOOL'].indexOf(r.cartera) !== -1;
+      }).map(function (r) { return r.recibidas; });
+      supLeyenda[0].textContent = 'Volumen: ' + fmtInt(Math.min.apply(null, supRecs)) + ' \u2193';
+      supLeyenda[2].textContent = '\u2191 ' + fmtInt(Math.max.apply(null, supRecs));
+    }
+  }
+
+  /* ---------- Sello en vivo ---------- */
+  function mostrarSello(iso, maxMin) {
+    var sello = document.getElementById('dir-sello-vivo');
+    if (!sello) return;
+    var m = /T(\d{2}):(\d{2})/.exec(iso || '');
+    var hhmm = m ? m[1] + ':' + m[2] : iso;
+    var desactualizado = (Date.now() - Date.parse(iso)) > (maxMin || 60) * 60000;
+    sello.textContent = desactualizado ? 'DESACTUALIZADO · actualizado ' + hhmm : 'en vivo · actualizado ' + hhmm;
+    sello.classList.toggle('dir-sello-vivo--desactualizado', desactualizado);
+    sello.hidden = false;
+  }
+
+  /* ---------- Fetch ---------- */
+  var ctrl = ('AbortController' in window) ? new AbortController() : null;
+  var temporizador = setTimeout(function () { if (ctrl) ctrl.abort(); }, 10000);
+  fetch(URL, { cache: 'no-store', signal: ctrl ? ctrl.signal : undefined }).then(function (resp) {
+    clearTimeout(temporizador);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    return resp.json();
+  }).then(function (datos) {
+    var error = validar(datos);
+    if (error) { terminar('foto-fija', null); return; }
+    try { aplicar(datos); } catch (e) { terminar('foto-fija', null); return; }
+    mostrarSello(datos.actualizadoISO, datos.maxMinutos);
+    terminar('vivo', datos.actualizadoISO);
+  }).catch(function () {
+    clearTimeout(temporizador);
+    terminar('foto-fija', null);
+  });
 })();
 
 </script>
