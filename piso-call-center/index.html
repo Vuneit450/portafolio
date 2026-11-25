@@ -59,12 +59,44 @@
   svg{display:block; width:100%; height:auto;}
   .zone-label{font-size:11px; font-weight:700; fill:#334155;}
   .zone-sub{font-size:10px; font-weight:600; fill:#64748b;}
+  /* El overlay de heatmap y los rótulos de zona no interceptan el puntero:
+     la plataforma (.zone-platform) debe recibir el hover. */
+  #heatLayer{pointer-events:none;}
+  #zoneLayer rect, #zoneLayer text{pointer-events:none;}
   .station{cursor:pointer;}
   .station:hover .desk-top{stroke:#0f766e; stroke-width:2;}
   .station text{pointer-events:none;}
   .st-id{font-size:8.5px; font-weight:700; fill:#334155;}
+  .call-timer{font-size:6.5px; font-weight:800; fill:#1f2937;
+    paint-order:stroke; stroke:#fff; stroke-width:2px;}
+  .screen-glyph text{font-size:6.5px; fill:#fff;}
   .call-dot{pointer-events:none;}
+  .call-dot-click{pointer-events:auto; cursor:pointer;}
+  .call-dot-halo{pointer-events:none;}
+  #supervisor{cursor:pointer;}
+  #supervisor text{pointer-events:none;}
+  .zone-platform{cursor:pointer;}
+  .zone-platform.zone-hover{stroke:#0f766e; stroke-width:2.5;}
+  .zone-platform:focus{outline:none; stroke:#0f766e; stroke-width:2.5;}
+  .zone-tip{position:absolute; z-index:6; width:230px; background:#fff;
+    border:1px solid var(--line); border-radius:10px; box-shadow:0 6px 24px rgba(15,23,42,.18);
+    padding:10px 12px; font-size:12.5px; pointer-events:none;}
+  .zone-tip[hidden]{display:none;}
+  .zone-tip h3{font-size:13px; margin-bottom:4px;}
+  .zone-tip dl{display:grid; grid-template-columns:auto 1fr; gap:3px 10px;}
+  .zone-tip dt{color:var(--muted); font-size:11.5px;}
+  .zone-tip dd{font-weight:600; text-align:right; font-variant-numeric:tabular-nums;}
+  .ctl-btn{border:1px solid var(--line); background:#f8fafc; border-radius:999px;
+    padding:4px 10px; font-size:12px; font-weight:600; color:var(--ink); cursor:pointer;}
+  .ctl-btn[aria-pressed="true"]{background:#0f766e; color:#fff; border-color:#0f766e;}
+  .filter-group{display:inline-flex; gap:4px; align-items:center; flex-wrap:wrap;}
+  .filter-btn{border:1px solid var(--line); background:#f8fafc; border-radius:999px;
+    padding:4px 9px; font-size:12px; font-weight:600; color:var(--ink); cursor:pointer;}
+  .filter-btn[aria-pressed="true"]{background:#1f2937; color:#fff; border-color:#1f2937;}
+  .filter-count{font-size:11.5px; color:var(--muted); font-weight:600; white-space:nowrap;}
   .queue-count{font-size:12px; font-weight:800; fill:#fff;}
+  .pasillo-label{font-size:8px; font-weight:700; letter-spacing:1.5px; fill:#94a3b8; pointer-events:none;}
+  .sign-label{font-size:9px; font-weight:800; fill:#334155;}
   /* ---------- Inspector ---------- */
   .inspector{position:absolute; top:10px; right:10px; width:236px; background:var(--panel);
     border:1px solid var(--line); border-radius:10px; box-shadow:0 6px 24px rgba(15,23,42,.18);
@@ -117,6 +149,16 @@
     <button class="switch" id="heatToggle" role="switch" aria-checked="true">
       <span class="track" aria-hidden="true"></span> Heatmap por volumen
     </button>
+    <button class="ctl-btn" id="pauseBtn" aria-pressed="false">⏸ Pausa</button>
+    <button class="ctl-btn" id="speedBtn" aria-pressed="false">Velocidad 1x</button>
+    <span class="filter-group" role="group" aria-label="Filtrar estaciones por estado">
+      <button class="filter-btn" data-filter="all" aria-pressed="true">Todos</button>
+      <button class="filter-btn" data-filter="llamada" aria-pressed="false">En llamada</button>
+      <button class="filter-btn" data-filter="disponible" aria-pressed="false">Disponible</button>
+      <button class="filter-btn" data-filter="pausa" aria-pressed="false">Pausa</button>
+      <button class="filter-btn" data-filter="post" aria-pressed="false">Post-llamada</button>
+    </span>
+    <span class="filter-count" id="filterCount" aria-live="polite">31 / 31 visibles</span>
     <div class="legend" aria-label="Leyenda de estados de estación">
       <span class="item"><span class="dot" style="background:#16a34a"></span>Disponible</span>
       <span class="item"><span class="dot" style="background:#ea580c"></span>En llamada</span>
@@ -134,6 +176,7 @@
          aria-label="Vista isométrica del piso del call center con 6 zonas y 31 estaciones">
     </svg>
 
+    <div class="zone-tip" id="zoneTip" hidden></div>
     <aside class="inspector" id="inspector" hidden aria-live="polite">
       <button class="close" id="inspClose" aria-label="Cerrar panel">✕</button>
       <h2 id="inspTitle">Estación A-01</h2>
@@ -146,7 +189,7 @@
         <dt>TMO (global)</dt><dd>8:52</dd>
         <dt>Volumen nov (zona)</dt><dd id="inspVol">7.909</dd>
       </dl>
-      <p class="note">TMO por zona no forma parte de la foto fija de nov 2026; se muestra el TMO global (8:52). La llamada en curso es un identificador ficticio de la simulación.</p>
+      <p class="note" id="inspNote">TMO por zona no forma parte de la foto fija de nov 2026; se muestra el TMO global (8:52). La llamada en curso es un identificador ficticio de la simulación.</p>
     </aside>
 
     <div class="hint">Toca una estación para ver su detalle · El supervisor recorre los pasillos apoyando estaciones</div>
@@ -165,6 +208,17 @@
 (function(){
 "use strict";
 var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- Reloj de simulación e interactividad ---------- */
+/* simNow avanza solo cuando la simulación corre (ni pausa ni reduced-motion);
+   es la referencia de callStart/callEnd y del temporizador del inspector, así
+   que en pausa el temporizador se congela. A 2x avanza al doble de rápido. */
+var paused = false, speedFactor = 1, currentFilter = "all";
+var simNow = Date.now();
+function nowSim(){ return simNow; }
+var lastCallInfo = null, lastSupInfo = null;
+/* vista actual del inspector: "station" | "call" | "supervisor" */
+var viewKind = "station", viewCall = null, viewSup = null;
 
 /* ---------- Datos reales (foto fija nov 2026) ---------- */
 var ZONES = [
@@ -210,14 +264,20 @@ el("polygon", {points: poly(floorPts), fill:"#e2e8f0", stroke:"#cbd5e1", "stroke
 var floorIn = [iso(0,0), iso(33,0), iso(33,22), iso(0,22)];
 el("polygon", {points: poly(floorIn), fill:"#f1f5f9", stroke:"#cbd5e1", "stroke-width":1}, svg);
 
-/* Pasillos (líneas de guía) */
+/* Pasillos marcados: banda de piso en tono distinto + línea central discontinua */
+[[13.7,0,15.3,0,15.3,22,13.7,22],[0,12.5,33,12.5,33,14.1,0,14.1]].forEach(function(b){
+  el("polygon",{points: poly([iso(b[0],b[1]),iso(b[2],b[3]),iso(b[4],b[5]),iso(b[6],b[7])]),
+    fill:"#dbe7f3"},svg);
+});
 [[14.5,0,14.5,22],[0,13.3,33,13.3]].forEach(function(l){
   var a=iso(l[0],l[1]), b=iso(l[2],l[3]);
-  el("line",{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:"#e2e8f0","stroke-width":7,"stroke-linecap":"round"},svg);
+  el("line",{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:"#94a3b8","stroke-width":1.5,
+    "stroke-dasharray":"6 5",opacity:.8},svg);
 });
 
 /* ---------- Zonas, plataformas y estaciones ---------- */
 var stations = [];   /* {id, zone, g, dot, screen, state, callId, callStart, timerEl} */
+var mamparas = [];   /* {u, v} centro entre dos estaciones vecinas de la misma fila */
 var zoneLayer = el("g", {id:"zoneLayer"}, svg);
 var heatLayer = el("g", {id:"heatLayer"}, svg);
 var stationLayer = el("g", {id:"stationLayer"}, svg);
@@ -227,7 +287,9 @@ ZONES.forEach(function(z){
   var u1 = z.u0 + (z.cols-1)*du, v1 = z.v0 + (z.rows-1)*dv;
   /* plataforma */
   var p = [iso(z.u0-1.2, z.v0-1.2), iso(u1+1.6, z.v0-1.2), iso(u1+1.6, v1+1.6), iso(z.u0-1.2, v1+1.6)];
-  el("polygon", {points: poly(p), fill:"#ffffff", stroke:"#cbd5e1", "stroke-width":1.2}, zoneLayer);
+  el("polygon", {points: poly(p), fill:"#ffffff", stroke:"#cbd5e1", "stroke-width":1.2,
+    "class":"zone-platform", "data-zone":z.key, tabindex:"0", role:"button",
+    "aria-label":"Zona "+z.name+", NS "+z.ns+", volumen "+z.volTxt}, zoneLayer);
   /* heatmap overlay (encima de la plataforma, debajo de las estaciones) */
   var h = el("polygon", {points: poly(p), fill: heatColor(z.vol), opacity:0.38,
     stroke: heatColor(z.vol), "stroke-width":1.5, "class":"heat-poly"}, heatLayer);
@@ -254,6 +316,7 @@ ZONES.forEach(function(z){
     for(var c=0; c<z.cols && idx<z.n; c++){
       idx++;
       var u = z.u0 + c*du, v = z.v0 + r*dv;
+      if(c < z.cols-1 && idx < z.n){ mamparas.push({u: u + du/2, v: v}); }
       var s = iso(u, v);
       var id = z.prefix + "-" + String(idx).padStart(2,"0");
       var g = el("g", {"class":"station", "data-station-id": id, "data-zone": z.key, tabindex:"0", role:"button",
@@ -262,29 +325,125 @@ ZONES.forEach(function(z){
       el("ellipse", {cx:s.x, cy:s.y+12, rx:15, ry:5, fill:"rgba(15,23,42,.10)"}, g);
       /* silla */
       el("ellipse", {cx:s.x-1, cy:s.y+9, rx:7, ry:4.5, fill:"#94a3b8", stroke:"#64748b", "stroke-width":.8}, g);
+      /* asesor sentado (se dibuja ANTES del escritorio: el escritorio tapa
+         la parte baja del torso; la cabeza queda por encima/detrás del monitor) */
+      var asesor = el("g", {"class":"asesor"}, g);
+      el("path", {d:"M "+(s.x-8)+" "+(s.y-3)+" L "+(s.x-8)+" "+(s.y-15)+" Q "+(s.x-8)+" "+(s.y-23)+" "+(s.x+4)+" "+(s.y-23)+" Q "+(s.x+16)+" "+(s.y-23)+" "+(s.x+16)+" "+(s.y-15)+" L "+(s.x+16)+" "+(s.y-3)+" Z",
+        fill:"#64748b", stroke:"#475569", "stroke-width":.7}, asesor);
+      el("circle", {cx:s.x+4, cy:s.y-30, r:5.2, fill:"#e8b48c", stroke:"#c68a5e", "stroke-width":.6}, asesor);
+      /* diadema naranja #ff6900: banda sobre la cabeza, copa en la oreja y micrófono hacia la boca */
+      el("path", {d:"M "+(s.x-1)+" "+(s.y-31)+" Q "+(s.x+4)+" "+(s.y-37)+" "+(s.x+9)+" "+(s.y-31),
+        fill:"none", stroke:"#ff6900", "stroke-width":1.8, "stroke-linecap":"round"}, asesor);
+      el("circle", {cx:s.x+9, cy:s.y-30, r:2.1, fill:"#ff6900", stroke:"#c2410c", "stroke-width":.6}, asesor);
+      el("path", {d:"M "+(s.x+9)+" "+(s.y-28)+" Q "+(s.x+9)+" "+(s.y-24.5)+" "+(s.x+5.5)+" "+(s.y-24),
+        fill:"none", stroke:"#334155", "stroke-width":1.2, "stroke-linecap":"round"}, asesor);
+      el("circle", {cx:s.x+5, cy:s.y-24, r:1, fill:"#334155"}, asesor);
       /* escritorio isométrico */
       el("polygon", {points: (s.x-15)+","+(s.y-1)+" "+(s.x+1)+","+(s.y-10)+" "+(s.x+17)+","+(s.y-1)+" "+(s.x+1)+","+(s.y+8),
         fill:"#cbd5e1", stroke:"#94a3b8", "stroke-width":1, "class":"desk-top"}, g);
       el("polygon", {points: (s.x-15)+","+(s.y-1)+" "+(s.x+1)+","+(s.y+8)+" "+(s.x+1)+","+(s.y+13)+" "+(s.x-15)+","+(s.y+4),
         fill:"#94a3b8"}, g);
+      /* teclado (paralelogramo sobre el escritorio, delante del monitor) */
+      el("polygon", {points: (s.x-6)+","+(s.y-3)+" "+(s.x)+","+(s.y-6.5)+" "+(s.x+8)+","+(s.y-3)+" "+(s.x+2)+","+(s.y+0.5),
+        fill:"#475569", stroke:"#1e293b", "stroke-width":.6}, g);
+      /* teléfono de escritorio en la esquina derecha del escritorio */
+      el("rect", {x:s.x+11, y:s.y-5, width:6.5, height:3.5, rx:1, fill:"#1e293b", stroke:"#0f172a", "stroke-width":.5}, g);
+      el("rect", {x:s.x+11.8, y:s.y-7, width:5, height:1.8, rx:.9, fill:"#334155", stroke:"#0f172a", "stroke-width":.4}, g);
       /* monitor (pantalla con el color del estado) */
       el("rect", {x:s.x-2, y:s.y-24, width:13, height:10, rx:1.5, fill:"#334155", stroke:"#1e293b", "stroke-width":.8}, g);
       var screen = el("rect", {x:s.x-0.5, y:s.y-22.5, width:10, height:7, rx:1, fill:STATES.disponible.color, "class":"monitor"}, g);
+      /* pantalla viva: glifo blanco según el estado, sobre el color de estado */
+      var glyph = el("g", {"class":"screen-glyph", transform:"translate("+(s.x+4.5)+","+(s.y-19)+")"}, g);
+      var glyphPhone = el("text", {x:0, y:2.2, "text-anchor":"middle", fill:"#fff"}, glyph);
+      glyphPhone.textContent = "☎";
+      var glyphCheck = el("path", {d:"M -2.6 0.2 L -0.9 1.9 L 2.7 -2", fill:"none", stroke:"#fff", "stroke-width":1.4, "stroke-linecap":"round", "stroke-linejoin":"round"}, glyph);
+      var glyphClock = el("g", {}, glyph);
+      el("circle", {cx:0, cy:0, r:2.6, fill:"none", stroke:"#fff", "stroke-width":1}, glyphClock);
+      el("path", {d:"M 0 0 L 0 -1.7 M 0 0 L 1.2 0.7", fill:"none", stroke:"#fff", "stroke-width":1, "stroke-linecap":"round"}, glyphClock);
+      var glyphPause = el("g", {}, glyph);
+      el("rect", {x:-2.3, y:-2.1, width:1.4, height:4.2, rx:.5, fill:"#fff"}, glyphPause);
+      el("rect", {x:0.9, y:-2.1, width:1.4, height:4.2, rx:.5, fill:"#fff"}, glyphPause);
+      /* temporizador mm:ss a la derecha del ID (solo visible en llamada).
+         RECOLOCADO en fusión: junto al monitor caía sobre la píldora de zona
+         en la fila trasera de ASISTENCIAS; aquí no tapa píldora ni escritorio. */
+      var timerEl = el("text", {x:s.x+14, y:s.y+24, "text-anchor":"start", "class":"call-timer"}, g);
+      timerEl.textContent = "00:00";
       /* punto de estado */
       var dot = el("circle", {cx:s.x+14, cy:s.y-16, r:5.5, fill:STATES.disponible.color,
         stroke:"#fff", "stroke-width":1.5, "class":"state-dot"}, g);
+      /* taza en 1 de cada 3 estaciones (determinista por índice global).
+         RECOLOCADA en fusión a la esquina izquierda del escritorio: en la
+         derecha se solapaba con el teléfono de escritorio del asesor. */
+      if(stations.length % 3 === 0){
+        el("rect", {x:s.x-14, y:s.y-8, width:5, height:6, rx:1, fill:"#ffffff", stroke:"#94a3b8", "stroke-width":.7}, g);
+        el("path", {d:"M "+(s.x-9)+" "+(s.y-6)+" q 3.5 2 0 4", fill:"none", stroke:"#94a3b8", "stroke-width":.9}, g);
+      }
       /* ID */
       var idT = el("text", {x:s.x+1, y:s.y+24, "text-anchor":"middle", "class":"st-id"}, g);
       idT.textContent = id;
       stations.push({id:id, zone:z, g:g, dot:dot, screen:screen, sx:s.x, sy:s.y,
+        asesor:asesor, glyphs:{phone:glyphPhone, check:glyphCheck, clock:glyphClock, pause:glyphPause},
+        timerEl:timerEl,
         state:"disponible", callId:null, callStart:0, callEnd:0});
     }
   }
 });
 
+/* ---------- Estilo call center: mamparas, plantas, letreros y puesto de supervisión ---------- */
+/* Mamparas entre estaciones vecinas de la misma fila (en zoneLayer: las estaciones quedan encima) */
+mamparas.forEach(function(m){
+  var p = iso(m.u, m.v);
+  el("polygon", {points: (p.x-5.2)+","+(p.y+2.6)+" "+(p.x+5.2)+","+(p.y-2.6)+" "+(p.x+5.2)+","+(p.y-16.6)+" "+(p.x-5.2)+","+(p.y-11.4),
+    fill:"#e5e7eb", stroke:"#cbd5e1", "stroke-width":.8}, zoneLayer);
+  el("line", {x1:p.x-5.2, y1:p.y-11.4, x2:p.x+5.2, y2:p.y-16.6, stroke:"#ff6900", "stroke-width":2}, zoneLayer);
+});
+/* Plantitas en dos esquinas de zona (suelo junto a la esquina oeste de CRED, esquina izquierda de COPPEL) */
+[[2.2,17.5],[16.3,6.8]].forEach(function(c){
+  var p = iso(c[0], c[1]);
+  el("circle", {cx:p.x-4, cy:p.y-5, r:4.5, fill:"#22c55e", stroke:"#16a34a", "stroke-width":.8}, zoneLayer);
+  el("circle", {cx:p.x+4, cy:p.y-6, r:4.5, fill:"#22c55e", stroke:"#16a34a", "stroke-width":.8}, zoneLayer);
+  el("circle", {cx:p.x, cy:p.y-9, r:5, fill:"#4ade80", stroke:"#16a34a", "stroke-width":.8}, zoneLayer);
+  el("polygon", {points: (p.x-6)+","+p.y+" "+(p.x+6)+","+p.y+" "+(p.x+4)+","+(p.y+7)+" "+(p.x-4)+","+(p.y+7),
+    fill:"#b45309", stroke:"#92400e", "stroke-width":.8}, zoneLayer);
+});
+/* Letreros de zona: poste + placa con el nombre corto, en la esquina de la plataforma.
+   dx/dy sitúan la placa respecto a la esquina para no tapar estaciones ni IDs. */
+[
+  {key:"ASIS",  cu:13.2, cv:0.8,  dx:0,   dy:-21, w:74},
+  {key:"COPPEL",cu:28.7, cv:0.8,  dx:0,   dy:-22, w:72},
+  {key:"CRED",  cu:13.2, cv:13.8, dx:0,   dy:-22, w:68},
+  {key:"SEG",   cu:16.8, cv:13.8, dx:-64, dy:-21, w:64},
+  {key:"EMPL",  cu:25.6, cv:13.8, dx:0,   dy:-22, w:72},
+  {key:"LIV",   cu:30.6, cv:13.8, dx:0,   dy:-22, w:68}
+].forEach(function(sg){
+  var z = ZONES.filter(function(zz){ return zz.key===sg.key; })[0];
+  var p = iso(sg.cu, sg.cv);
+  var px = p.x + sg.dx, py = p.y + sg.dy;
+  el("line", {x1:p.x, y1:py+15, x2:p.x, y2:p.y, stroke:"#64748b", "stroke-width":2}, zoneLayer);
+  el("rect", {x:px, y:py, width:sg.w, height:15, rx:3, fill:"#ffffff", stroke:"#cbd5e1", "stroke-width":1}, zoneLayer);
+  var t = el("text", {x:px+sg.w/2, y:py+11, "text-anchor":"middle", "class":"sign-label"}, zoneLayer);
+  t.textContent = z.short;
+});
+/* Puesto del supervisor: plataforma en la esquina superior derecha del piso (u 29..33, v 0..4) */
+var supPlat = [iso(29,0), iso(33,0), iso(33,4), iso(29,4)];
+el("polygon", {points: poly(supPlat), fill:"#e0f2fe", stroke:"#0ea5e9", "stroke-width":1.5}, zoneLayer);
+el("rect", {x:829, y:254, width:96, height:15, rx:7, fill:"#ffffff", stroke:"#0ea5e9", "stroke-width":1}, zoneLayer);
+var supLab = el("text", {x:877, y:265, "text-anchor":"middle", "font-size":10, "font-weight":800, fill:"#0369a1"}, zoneLayer);
+supLab.textContent = "SUPERVISIÓN";
+el("rect", {x:875, y:270, width:10, height:8, rx:1, fill:"#334155", stroke:"#1e293b", "stroke-width":.7}, zoneLayer);
+el("rect", {x:876.5, y:271.5, width:7, height:5, rx:1, fill:"#38bdf8"}, zoneLayer);
+el("polygon", {points:"866,285 878,278 890,285 878,292", fill:"#cbd5e1", stroke:"#94a3b8", "stroke-width":1}, zoneLayer);
+el("polygon", {points:"866,285 878,292 878,296 866,289", fill:"#94a3b8"}, zoneLayer);
+el("ellipse", {cx:877, cy:298, rx:5.5, ry:3, fill:"#94a3b8", stroke:"#64748b", "stroke-width":.8}, zoneLayer);
+/* Rótulos PASILLO en los extremos de los dos pasillos (encima de las plataformas) */
+[["PASILLO",682,159],["PASILLO",500,266],["PASILLO",327,148],["PASILLO",756,363]].forEach(function(l){
+  var t = el("text", {x:l[1], y:l[2], "text-anchor":"middle", "class":"pasillo-label"}, svg);
+  t.textContent = l[0];
+});
+
 /* ---------- Cola de entrada ---------- */
 var queue = el("g", {id:"queue"}, svg);
-el("rect", {x:60, y:450, width:880, height:56, rx:10, fill:"#ffffff", stroke:"#cbd5e1", "stroke-width":1.2}, queue);
+el("rect", {x:60, y:450, width:880, height:56, rx:10, fill:"#ffffff", stroke:"#7c3aed", "stroke-width":2}, queue);
 el("rect", {x:60, y:450, width:150, height:56, rx:10, fill:"#7c3aed"}, queue);
 var qt = el("text", {x:135, y:474, "text-anchor":"middle", fill:"#fff", "font-size":12, "font-weight":700}, queue);
 qt.textContent = "COLA DE ENTRADA";
@@ -292,13 +451,21 @@ var qs = el("text", {x:135, y:491, "text-anchor":"middle", fill:"#e9d5ff", "font
 qs.textContent = "llamadas esperando";
 var qCount = el("text", {x:905, y:485, "text-anchor":"end", "font-size":13, "font-weight":800, fill:"#475569"}, queue);
 qCount.textContent = "En espera: 0";
+/* Zona de cola diferenciada: pestaña con título, flecha de entrada y figuras en espera */
+el("rect", {x:60, y:432, width:118, height:18, rx:6, fill:"#7c3aed"}, queue);
+var qTab = el("text", {x:119, y:445, "text-anchor":"middle", fill:"#fff", "font-size":10, "font-weight":800}, queue);
+qTab.textContent = "ZONA DE COLA";
+el("line", {x1:560, y1:418, x2:560, y2:444, stroke:"#7c3aed", "stroke-width":2.5}, queue);
+el("polygon", {points:"560,450 552,440 568,440", fill:"#7c3aed"}, queue);
+var queueDots = el("g", {id:"queueDots"}, queue);
 
 /* ---------- Supervisor ---------- */
 var supWaypoints = [
   {u:14.5, v:6}, {u:14.5, v:12}, {u:19, v:13.3}, {u:25, v:13.3}, {u:14.5, v:17.8},
   {u:6, v:13.3}, {u:14.5, v:9}
 ].map(function(w){ var p=iso(w.u,w.v); return {x:p.x, y:p.y}; });
-var sup = el("g", {id:"supervisor"}, svg);
+var sup = el("g", {id:"supervisor", tabindex:"0", role:"button",
+  "aria-label":"Supervisor: toca para ver a qué estación está apoyando y por qué"}, svg);
 el("circle", {cx:0, cy:0, r:13, fill:"rgba(14,165,233,.18)", stroke:"#0ea5e9", "stroke-width":1.5}, sup);
 el("circle", {cx:0, cy:-4, r:5, fill:"#0ea5e9", stroke:"#fff", "stroke-width":1.5}, sup);
 el("path", {d:"M -6 8 Q 0 0 6 8 L 6 11 L -6 11 Z", fill:"#0284c7", stroke:"#fff", "stroke-width":1}, sup);
@@ -307,15 +474,46 @@ supT.textContent = "SUPERVISOR";
 sup.setAttribute("transform", "translate("+supWaypoints[0].x+","+supWaypoints[0].y+")");
 
 /* ---------- Estado inicial ---------- */
+/* Pantalla viva + visibilidad del asesor según el estado.
+   Llamada: glifo teléfono + temporizador; disponible: check; post: reloj;
+   pausa: dos barras + asesor oculto (silla vacía, asesor en descanso). */
+function updateScreen(st){
+  st.screen.setAttribute("fill", STATES[st.state].color);
+  st.glyphs.phone.style.display = st.state==="llamada" ? "" : "none";
+  st.glyphs.check.style.display = st.state==="disponible" ? "" : "none";
+  st.glyphs.clock.style.display = st.state==="post" ? "" : "none";
+  st.glyphs.pause.style.display = st.state==="pausa" ? "" : "none";
+  if(st.state==="llamada"){
+    st.timerEl.textContent = fmtTime(nowSim() - st.callStart);
+    st.timerEl.style.display = "";
+  } else {
+    st.timerEl.style.display = "none";
+  }
+  st.asesor.style.display = st.state==="pausa" ? "none" : "";
+}
+function refreshMonitorTimers(){
+  stations.forEach(function(st){
+    if(st.state==="llamada"){ st.timerEl.textContent = fmtTime(nowSim() - st.callStart); }
+  });
+}
 function setState(st, state, callId){
   st.state = state;
   st.dot.setAttribute("fill", STATES[state].color);
-  st.screen.setAttribute("fill", STATES[state].color);
   st.g.setAttribute("data-state", state);
   st.g.setAttribute("aria-label", "Estación "+st.id+", "+st.zone.name+", "+STATES[state].label +
     (callId ? ", llamada "+callId : ""));
-  if(callId){ st.callId = callId; st.callStart = Date.now(); }
+  if(callId){ st.callId = callId; st.callStart = nowSim(); }
   if(state !== "llamada"){ st.callId = null; }
+  st.g.setAttribute("aria-label", "Estación "+st.id+", "+st.zone.name+", "+STATES[state].label +
+    (callId ? ", llamada "+callId : ""));
+  if(callId){ st.callId = callId; st.callStart = nowSim(); }
+  if(state !== "llamada"){ st.callId = null; }
+  /* El filtro sigue al estado en vivo: al cambiar de estado la opacidad
+     se actualiza aquí mismo, sin esperar al próximo tick. */
+  if(typeof currentFilter !== "undefined"){
+    st.g.style.opacity = (currentFilter === "all" || state === currentFilter) ? "" : ".18";
+  }
+  updateScreen(st);
 }
 function randCallId(){ return "LL-" + (1000 + Math.floor(Math.random()*9000)); }
 
@@ -324,7 +522,7 @@ var initial = ["llamada","llamada","llamada","disponible","llamada","disponible"
 stations.forEach(function(st, i){
   var s = REDUCED ? initial[i % initial.length] : initial[i % initial.length];
   setState(st, s, s==="llamada" ? randCallId() : null);
-  if(s==="llamada"){ st.callEnd = Date.now() + (6000 + Math.random()*9000); }
+  if(s==="llamada"){ st.callEnd = nowSim() + (6000 + Math.random()*9000); }
 });
 
 /* ---------- Simulación en vivo ---------- */
@@ -333,21 +531,39 @@ var activeCalls = [];   /* {el, from, ctrl, to, t, dur, target} */
 var waiting = 0;
 
 function spawnCall(){
-  if(REDUCED) return;
+  if(REDUCED || paused) return;
   var free = stations.filter(function(s){ return s.state==="disponible"; });
   if(!free.length) { waiting++; updateQueue(); return; }
   var target = free[Math.floor(Math.random()*free.length)];
   var from = {x: 220 + Math.random()*560, y: 477};
   var to = {x: target.sx, y: target.sy - 30};
   var ctrl = {x: (from.x+to.x)/2, y: Math.min(from.y, to.y) - 120};
+  var callId = randCallId();
   var c = el("circle", {cx: from.x, cy: from.y, r:6, fill:"#7c3aed", stroke:"#fff",
-    "stroke-width":1.8, "class":"call-dot"}, callLayer);
-  el("circle", {cx: from.x, cy: from.y, r:10, fill:"none", stroke:"#7c3aed",
-    "stroke-width":1, opacity:.5, "class":"call-dot"}, callLayer);
-  activeCalls.push({els:[c], from:from, ctrl:ctrl, to:to, t:0, dur:1.4+Math.random()*0.7, target:target});
+    "stroke-width":1.8, "class":"call-dot call-dot-click", tabindex:"0", role:"button",
+    "data-call-id": callId, "data-target": target.id,
+    "aria-label":"Llamada "+callId+" en camino a la estación "+target.id}, callLayer);
+  var title = el("title", {}, c);
+  title.textContent = "Llamada "+callId+" en camino a la estación "+target.id+" ("+target.zone.name+")";
+  var halo = el("circle", {cx: from.x, cy: from.y, r:10, fill:"none", stroke:"#7c3aed",
+    "stroke-width":1, opacity:.5, "class":"call-dot call-dot-halo"}, callLayer);
+  activeCalls.push({els:[c, halo], dot:c, from:from, ctrl:ctrl, to:to, t:0,
+    dur:1.4+Math.random()*0.7, target:target, callId:callId, startSim:nowSim()});
 }
 function updateQueue(){
   qCount.textContent = "En espera: " + waiting + (activeCalls.length ? " · " + activeCalls.length + " en camino" : "");
+  /* figuras en espera dentro de la barra: tantas como el contador, tope visual de 12 */
+  while(queueDots.firstChild){ queueDots.removeChild(queueDots.firstChild); }
+  var n = Math.min(waiting, 12);
+  for(var i=0; i<n; i++){
+    var x = 300 + i*30;
+    el("circle", {cx:x, cy:472, r:4, fill:"#7c3aed", stroke:"#fff", "stroke-width":1}, queueDots);
+    el("rect", {x:x-4.5, y:477, width:9, height:8, rx:3.5, fill:"#a78bfa", stroke:"#fff", "stroke-width":1}, queueDots);
+  }
+  if(waiting > 12){
+    var more = el("text", {x:668, y:482, "font-size":11, "font-weight":800, fill:"#7c3aed"}, queueDots);
+    more.textContent = "+" + (waiting-12);
+  }
 }
 function bezier(p0,p1,p2,t){
   var u=1-t;
@@ -359,16 +575,18 @@ var lastTs = 0, supIdx = 0, supT0 = 0, supDwellUntil = 0, supPos = {x:supWaypoin
 function frame(ts){
   if(REDUCED) return;
   var dt = Math.min(0.05, (ts - lastTs)/1000 || 0.016); lastTs = ts;
+  if(paused){ requestAnimationFrame(frame); return; }
+  simNow += dt * 1000 * speedFactor;
   /* llamadas en tránsito */
   for(var i=activeCalls.length-1; i>=0; i--){
     var c = activeCalls[i];
-    c.t += dt / c.dur;
+    c.t += dt * speedFactor / c.dur;
     if(c.t >= 1){
       c.els.forEach(function(e){ e.remove(); });
       activeCalls.splice(i,1);
       if(c.target.state === "disponible"){
         setState(c.target, "llamada", randCallId());
-        c.target.callEnd = Date.now() + (8000 + Math.random()*9000);
+        c.target.callEnd = nowSim() + (8000 + Math.random()*9000);
       }
       updateQueue();
     } else {
@@ -377,13 +595,13 @@ function frame(ts){
     }
   }
   /* supervisor: camina entre puntos, se detiene 2,5 s en cada uno */
-  if(Date.now() > supDwellUntil){
+  if(nowSim() > supDwellUntil){
     var next = supWaypoints[(supIdx+1) % supWaypoints.length];
     var dx = next.x - supPos.x, dy = next.y - supPos.y;
-    var dist = Math.hypot(dx,dy), speed = 55;
+    var dist = Math.hypot(dx,dy), speed = 55 * speedFactor;
     if(dist < 2){
       supIdx = (supIdx+1) % supWaypoints.length;
-      supDwellUntil = Date.now() + 2500;
+      supDwellUntil = nowSim() + 2500;
       /* apoyo: marca la estación más cercana con un pulso */
       var near = null, best = 1e9;
       stations.forEach(function(s){
@@ -405,8 +623,8 @@ function frame(ts){
 }
 
 function tick(){
-  if(REDUCED) return;
-  var now = Date.now();
+  if(REDUCED || paused) return;
+  var now = nowSim();
   stations.forEach(function(st){
     if(st.state==="llamada" && now > st.callEnd){
       setState(st, "post");
@@ -426,19 +644,23 @@ function tick(){
     if(free.length){ waiting--; updateQueue(); }
   }
   refreshInspectorTimer();
+  if(currentFilter !== "all") applyFilter();
 }
 
+var spawnTimer = null, tickTimer = null;
+function startIntervals(){
+  if(spawnTimer) clearInterval(spawnTimer);
+  if(tickTimer) clearInterval(tickTimer);
+  spawnTimer = setInterval(spawnCall, 1400 / speedFactor);
+  tickTimer = setInterval(tick, 2000 / speedFactor);
+}
 if(!REDUCED){
-  setInterval(spawnCall, 1400);
-  setInterval(tick, 2000);
+  startIntervals();
   setInterval(updateQueue, 1000);
   requestAnimationFrame(frame);
   spawnCall(); spawnCall();
 } else {
-  /* estático: 3 llamadas en espera dibujadas en la cola, sin movimiento */
-  [300, 330, 360].forEach(function(x){
-    el("circle", {cx:x, cy:477, r:6, fill:"#7c3aed", stroke:"#fff", "stroke-width":1.8}, callLayer);
-  });
+  /* estático: 3 llamadas en espera; updateQueue dibuja sus figuras en la zona de cola */
   waiting = 3; updateQueue();
 }
 
@@ -463,12 +685,19 @@ function fmtTime(ms){
   return String(m).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
 }
 function refreshInspectorTimer(){
-  if(!current || current.state!=="llamada"){ return; }
-  document.getElementById("inspTimer").textContent = fmtTime(Date.now() - current.callStart);
+  refreshMonitorTimers();
+  if(viewKind === "station"){
+    if(!current || current.state!=="llamada"){ return; }
+    document.getElementById("inspTimer").textContent = fmtTime(nowSim() - current.callStart);
+  } else if(viewKind === "call"){
+    if(!viewCall){ return; }
+    document.getElementById("inspTimer").textContent = fmtTime(nowSim() - viewCall.startSim);
+  }
+  /* supervisor: sin temporizador en curso */
 }
 setInterval(refreshInspectorTimer, 1000);
 function openInspector(st){
-  current = st;
+  current = st; viewKind = "station"; viewCall = null; viewSup = null;
   document.getElementById("inspTitle").textContent = "Estación " + st.id;
   document.getElementById("inspCartera").textContent = st.zone.name;
   var b = document.getElementById("inspEstado");
@@ -476,30 +705,241 @@ function openInspector(st){
   b.style.background = STATES[st.state].color;
   document.getElementById("inspCall").textContent = st.state==="llamada" ? st.callId : "—";
   document.getElementById("inspTimer").textContent =
-    st.state==="llamada" ? fmtTime(Date.now()-st.callStart) : "—";
+    st.state==="llamada" ? fmtTime(nowSim()-st.callStart) : "—";
   document.getElementById("inspNS").textContent = st.zone.ns;
   document.getElementById("inspVol").textContent = st.zone.volTxt;
+  document.getElementById("inspNote").textContent =
+    "TMO por zona no forma parte de la foto fija de nov 2026; se muestra el TMO global (8:52). La llamada en curso es un identificador ficticio de la simulación.";
+  inspector.hidden = false;
+}
+/* ---------- Llamada en tránsito ---------- */
+function findCall(callId){
+  for(var i=0;i<activeCalls.length;i++){ if(activeCalls[i].callId===callId) return activeCalls[i]; }
+  return null;
+}
+function openCallInspector(call){
+  if(!call) return;
+  viewKind = "call"; viewCall = call; viewSup = null; current = null;
+  var z = call.target.zone;
+  lastCallInfo = {callId: call.callId, to: call.target.id, zone: z.key, ns: z.ns};
+  window.__piso.lastCallInfo = lastCallInfo;
+  document.getElementById("inspTitle").textContent = "Llamada en tránsito " + call.callId;
+  document.getElementById("inspCartera").textContent =
+    "Origen: Cola de entrada · Destino: Estación " + call.target.id + " — " + z.name;
+  var b = document.getElementById("inspEstado");
+  b.textContent = "En camino"; b.style.background = "#7c3aed";
+  document.getElementById("inspCall").textContent = call.callId;
+  document.getElementById("inspTimer").textContent = fmtTime(nowSim() - call.startSim);
+  document.getElementById("inspNS").textContent = z.ns;
+  document.getElementById("inspVol").textContent = z.volTxt;
+  document.getElementById("inspNote").textContent =
+    "Llamada en tránsito desde la cola de entrada hacia la estación " + call.target.id +
+    " (" + z.name + "). Tiempo en camino desde que salió de la cola.";
+  inspector.hidden = false;
+}
+/* ---------- Supervisor ---------- */
+function nearestStationTo(x, y){
+  var near = null, best = 1e9;
+  stations.forEach(function(s){
+    var d = Math.hypot(s.sx-x, s.sy-y);
+    if(d<best){ best=d; near=s; }
+  });
+  return {station: near, dist: best};
+}
+function worstZone(){
+  var worst = ZONES[0], worstVal = 1e9;
+  ZONES.forEach(function(z){
+    var v = parseFloat(z.ns.replace("%","").replace(",","."));
+    if(v < worstVal){ worstVal = v; worst = z; }
+  });
+  return worst;
+}
+function supTarget(){
+  var near = nearestStationTo(supPos.x, supPos.y);
+  if(near.station && near.dist < 90) return near.station;
+  var next = supWaypoints[(supIdx+1) % supWaypoints.length];
+  return nearestStationTo(next.x, next.y).station;
+}
+function openSupInspector(){
+  var st = supTarget();
+  if(!st) return;
+  viewKind = "supervisor"; viewSup = st; viewCall = null; current = null;
+  var reason;
+  if(waiting > 0){
+    reason = "Cola en espera (" + waiting + (waiting===1 ? " llamada)" : " llamadas)");
+  } else {
+    var w = worstZone();
+    reason = "Zona con peor NS: " + w.name + " (" + w.ns + ", " + w.volTxt + " llamadas en nov)";
+  }
+  lastSupInfo = {station: st.id, zone: st.zone.key, reason: reason};
+  window.__piso.lastSupInfo = lastSupInfo;
+  document.getElementById("inspTitle").textContent = "Supervisor";
+  document.getElementById("inspCartera").textContent =
+    "Apoyando a la estación " + st.id + " — " + st.zone.name;
+  var b = document.getElementById("inspEstado");
+  b.textContent = "En ronda"; b.style.background = "#0ea5e9";
+  document.getElementById("inspCall").textContent = st.id + " · " + STATES[st.state].label;
+  document.getElementById("inspTimer").textContent = "—";
+  document.getElementById("inspNS").textContent = st.zone.ns;
+  document.getElementById("inspVol").textContent = st.zone.volTxt;
+  document.getElementById("inspNote").textContent = "Por qué está aquí: " + reason + ".";
   inspector.hidden = false;
 }
 svg.addEventListener("click", function(ev){
+  /* 1) Clic en estación: la figura del asesor vive dentro del <g class="station">,
+     así que closest('.station') la cubre — ningún hijo intercepta el clic
+     (el <text> tiene pointer-events:none en CSS; el resto son formas del grupo).
+     Verificado en Playwright clicando monitor/punto de estado. */
   var g = ev.target.closest ? ev.target.closest(".station") : null;
   if(g){
     var st = stations.filter(function(s){ return s.id===g.getAttribute("data-station-id"); })[0];
     if(st) openInspector(st);
-  } else if(ev.target===svg){
-    inspector.hidden = true; current = null;
+    return;
+  }
+  /* 2) Clic en una llamada que camina (solo el punto; el halo tiene pointer-events:none) */
+  var dot = ev.target.closest ? ev.target.closest(".call-dot-click") : null;
+  if(dot){
+    openCallInspector(findCall(dot.getAttribute("data-call-id")));
+    return;
+  }
+  /* 3) Clic en el supervisor */
+  var s = ev.target.closest ? ev.target.closest("#supervisor") : null;
+  if(s){ openSupInspector(); return; }
+  if(ev.target===svg){
+    inspector.hidden = true; current = null; viewKind = "station"; viewCall = null; viewSup = null;
   }
 });
 svg.addEventListener("keydown", function(ev){
-  if((ev.key==="Enter"||ev.key===" ") && ev.target.classList.contains("station")){
+  if(ev.key!=="Enter" && ev.key!==" "){ return; }
+  if(ev.target.classList && ev.target.classList.contains("station")){
     ev.preventDefault();
     var st = stations.filter(function(s){ return s.id===ev.target.getAttribute("data-station-id"); })[0];
     if(st) openInspector(st);
+  } else if(ev.target.classList && ev.target.classList.contains("call-dot-click")){
+    ev.preventDefault();
+    openCallInspector(findCall(ev.target.getAttribute("data-call-id")));
+  } else if(ev.target.id === "supervisor"){
+    ev.preventDefault();
+    openSupInspector();
+  } else if(ev.target.classList && ev.target.classList.contains("zone-platform")){
+    ev.preventDefault();
+    showZoneTip(ev.target.getAttribute("data-zone"));
   }
 });
 document.getElementById("inspClose").addEventListener("click", function(){
-  inspector.hidden = true; current = null;
+  inspector.hidden = true; current = null; viewKind = "station"; viewCall = null; viewSup = null;
 });
+
+/* ---------- Tooltip de zona (hover + foco de teclado) ---------- */
+var zoneTip = document.getElementById("zoneTip");
+var sceneEl = document.getElementById("scene");
+function zoneByKey(key){
+  for(var i=0;i<ZONES.length;i++){ if(ZONES[i].key===key) return ZONES[i]; }
+  return null;
+}
+function showZoneTip(key, clientX, clientY){
+  var z = zoneByKey(key);
+  if(!z) return;
+  var inCall = stations.filter(function(s){ return s.zone.key===key && s.state==="llamada"; }).length;
+  zoneTip.innerHTML = "<h3>"+z.name+"</h3><dl>"+
+    "<dt>NS nov</dt><dd>"+z.ns+"</dd>"+
+    "<dt>Volumen nov</dt><dd>"+z.volTxt+"</dd>"+
+    "<dt>Estaciones</dt><dd>"+z.n+"</dd>"+
+    "<dt>En llamada ahora</dt><dd>"+inCall+"</dd></dl>";
+  zoneTip.hidden = false;
+  var rect = sceneEl.getBoundingClientRect();
+  var x, y;
+  if(typeof clientX === "number"){
+    /* A la derecha del puntero, salvo en la mitad derecha de la escena,
+       donde va a la izquierda para no tapar el inspector. */
+    var px = clientX - rect.left;
+    x = px > rect.width * 0.55 ? px - 244 : px + 14;
+    y = clientY - rect.top + 12;
+  } else {
+    var plat = svg.querySelector('.zone-platform[data-zone="'+key+'"]');
+    if(plat){
+      var b = plat.getBoundingClientRect();
+      x = b.left - rect.left + b.width/2 - 115; y = b.top - rect.top + b.height/2 - 20;
+    } else { x = 20; y = 20; }
+  }
+  x = Math.max(8, Math.min(x, rect.width - 240));
+  y = Math.max(8, Math.min(y, rect.height - 110));
+  zoneTip.style.left = x + "px";
+  zoneTip.style.top = y + "px";
+  var platEl = svg.querySelector('.zone-platform[data-zone="'+key+'"]');
+  if(platEl) platEl.classList.add("zone-hover");
+}
+function hideZoneTip(key){
+  zoneTip.hidden = true;
+  if(key){
+    var platEl = svg.querySelector('.zone-platform[data-zone="'+key+'"]');
+    if(platEl) platEl.classList.remove("zone-hover");
+  } else {
+    svg.querySelectorAll(".zone-platform.zone-hover").forEach(function(p){ p.classList.remove("zone-hover"); });
+  }
+}
+svg.addEventListener("mouseover", function(ev){
+  var p = ev.target.closest ? ev.target.closest(".zone-platform") : null;
+  if(p) showZoneTip(p.getAttribute("data-zone"), ev.clientX, ev.clientY);
+});
+svg.addEventListener("mousemove", function(ev){
+  var p = ev.target.closest ? ev.target.closest(".zone-platform") : null;
+  if(p && !zoneTip.hidden) showZoneTip(p.getAttribute("data-zone"), ev.clientX, ev.clientY);
+});
+svg.addEventListener("mouseout", function(ev){
+  var p = ev.target.closest ? ev.target.closest(".zone-platform") : null;
+  if(p) hideZoneTip(p.getAttribute("data-zone"));
+});
+svg.addEventListener("focusin", function(ev){
+  if(ev.target.classList && ev.target.classList.contains("zone-platform"))
+    showZoneTip(ev.target.getAttribute("data-zone"));
+});
+svg.addEventListener("focusout", function(ev){
+  if(ev.target.classList && ev.target.classList.contains("zone-platform"))
+    hideZoneTip(ev.target.getAttribute("data-zone"));
+});
+
+/* ---------- Controles nuevos: pausa, velocidad, filtro ---------- */
+var pauseBtn = document.getElementById("pauseBtn");
+var speedBtn = document.getElementById("speedBtn");
+var filterCount = document.getElementById("filterCount");
+function applyPauseLabel(){
+  pauseBtn.textContent = paused ? "▶ Reanuda" : "⏸ Pausa";
+  pauseBtn.setAttribute("aria-pressed", String(paused));
+}
+pauseBtn.addEventListener("click", function(){
+  paused = !paused;
+  applyPauseLabel();
+});
+function applySpeedLabel(){
+  speedBtn.textContent = "Velocidad " + speedFactor + "x";
+  speedBtn.setAttribute("aria-pressed", String(speedFactor === 2));
+}
+speedBtn.addEventListener("click", function(){
+  speedFactor = speedFactor === 1 ? 2 : 1;
+  applySpeedLabel();
+  if(!REDUCED) startIntervals(); /* a 2x los intervalos se acortan a la mitad */
+});
+function applyFilter(){
+  var visible = 0;
+  stations.forEach(function(st){
+    var show = currentFilter === "all" || st.state === currentFilter;
+    st.g.style.opacity = show ? "" : ".18";
+    if(show) visible++;
+  });
+  filterCount.textContent = visible + " / " + stations.length + " visibles";
+  document.querySelectorAll(".filter-btn").forEach(function(b){
+    b.setAttribute("aria-pressed", String(b.getAttribute("data-filter") === currentFilter));
+  });
+}
+document.querySelectorAll(".filter-btn").forEach(function(b){
+  b.addEventListener("click", function(){
+    currentFilter = b.getAttribute("data-filter");
+    applyFilter();
+  });
+});
+/* El filtro sigue al estado en vivo: tick() lo re-aplica al final. */
+applyFilter();
 
 /* ---------- Hooks de verificación ---------- */
 window.__piso = {
@@ -515,7 +955,17 @@ window.__piso = {
     return r;
   },
   heatOn: function(){ return heatOn; },
-  reduced: REDUCED
+  reduced: REDUCED,
+  paused: function(){ return paused; },
+  speed: function(){ return speedFactor; },
+  filter: function(){ return currentFilter; },
+  lastCallInfo: lastCallInfo,
+  lastSupInfo: lastSupInfo,
+  asesoresVisibles: function(){
+    var n = 0;
+    stations.forEach(function(s){ if(s.asesor.style.display !== "none") n++; });
+    return n;
+  }
 };
 })();
 </script>
