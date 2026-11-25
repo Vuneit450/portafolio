@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Piso GMF — Cobranza · 25 nov 2026</title>
+<meta name="description" content="Piso GMF de cobranza: 38 gestores en 3 zonas Pareto, con datos reales de la tabla GESTORES: PROMESAS Y CUMPLIMIENTO (captura 25 nov 2026, 15:26–15:28).">
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; background: #f4f6fa; color: #1a1d21; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+.page { max-width: 1360px; margin: 0 auto; padding: 16px; }
+a { color: #c2410c; }
+
+/* ---------- Encabezado ---------- */
+.gmf-header { background: #ffffff; border: 1px solid #dfe3ea; border-radius: 12px; padding: 20px 24px; margin-bottom: 16px; }
+.gmf-header-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; margin-bottom: 6px; }
+.gmf-title { font-size: 1.5rem; line-height: 1.2; margin: 0; }
+.gmf-stamp { font-size: 0.85rem; color: #5f6368; margin: 0; background: #f4f6fa; border: 1px solid #dfe3ea; border-radius: 999px; padding: 4px 12px; }
+.gmf-source { font-size: 0.9rem; color: #5f6368; margin: 0 0 16px; }
+.gmf-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 0; }
+.gmf-kpi { background: #f4f6fa; border: 1px solid #e3e7ee; border-radius: 10px; padding: 12px 14px; }
+.gmf-kpi--hero { background: #fff3e8; border-color: #ff6900; }
+.gmf-kpi-label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: #5f6368; margin: 0 0 4px; }
+.gmf-kpi-value { font-size: 1.45rem; font-weight: 700; line-height: 1.15; margin: 0; }
+.gmf-kpi--hero .gmf-kpi-value { color: #c2410c; font-size: clamp(1.5rem, 2.4vw, 2.1rem); }
+.gmf-kpi-sub { font-size: 0.82rem; color: #5f6368; margin: 4px 0 0; }
+
+/* ---------- Leyenda ---------- */
+.gmf-legend { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; background: #ffffff; border: 1px solid #dfe3ea; border-radius: 12px; padding: 12px 20px; margin-bottom: 16px; font-size: 0.9rem; }
+.gmf-legend strong { margin-right: 2px; }
+.gmf-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; vertical-align: -1px; margin-right: 5px; }
+.gmf-dot--verde { background: #16a34a; }
+.gmf-dot--amarillo { background: #ca8a04; }
+.gmf-dot--rojo { background: #d93025; }
+.gmf-note { font-size: 0.85rem; color: #5f6368; margin: 0; }
+
+/* ---------- Layout piso + ficha ---------- */
+.gmf-layout { display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 16px; align-items: start; margin-bottom: 16px; }
+.gmf-layout > * { min-width: 0; }
+@media (max-width: 980px) { .gmf-layout { grid-template-columns: 1fr; } }
+.gmf-card { background: #ffffff; border: 1px solid #dfe3ea; border-radius: 12px; padding: 18px 20px; }
+.gmf-card-title { font-size: 1.05rem; margin: 0 0 4px; }
+.gmf-card-sub { font-size: 0.88rem; color: #5f6368; margin: 0 0 12px; }
+.gmf-floor-wrap { overflow: hidden; }
+.gmf-floor-wrap svg { display: block; width: 100%; height: auto; }
+.gmf-zone-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; }
+@media (max-width: 640px) { .gmf-zone-cards { grid-template-columns: 1fr; } }
+.gmf-zone-card { border: 1px solid #e3e7ee; border-radius: 10px; padding: 10px 12px; background: #f8fafc; }
+.gmf-zone-card h3 { font-size: 0.95rem; margin: 0 0 4px; }
+.gmf-zone-card p { font-size: 0.85rem; color: #5f6368; margin: 2px 0; }
+.gmf-zone-card .gmf-zone-total { font-size: 0.95rem; font-weight: 700; color: #1a1d21; }
+
+/* ---------- SVG piso ---------- */
+.gmf-zone-label { font-size: 11px; font-weight: 700; fill: #1a1d21; }
+.gmf-zone-sub { font-size: 10.5px; fill: #5f6368; }
+.gmf-station { cursor: pointer; outline: none; }
+.gmf-station:focus-visible { outline: 3px solid #ff6900; outline-offset: 2px; }
+.gmf-station-code { font-size: 10px; font-weight: 700; fill: #475569; paint-order: stroke; stroke: #ffffff; stroke-width: 3px; }
+.gmf-station-name { font-size: 8.5px; fill: #64748b; paint-order: stroke; stroke: #ffffff; stroke-width: 3px; }
+.gmf-monitor-glyph { font-size: 8px; font-weight: 700; fill: #ffffff; }
+.gmf-station--selected .gmf-station-ring { stroke: #ff6900; stroke-width: 2.5; }
+.gmf-station-ring { fill: none; stroke: transparent; stroke-width: 2; }
+
+/* ---------- Ficha ---------- */
+.gmf-ficha { position: sticky; top: 12px; }
+@media (max-width: 980px) { .gmf-ficha { position: static; } }
+.gmf-ficha-name { font-size: 1.2rem; line-height: 1.25; margin: 0 0 2px; }
+.gmf-ficha-sub { font-size: 0.88rem; color: #5f6368; margin: 0 0 12px; }
+.gmf-pill { display: inline-block; font-size: 0.85rem; font-weight: 700; border-radius: 999px; padding: 3px 12px; margin: 0 0 12px; }
+.gmf-pill--verde { background: #dcfce7; color: #166534; }
+.gmf-pill--amarillo { background: #fef3c7; color: #92400e; }
+.gmf-pill--rojo { background: #fee2e2; color: #991b1b; }
+.gmf-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 0 12px; }
+.gmf-metric { background: #f4f6fa; border: 1px solid #e3e7ee; border-radius: 10px; padding: 10px 12px; }
+.gmf-metric-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: #5f6368; margin: 0 0 3px; }
+.gmf-metric-value { font-size: 1.1rem; font-weight: 700; margin: 0; }
+.gmf-metric-sub { font-size: 0.8rem; color: #5f6368; margin: 3px 0 0; }
+.gmf-ficha h3 { font-size: 0.98rem; margin: 16px 0 8px; color: #1a1d21; }
+.gmf-ficha h3:first-of-type { margin-top: 4px; }
+.gmf-kv { margin: 0; font-size: 0.92rem; line-height: 1.55; }
+.gmf-kv dt { display: inline; font-weight: 700; }
+.gmf-kv dt::after { content: ": "; font-weight: 700; }
+.gmf-kv dd { display: inline; margin: 0; }
+.gmf-kv dd::after { content: ""; display: block; }
+.gmf-sindato { color: #5f6368; font-style: italic; }
+.gmf-dinero { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.gmf-dinero th, .gmf-dinero td { text-align: left; padding: 5px 6px; border-bottom: 1px solid #eef0f3; vertical-align: top; }
+.gmf-dinero th { color: #5f6368; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.03em; }
+.gmf-dinero td.num, .gmf-dinero th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.gmf-bar { height: 6px; background: #eef0f3; border-radius: 999px; overflow: hidden; margin-top: 4px; }
+.gmf-bar > span { display: block; height: 100%; background: #ff6900; }
+.gmf-ficha-note { font-size: 0.84rem; color: #5f6368; line-height: 1.5; margin: 12px 0 0; }
+.gmf-plan { background: #fff7ed; border: 1px solid #fdba74; border-radius: 10px; padding: 10px 12px; font-size: 0.92rem; line-height: 1.5; margin: 0; }
+.gmf-close { float: right; border: 1px solid #dfe3ea; background: #fff; border-radius: 8px; padding: 4px 10px; cursor: pointer; font-size: 0.85rem; }
+.gmf-ficha-empty { color: #5f6368; font-size: 0.95rem; line-height: 1.5; margin: 0; }
+
+/* ---------- Lista ---------- */
+.gmf-tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 12px; }
+.gmf-tools input[type="search"] { flex: 1 1 220px; min-width: 0; font: inherit; font-size: 0.95rem; padding: 8px 12px; border: 1px solid #dfe3ea; border-radius: 8px; }
+.gmf-tools select { font: inherit; font-size: 0.95rem; padding: 8px 10px; border: 1px solid #dfe3ea; border-radius: 8px; background: #fff; }
+.gmf-count { font-size: 0.88rem; color: #5f6368; margin: 0; }
+.gmf-table-wrap { overflow-x: auto; }
+table.gmf-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.gmf-table th, .gmf-table td { text-align: left; padding: 7px 8px; border-bottom: 1px solid #eef0f3; white-space: nowrap; }
+.gmf-table th { color: #5f6368; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; }
+.gmf-table td.num, .gmf-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.gmf-table tbody tr { cursor: pointer; }
+.gmf-table tbody tr:hover { background: #fff7ed; }
+.gmf-table tbody tr.gmf-row--selected { background: #ffedd5; }
+.gmf-table .gmf-name-cell { white-space: normal; min-width: 180px; font-weight: 600; }
+.gmf-footer { font-size: 0.84rem; color: #5f6368; line-height: 1.55; margin: 16px 0 0; }
+.gmf-footer p { margin: 4px 0; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="gmf-header">
+  <div class="gmf-header-top">
+    <h1 class="gmf-title">Piso GMF — Cobranza</h1>
+    <p class="gmf-stamp">Captura: 25 nov 2026, 15:26–15:28 CST</p>
+  </div>
+  <p class="gmf-source">Fuente: libro <strong>COBRANZA GMF DAILY Y GESTIONES</strong> · vista Operación, tabla «GESTORES: PROMESAS Y CUMPLIMIENTO». Filtros: MES «Todos los meses», BUCKET «Todos los buckets». Foto fija, sin datos en vivo.</p>
+  <div class="gmf-kpis">
+    <div class="gmf-kpi gmf-kpi--hero">
+      <p class="gmf-kpi-label">Total pagado</p>
+      <p class="gmf-kpi-value">$85.565.997,25</p>
+      <p class="gmf-kpi-sub">de $110.892.105,79 prometidos (77,2%)</p>
+    </div>
+    <div class="gmf-kpi">
+      <p class="gmf-kpi-label">Total promesas</p>
+      <p class="gmf-kpi-value">5.486</p>
+      <p class="gmf-kpi-sub">38 gestores</p>
+    </div>
+    <div class="gmf-kpi">
+      <p class="gmf-kpi-label">Vencido sin pago</p>
+      <p class="gmf-kpi-value">$21.290.530,72</p>
+      <p class="gmf-kpi-sub">19,2% de lo prometido</p>
+    </div>
+    <div class="gmf-kpi">
+      <p class="gmf-kpi-label">Semáforo vs meta 80%</p>
+      <p class="gmf-kpi-value">4 · 28 · 6</p>
+      <p class="gmf-kpi-sub"><span class="gmf-dot gmf-dot--verde"></span>verde · <span class="gmf-dot gmf-dot--amarillo"></span>amarillo · <span class="gmf-dot gmf-dot--rojo"></span>rojo</p>
+    </div>
+  </div>
+</header>
+
+<div class="gmf-legend" aria-label="Leyenda del semáforo">
+  <span><strong>Semáforo vs meta 80% de cumplimiento:</strong></span>
+  <span><span class="gmf-dot gmf-dot--verde"></span>Verde ≥ 80%</span>
+  <span><span class="gmf-dot gmf-dot--amarillo"></span>Amarillo 60–79%</span>
+  <span><span class="gmf-dot gmf-dot--rojo"></span>Rojo &lt; 60%</span>
+  <span class="gmf-note">Cumplida = pagó ≥ 90% de lo prometido · Parcial = pagó &lt; 90% · El color del lugar es el semáforo del gestor.</span>
+</div>
+
+<div class="gmf-layout">
+  <section class="gmf-card" aria-label="Piso de cobranza GMF">
+    <h2 class="gmf-card-title">El piso: 38 lugares en 3 zonas Pareto</h2>
+    <p class="gmf-card-sub">Toca un lugar para ver la ficha del gestor. Zona A: los 9 primeros por pagado acumulan el 80,1% del cobro · Zona B: los 9 siguientes llegan al 95,6% · Zona C: los 20 restantes, 4,4%.</p>
+    <div class="gmf-floor-wrap">
+      <svg id="gmf-floor" viewBox="0 0 1000 470" role="group" aria-label="Piso isométrico GMF con 38 lugares"></svg>
+    </div>
+    <div class="gmf-zone-cards" id="gmf-zoneCards"></div>
+  </section>
+
+  <aside class="gmf-card gmf-ficha" aria-label="Ficha del gestor">
+    <button class="gmf-close" id="gmf-fichaClose" type="button" hidden>Cerrar ✕</button>
+    <div id="gmf-fichaBody"></div>
+  </aside>
+</div>
+
+<section class="gmf-card" aria-label="Lista de gestores">
+  <h2 class="gmf-card-title">Gestores — tabla Operación</h2>
+  <p class="gmf-card-sub">Ordenada por pagado descendente, como en Tableau. Toca una fila para abrir su ficha.</p>
+  <div class="gmf-tools">
+    <input type="search" id="gmf-search" placeholder="Buscar por nombre, ID o lugar (A-01)…" aria-label="Buscar gestor">
+    <select id="gmf-sort" aria-label="Ordenar lista">
+      <option value="pagado-desc">Orden: pagado ↓</option>
+      <option value="pagado-asc">Orden: pagado ↑</option>
+      <option value="pct-desc">Orden: % cumplidas ↓</option>
+      <option value="promesas-desc">Orden: promesas ↓</option>
+      <option value="nombre-asc">Orden: nombre A–Z</option>
+    </select>
+    <p class="gmf-count" id="gmf-count" aria-live="polite"></p>
+  </div>
+  <div class="gmf-table-wrap">
+    <table class="gmf-table">
+      <thead>
+        <tr>
+          <th>Lugar</th><th>Gestor</th><th>ID</th>
+          <th class="num">Promesas</th><th class="num">Prometido</th><th class="num">Pagado</th>
+          <th class="num">Vencido sin pago</th><th class="num">% cumplidas</th><th>Semáforo</th>
+          <th class="num">Part. %</th><th class="num">Acum. %</th>
+        </tr>
+      </thead>
+      <tbody id="gmf-tbody"></tbody>
+    </table>
+  </div>
+</section>
+
+<footer class="gmf-footer">
+  <p><strong>Notas:</strong> en algunos gestores lo pagado supera lo prometido (49402, 58403, 54280 y 55189 (+$2)); se muestra tal cual aparece en la tabla, sin interpretar el motivo.</p>
+  <p>Los campos de la pestaña Gestores que aún no se han leído (velocidad de pago, % de parciales, ticket promedio, recuperación del monto, conteos de parciales y vigentes, evolución mensual) aparecen como «sin dato», salvo en las 3 fichas de muestra (43460, 53251 y 58928), capturadas el 25 nov 2026, 15:29–15:31 CST. No existen a nivel gestor: TMO, tiempo de habla, NPS ni RPC por gestor.</p>
+  <p>Percentiles de las fichas de muestra: contra 28 gestores con 10+ promesas (percentil 100 = mejor del equipo). El equipo cumple 70,0% (mediana).</p>
+</footer>
+
+</div>
+<script>
+"use strict";
+/* Datos reales: tabla «GESTORES: PROMESAS Y CUMPLIMIENTO», vista Operación,
+   libro COBRANZA GMF DAILY Y GESTIONES. Captura 25 nov 2026, 15:26–15:28 CST.
+   Orden por PAGADO descendente. Total promesas 5.486; total pagado $85.565.997,25. */
+var TOTAL_PAGADO = 85565997.25;
+var TOTAL_PROMETIDO = 110892105.79;
+var TOTAL_PROMESAS = 5486;
+/* id, nombre (null = sin nombre en catálogo), promesas, prometido, pagado, vencido, % cumplidas */
+var GESTORES = [
+["43460","MARTHA YOLANDA GARCIA BELTRAN",974,15606073.69,11772458.06,2593978.67,68.9],
+["53251","RICARDO ALEJANDRO GUERRERO GUERRERO",644,15107592.90,10922441.31,3314924.81,66.5],
+["49402",null,402,8610013.68,8692350.91,1498340.43,72.4],
+["56900","GONZALO ADRIAN MARTINEZ ARRAMBIDE",421,9104454.85,7290734.73,1135118.00,76.5],
+["56429","CRISTINA ARIDAI ESPINOSA RINCON",462,9658738.51,7042001.45,2000598.99,67.5],
+["50461","ROSA MARIA CONTRERAS GARIBAY",420,8997461.24,7016749.85,1819903.72,72.4],
+["54724","JATZIRY MARISOL MARTINEZ ESQUIVEL",316,7865497.59,6223505.37,1417249.85,72.2],
+["56401",null,266,7538237.63,5649253.06,1611035.32,75.2],
+["56337","MYRNA LAURA VAZQUEZ GARCIA",275,5132464.20,3949898.33,1048244.57,72.7],
+["55916","DIEGO ALAN HERNANDEZ CASTRUITA",179,3092883.30,2325839.28,656295.00,68.7],
+["58338","MARIA JOSE VILLARREAL CEPEDA",91,2784876.95,2135075.99,536383.43,76.9],
+["39516","AURORA MARTINEZ QUIROZ",162,2798597.77,2072703.58,477149.39,65.4],
+["58294","ALAN EDUARDO ALONSO VAZQUEZ",97,2178824.70,1545041.70,454538.00,73.2],
+["52369",null,86,1873586.09,1415257.94,382000.06,66.3],
+["55413",null,84,1659297.10,1186694.95,174636.40,71.4],
+["55510",null,78,1316722.00,981915.10,287614.00,70.5],
+["39616","MARIELLA MERCEDES ZAMBRANO DE MATOS",90,1107441.42,778915.47,264090.21,64.4],
+["56887","VICTOR ERNESTO MARQUEZ PUGA",70,1117109.00,762200.88,343337.00,68.6],
+["54307",null,54,831272.49,691223.49,66187.00,70.4],
+["50511","ILIANA LIZETH BUENDIA TORRES",74,917359.54,611876.94,278141.89,58.1],
+["58403","GRECIA ATENEA ALFARO GONZALEZ",33,383007.00,468229.71,136908.00,60.6],
+["56208","ISAAC BASURTO ZAPUCHE",41,539311.30,393058.62,141174.99,75.6],
+["55336",null,14,385238.00,365911.94,7069.00,78.6],
+["58476","ANTONIO ROSAS ENRIQUEZ",22,332914.50,254638.00,87143.00,63.6],
+["56475","JUAN ABRAHAM MORENO BALDERAS",29,719644.30,213653.45,150978.00,51.7],
+["56984",null,20,239771.14,183514.69,54648.53,70.0],
+["58928","IRVING CARLOS GAONA SALINAS",31,324175.00,162358.00,150424.00,48.4],
+["55522",null,13,187216.00,103605.47,74394.00,61.5],
+["55189",null,2,82069.00,82071.00,0.00,100.0],
+["52952",null,6,86684.35,72754.89,13929.46,66.7],
+["57957",null,9,75456.00,54749.00,20707.00,77.8],
+["56919",null,8,106793.00,53291.61,53823.00,50.0],
+["54280",null,3,28112.55,28359.48,0.00,100.0],
+["37336",null,4,36308.00,24963.00,11365.00,75.0],
+[null,null,1,17501.00,17500.00,0.00,100.0],
+["59142","CLAUDIA CECILIA VAZQUEZ GONZALEZ",2,22933.00,12700.00,10233.00,50.0],
+["53975",null,1,8500.00,8500.00,0.00,100.0],
+["58402","PALOMA GUADALUPE MARTINEZ PEREZ",2,17967.00,0.00,17967.00,0.0]
+];
+/* Zonas Pareto por cobro (Análisis): A 9 gestores hasta 80,1% del cobro;
+   B 9 siguientes hasta 95,6%; C 20 restantes. Gini 0,69. */
+var ZONES = [
+  {key:"A", name:"Clase Pareto A", n:9,  prefix:"A", u0:2,  v0:2,  cols:3, rows:3, lab:{x:500, y:24}},
+  {key:"B", name:"Clase Pareto B", n:9,  prefix:"B", u0:18, v0:2,  cols:3, rows:3, lab:{x:708, y:128}},
+  {key:"C", name:"Clase Pareto C", n:20, prefix:"C", u0:2,  v0:13, cols:5, rows:4, lab:{x:297, y:96}}
+];
+/* Fichas de muestra: pestaña Gestores, captura 25 nov 2026, 15:29–15:31 CST,
+   filtros Todos los meses / Todos los buckets, todo el histórico.
+   Percentiles contra 28 gestores con 10+ promesas (100 = mejor del equipo).
+   Equipo cumple 70,0% (mediana). */
+var FICHAS = {
+"43460": {
+  diffMediana: -1.1, percentil: 48, promesasPctEquipo: 18, cobradoPct: 75.4,
+  recuperacion: 75.4, recMediana: 74.9, recRango: [70.9, 77.0], recPercentil: 55,
+  velocidad: 67.8, velPercentil: 16, velMediana: 78.5,
+  parcialesPct: 13.1, parcialesN: 128, parcialesMediana: 8.3, parcialesPercentil: 20,
+  ticket: "$16 K", ticketMediana: "$17 K", ticketPercentil: 38,
+  volumenPercentil: 98, volumenMediana: 86, vigentes: 0, vigentesMonto: null, rotas: 175,
+  fortalezas: ["promesas (volumen) (percentil 98)"],
+  mejoras: ["pagan en ≤3 días (percentil 16)", "% parciales (percentil 20)"],
+  plan: "Prioridad: acordar fechas de pago más cercanas a la promesa; después, confirmar el monto total antes de cerrar la promesa.",
+  dinero: [
+    ["Pagó 0-3 días", 6833957.35, 43.8, 455],
+    ["Pagó 4-7 días", 1260980.18, 8.1, 88],
+    ["Pagó 8-15 días", 949266.86, 6.1, 60],
+    ["Pagó 16+ días", 1215021.63, 7.8, 68],
+    ["Parcial", 2752869.00, 17.6, 128],
+    ["Vencida sin pago", 2593978.67, 16.6, 175]
+  ],
+  mensual: [
+    ["dic 2025",15,53.3,67.4,7000.00],["ene 2026",69,71.0,72.1,744635.26],
+    ["feb 2026",63,60.3,70.5,610328.18],["mar 2026",93,62.4,69.5,810601.79],
+    ["abr 2026",102,68.6,70.9,1230210.57],["may 2026",81,67.9,70.3,1217442.05],
+    ["jun 2026",79,68.4,71.2,1099428.62],["jul 2026",101,66.3,71.4,1252516.92],
+    ["ago 2026",71,81.7,77.0,1275759.64],["sep 2026",107,72.0,68.1,1332320.77],
+    ["oct 2026",113,70.8,68.9,1464833.00],["nov 2026",55,74.5,64.8,727381.26]
+  ],
+  notaSuma: "Suma dic–nov 949; total histórico 974: 25 promesas de meses anteriores no mostrados."
+},
+"53251": {
+  diffMediana: -3.5, percentil: 34, promesasPctEquipo: 12, cobradoPct: 72.3,
+  recuperacion: 72.3, recMediana: 74.9, recRango: null, recPercentil: 30,
+  velocidad: 71.7, velPercentil: 27, velMediana: 78.5,
+  parcialesPct: 9.5, parcialesN: 61, parcialesMediana: 8.3, parcialesPercentil: 45,
+  ticket: "$23 K", ticketMediana: "$17 K", ticketPercentil: 80,
+  volumenPercentil: 95, volumenMediana: 86, vigentes: 5, vigentesMonto: 66349.00, rotas: 150,
+  fortalezas: ["promesas (volumen) (percentil 95)", "ticket promedio (percentil 80)"],
+  mejoras: ["% cumplidas (percentil 34)", "recuperación del monto (percentil 30)", "pagan en ≤3 días (percentil 27)"],
+  plan: "Prioridad: reforzar la negociación: promesas realistas y confirmación del monto; después, dar seguimiento a pagos incompletos hasta cubrir el monto.",
+  dinero: [
+    ["Pagó 0-3 días", 6787418.18, 44.9, 307],
+    ["Pagó 4-7 días", 1064498.00, 7.0, 50],
+    ["Pagó 8-15 días", 693233.91, 4.6, 29],
+    ["Pagó 16+ días", 1596516.00, 10.6, 42],
+    ["Parcial", 1584653.00, 10.5, 61],
+    ["Vigente", 66349.00, 0.4, 5],
+    ["Vencida sin pago", 3314924.81, 21.9, 150]
+  ],
+  mensual: [
+    ["dic 2025",2,0.0,67.4,0.00],["ene 2026",27,70.4,72.1,136056.00],
+    ["feb 2026",60,75.0,70.5,895803.86],["mar 2026",47,57.4,69.5,587299.36],
+    ["abr 2026",60,81.7,70.9,1073042.95],["may 2026",67,73.1,70.3,1078725.03],
+    ["jun 2026",65,70.8,71.2,1226787.31],["jul 2026",55,61.8,71.4,1347222.49],
+    ["ago 2026",59,66.1,77.0,1342482.30],["sep 2026",52,55.8,68.1,731350.53],
+    ["oct 2026",66,62.1,68.9,1194648.21],["nov 2026",70,60.0,64.8,1309023.27]
+  ],
+  notaSuma: "Suma dic–nov 630; total histórico 644: 14 promesas de meses anteriores no mostrados."
+},
+"58928": {
+  diffMediana: -21.6, percentil: 2, promesasPctEquipo: 1, cobradoPct: 50.1,
+  recuperacion: 50.1, recMediana: 74.9, recRango: null, recPercentil: 5,
+  velocidad: 100.0, velPercentil: 98, velMediana: 78.5,
+  parcialesPct: 0.0, parcialesN: 0, parcialesMediana: 8.3, parcialesPercentil: 96,
+  ticket: "$10 K", ticketMediana: "$17 K", ticketPercentil: 2,
+  volumenPercentil: 20, volumenMediana: 86, vigentes: 2, vigentesMonto: 21456.00, rotas: 14,
+  fortalezas: ["pagan en ≤3 días (percentil 98)", "% parciales (percentil 96)"],
+  mejoras: ["% cumplidas (percentil 2)", "recuperación del monto (percentil 5)", "promesas (volumen) (percentil 20)", "ticket promedio (percentil 2)"],
+  plan: "Prioridad: reforzar la negociación: promesas realistas y confirmación del monto; después, dar seguimiento a pagos incompletos hasta cubrir el monto.",
+  dinero: [
+    ["Pagó 0-3 días", 152295.00, 47.0, 15],
+    ["Vigente", 21456.00, 6.6, 2],
+    ["Vencida sin pago", 150424.00, 46.4, 14]
+  ],
+  notaDinero: "Sin segmentos 4-7, 8-15 ni 16+ días y sin parciales.",
+  mensual: [
+    ["dic 2025",0,null,null,0.00],["ene 2026",0,null,null,0.00],
+    ["feb 2026",0,null,null,0.00],["mar 2026",0,null,null,0.00],
+    ["abr 2026",0,null,null,0.00],["may 2026",0,null,null,0.00],
+    ["jun 2026",0,null,null,0.00],["jul 2026",0,null,null,0.00],
+    ["ago 2026",0,null,null,0.00],["sep 2026",1,0.0,68.1,0.00],
+    ["oct 2026",5,80.0,68.9,39689.00],["nov 2026",25,44.0,64.8,122669.00]
+  ],
+  notaSuma: "Su actividad empieza en sep 2026 (dic 2025–ago 2026: 0 promesas cada mes, $0)."
+}
+};
+</script>
+<script>
+"use strict";
+/* ---------- Formato (como en la captura: $15.606.073,69) ---------- */
+function fmtInt(n){ return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+function fmtMoney(n){
+  var neg = n < 0; var abs = Math.abs(n);
+  var entero = Math.floor(abs), dec = Math.round((abs - entero) * 100);
+  if(dec === 100){ entero += 1; dec = 0; }
+  return (neg ? "-$" : "$") + fmtInt(entero) + "," + (dec < 10 ? "0" : "") + dec;
+}
+function fmtNum(n, dec){
+  var s = n.toFixed(dec === undefined ? 1 : dec);
+  return s.replace(".", ",");
+}
+function fmtPct(n, dec){ return fmtNum(n, dec === undefined ? 1 : dec) + "%"; }
+function fmtMoneyShort(n){
+  if(n >= 1000000) return "$" + fmtNum(n / 1000000, 2) + " M";
+  if(n >= 1000) return "$" + fmtInt(Math.round(n / 1000)) + " K";
+  return fmtMoney(n);
+}
+function semaforo(pct){
+  if(pct >= 80) return {key:"verde", label:"Verde", color:"#16a34a", dark:"#15803d", glyph:"✓"};
+  if(pct >= 60) return {key:"amarillo", label:"Amarillo", color:"#ca8a04", dark:"#92400e", glyph:"!"};
+  return {key:"rojo", label:"Rojo", color:"#d93025", dark:"#991b1b", glyph:"✕"};
+}
+function displayName(g){ return g.nombre || (g.id ? "Gestor " + g.id : "Sin ID"); }
+
+/* ---------- Datos enriquecidos: zona, código, participación, acumulado ---------- */
+var GEST = GESTORES.map(function(row, i){
+  var zone = i < 9 ? ZONES[0] : (i < 18 ? ZONES[1] : ZONES[2]);
+  var idxInZone = i < 9 ? i : (i < 18 ? i - 9 : i - 18);
+  return {rank: i + 1, id: row[0], nombre: row[1], promesas: row[2],
+    prometido: row[3], pagado: row[4], vencido: row[5], pct: row[6],
+    zone: zone, code: zone.prefix + "-" + String(idxInZone + 1).padStart(2, "0"),
+    part: row[4] / TOTAL_PAGADO * 100, acum: 0, sem: semaforo(row[6])};
+});
+(function(){ var acc = 0; GEST.forEach(function(g){ acc += g.part; g.acum = acc; }); })();
+function byRank(r){ return GEST[r - 1]; }
+function byId(id){ for(var i = 0; i < GEST.length; i++){ if(GEST[i].id === id) return GEST[i]; } return null; }
+
+/* ---------- Proyección isométrica (reutilizada de piso-call-center v2) ---------- */
+function iso(u, v){ return {x: 500 + (u - v) * 13, y: 62 + (u + v) * 6.5}; }
+function poly(points){ return points.map(function(p){ return p.x.toFixed(1) + "," + p.y.toFixed(1); }).join(" "); }
+var svg = document.getElementById("gmf-floor");
+var NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs, parent){
+  var e = document.createElementNS(NS, tag);
+  for(var k in attrs){ e.setAttribute(k, attrs[k]); }
+  if(parent) parent.appendChild(e);
+  return e;
+}
+function drawPerson(g, shirt, dark){
+  el("path", {d:"M -8 -3 L -8 -15 Q -8 -23 4 -23 Q 16 -23 16 -15 L 16 -3 Z",
+    fill:shirt, stroke:dark, "stroke-width":1}, g);
+  el("circle", {cx:4, cy:-30, r:7, fill:"#f2c89b", stroke:"#b45309", "stroke-width":0.8}, g);
+  el("path", {d:"M -3 -30 Q 4 -37 11 -30", fill:"none", stroke:"#334155", "stroke-width":1.4, "stroke-linecap":"round"}, g);
+  el("circle", {cx:-3, cy:-29, r:1.6, fill:"#334155"}, g);
+  el("circle", {cx:11, cy:-29, r:1.6, fill:"#334155"}, g);
+  el("path", {d:"M 11 -28 Q 11 -24.5 7.5 -24", fill:"none", stroke:"#334155", "stroke-width":1.1, "stroke-linecap":"round"}, g);
+  el("circle", {cx:7, cy:-24, r:1, fill:"#334155"}, g);
+}
+
+/* ---------- Piso base ---------- */
+el("polygon", {points: poly([iso(-1,-1), iso(28,-1), iso(28,27), iso(-1,27)]),
+  fill:"#e2e8f0", stroke:"#cbd5e1", "stroke-width":1}, svg);
+el("polygon", {points: poly([iso(0,0), iso(27,0), iso(27,26), iso(0,26)]),
+  fill:"#f1f5f9", stroke:"#cbd5e1", "stroke-width":1}, svg);
+var zoneLayer = el("g", {id:"gmf-zoneLayer"}, svg);
+var stationLayer = el("g", {id:"gmf-stationLayer"}, svg);
+var labelLayer = el("g", {id:"gmf-labelLayer"}, svg);
+var stations = [];
+
+ZONES.forEach(function(z){
+  var du = 3.4, dv = 3.4;
+  var u1 = z.u0 + (z.cols - 1) * du, v1 = z.v0 + (z.rows - 1) * dv;
+  var p = [iso(z.u0 - 1.2, z.v0 - 1.2), iso(u1 + 1.6, z.v0 - 1.2),
+           iso(u1 + 1.6, v1 + 1.6), iso(z.u0 - 1.2, v1 + 1.6)];
+  el("polygon", {points: poly(p), fill:"#ffffff", stroke:"#cbd5e1", "stroke-width":1.2,
+    "class":"gmf-zone-platform", "data-zone":z.key}, zoneLayer);
+  var members = GEST.filter(function(g){ return g.zone === z; });
+  var totPag = members.reduce(function(a, g){ return a + g.pagado; }, 0);
+  var totProm = members.reduce(function(a, g){ return a + g.promesas; }, 0);
+  var line1 = z.name.toUpperCase() + " · " + z.n + " LUGARES";
+  var line2 = fmtMoneyShort(totPag) + " · " + fmtPct(totPag / TOTAL_PAGADO * 100) + " del cobro";
+  var w = Math.max(line1.length, line2.length) * 6 + 22, hh = 30;
+  var lx = z.lab.x, ly = z.lab.y;
+  el("rect", {x: lx - w / 2, y: ly - hh / 2, width: w, height: hh, rx: 7,
+    fill:"#ffffff", stroke:"#cbd5e1", "stroke-width":1}, labelLayer);
+  var t1 = el("text", {x: lx, y: ly - 3, "text-anchor":"middle", "class":"gmf-zone-label"}, labelLayer);
+  t1.textContent = line1;
+  var t2 = el("text", {x: lx, y: ly + 10, "text-anchor":"middle", "class":"gmf-zone-sub"}, labelLayer);
+  t2.textContent = line2;
+  var idx = 0;
+  for(var r = 0; r < z.rows && idx < z.n; r++){
+    for(var c = 0; c < z.cols && idx < z.n; c++){
+      idx++;
+      var g = members[idx - 1];
+      var u = z.u0 + c * du, v = z.v0 + r * dv;
+      var s = iso(u, v);
+      var grp = el("g", {"class":"gmf-station", "data-rank": g.rank, "data-code": g.code,
+        "data-zone": z.key, tabindex:"0", role:"button",
+        "aria-label":"Lugar " + g.code + ", " + displayName(g) + ", " + fmtPct(g.pct) + " cumplidas, semáforo " + g.sem.label}, stationLayer);
+      el("ellipse", {cx:s.x, cy:s.y + 12, rx:15, ry:5, fill:"rgba(15,23,42,.10)"}, grp);
+      el("ellipse", {cx:s.x - 1, cy:s.y + 9, rx:7, ry:4.5, fill:"#94a3b8", stroke:"#64748b", "stroke-width":.8}, grp);
+      var person = el("g", {"class":"gmf-person", transform:"translate(" + s.x + "," + s.y + ")"}, grp);
+      drawPerson(person, g.sem.color, g.sem.dark);
+      el("polygon", {points: (s.x - 15) + "," + (s.y - 1) + " " + (s.x + 1) + "," + (s.y - 10) + " " + (s.x + 17) + "," + (s.y - 1) + " " + (s.x + 1) + "," + (s.y + 8),
+        fill:"#cbd5e1", stroke:"#94a3b8", "stroke-width":1}, grp);
+      el("polygon", {points: (s.x - 15) + "," + (s.y - 1) + " " + (s.x + 1) + "," + (s.y + 8) + " " + (s.x + 1) + "," + (s.y + 13) + " " + (s.x - 15) + "," + (s.y + 4),
+        fill:"#94a3b8"}, grp);
+      el("rect", {x:s.x - 2, y:s.y - 24, width:13, height:12, rx:1.5, fill:"#334155", stroke:"#1e293b", "stroke-width":.8}, grp);
+      el("rect", {x:s.x - 0.5, y:s.y - 22.5, width:10, height:9, rx:1, fill:g.sem.color}, grp);
+      var glyph = el("text", {x:s.x + 4.5, y:s.y - 15, "text-anchor":"middle", "class":"gmf-monitor-glyph"}, grp);
+      glyph.textContent = g.sem.glyph;
+      el("circle", {cx:s.x + 14, cy:s.y - 16, r:5.5, fill:g.sem.color, stroke:"#fff", "stroke-width":1.2}, grp);
+      el("ellipse", {cx:s.x, cy:s.y - 26, rx:17, ry:6, fill:"none", "class":"gmf-station-ring"}, grp);
+      var code = el("text", {x:s.x, y:s.y + 26, "text-anchor":"middle", "class":"gmf-station-code"}, grp);
+      code.textContent = g.code;
+      var shortName = g.nombre ? g.nombre.split(" ")[0] : (g.id ? "Gestor " + g.id : "Sin ID");
+      var nm = el("text", {x:s.x, y:s.y + 36, "text-anchor":"middle", "class":"gmf-station-name"}, grp);
+      nm.textContent = shortName.length > 14 ? shortName.slice(0, 13) + "…" : shortName;
+      grp.addEventListener("click", function(ev){ openFicha(Number(ev.currentTarget.getAttribute("data-rank"))); });
+      grp.addEventListener("keydown", function(ev){
+        if(ev.key === "Enter" || ev.key === " "){ ev.preventDefault(); openFicha(Number(ev.currentTarget.getAttribute("data-rank"))); }
+      });
+      stations.push({rank: g.rank, code: g.code, el: grp});
+    }
+  }
+});
+
+/* ---------- Tarjetas de zona ---------- */
+(function(){
+  var wrap = document.getElementById("gmf-zoneCards");
+  ZONES.forEach(function(z){
+    var members = GEST.filter(function(g){ return g.zone === z; });
+    var totPag = members.reduce(function(a, g){ return a + g.pagado; }, 0);
+    var totProm = members.reduce(function(a, g){ return a + g.promesas; }, 0);
+    var totPrometido = members.reduce(function(a, g){ return a + g.prometido; }, 0);
+    var totVenc = members.reduce(function(a, g){ return a + g.vencido; }, 0);
+    var div = document.createElement("div");
+    div.className = "gmf-zone-card";
+    div.innerHTML = "<h3>Zona " + z.key + " — " + z.name + " (" + z.n + " lugares)</h3>" +
+      "<p class=\"gmf-zone-total\">" + fmtMoney(totPag) + " pagado · " + fmtPct(totPag / TOTAL_PAGADO * 100) + " del cobro</p>" +
+      "<p>" + fmtInt(totProm) + " promesas · " + fmtMoney(totPrometido) + " prometido</p>" +
+      "<p>" + fmtMoney(totVenc) + " vencido sin pago</p>";
+    wrap.appendChild(div);
+  });
+})();
+
+/* ---------- Ficha ---------- */
+var fichaBody = document.getElementById("gmf-fichaBody");
+var fichaClose = document.getElementById("gmf-fichaClose");
+var selectedRank = null;
+function esc(s){ return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+function sindato(){ return "<span class=\"gmf-sindato\">sin dato</span>"; }
+function openFicha(rank){
+  var g = byRank(rank);
+  if(!g) return;
+  selectedRank = rank;
+  var f = g.id ? FICHAS[g.id] : null;
+  var h = "";
+  h += "<h2 class=\"gmf-ficha-name\">" + esc(displayName(g)) + "</h2>";
+  h += "<p class=\"gmf-ficha-sub\">Lugar " + g.rank + " de 38 por monto pagado · Zona " + g.zone.key +
+    " (" + esc(g.zone.name) + ") · Código " + g.code + " · ID " + (g.id || "sin ID") + "</p>";
+  h += "<span class=\"gmf-pill gmf-pill--" + g.sem.key + "\">● " + g.sem.label + " · " + fmtPct(g.pct) + " cumplidas</span>";
+  h += "<div class=\"gmf-metrics\">" +
+    "<div class=\"gmf-metric\"><p class=\"gmf-metric-label\">Promesas</p><p class=\"gmf-metric-value\">" + fmtInt(g.promesas) + "</p>" +
+    (f ? "<p class=\"gmf-metric-sub\">" + fmtNum(f.promesasPctEquipo, 0) + "% del equipo</p>" : "") + "</div>" +
+    "<div class=\"gmf-metric\"><p class=\"gmf-metric-label\">Prometido</p><p class=\"gmf-metric-value\">" + fmtMoney(g.prometido) + "</p></div>" +
+    "<div class=\"gmf-metric\"><p class=\"gmf-metric-label\">Pagado</p><p class=\"gmf-metric-value\">" + fmtMoney(g.pagado) + "</p>" +
+    (f ? "<p class=\"gmf-metric-sub\">" + fmtPct(f.cobradoPct) + " de lo prometido</p>" : "") + "</div>" +
+    "<div class=\"gmf-metric\"><p class=\"gmf-metric-label\">Vencido sin pago</p><p class=\"gmf-metric-value\">" + fmtMoney(g.vencido) + "</p></div>" +
+    "<div class=\"gmf-metric\"><p class=\"gmf-metric-label\">Participación del cobro</p><p class=\"gmf-metric-value\">" + fmtPct(g.part) + "</p></div>" +
+    "<div class=\"gmf-metric\"><p class=\"gmf-metric-label\">Acumulado del cobro</p><p class=\"gmf-metric-value\">" + fmtPct(g.acum) + "</p></div>" +
+    "</div>";
+  h += "<p class=\"gmf-note\">Meta de cumplimiento: 80%. Cumplida = pagó ≥ 90% de lo prometido; parcial = pagó &lt; 90%.</p>";
+  if(f){
+    var diff = (f.diffMediana < 0 ? "▼" : "▲") + fmtNum(Math.abs(f.diffMediana)) + " pts vs mediana del equipo (70,0%)";
+    h += "<h3>Ficha de muestra — pestaña Gestores</h3>";
+    h += "<dl class=\"gmf-kv\">" +
+      "<dt>% cumplidas vs mediana</dt><dd>" + diff + " · percentil " + f.percentil + "</dd>" +
+      "<dt>Recuperación del monto</dt><dd>" + fmtPct(f.recuperacion) + " (mediana equipo " + fmtPct(f.recMediana) +
+        (f.recRango ? ", rango " + fmtPct(f.recRango[0]) + "–" + fmtPct(f.recRango[1]) : "") + ", percentil " + f.recPercentil + ")</dd>" +
+      "<dt>Velocidad de pago</dt><dd>" + fmtPct(f.velocidad) + " de las cumplidas paga en ≤3 días (mediana " + fmtPct(f.velMediana) + ", percentil " + f.velPercentil + ")</dd>" +
+      "<dt>% de parciales</dt><dd>" + fmtPct(f.parcialesPct) + " (" + fmtInt(f.parcialesN) + "/" + fmtInt(g.promesas) + "; mediana " + fmtPct(f.parcialesMediana) + ", percentil " + f.parcialesPercentil + ")</dd>" +
+      "<dt>Ticket promedio</dt><dd>" + esc(f.ticket) + " (mediana " + esc(f.ticketMediana) + ", percentil " + f.ticketPercentil + ")</dd>" +
+      "<dt>Volumen de promesas</dt><dd>" + fmtInt(g.promesas) + " (mediana " + fmtInt(f.volumenMediana) + ", percentil " + f.volumenPercentil + ")</dd>" +
+      "<dt>Promesas rotas</dt><dd>" + fmtInt(f.rotas) + " vencidas sin pago</dd>" +
+      "<dt>Vigentes</dt><dd>" + fmtInt(f.vigentes) + (f.vigentesMonto ? " (" + fmtMoney(f.vigentesMonto) + ")" : "") + "</dd>" +
+      "<dt>Fortalezas</dt><dd>" + f.fortalezas.map(esc).join("; ") + "</dd>" +
+      "<dt>Áreas de mejora</dt><dd>" + f.mejoras.map(esc).join("; ") + "</dd>" +
+      "</dl>";
+    h += "<h3>Plan de acción</h3><p class=\"gmf-plan\">" + esc(f.plan) + "</p>";
+    h += "<h3>Dónde está su dinero</h3>";
+    h += "<div class=\"gmf-table-wrap\"><table class=\"gmf-dinero\"><thead><tr><th>Segmento</th><th class=\"num\">Monto</th><th class=\"num\">%</th><th class=\"num\">Promesas</th></tr></thead><tbody>";
+    f.dinero.forEach(function(d){
+      h += "<tr><td>" + esc(d[0]) + "<div class=\"gmf-bar\"><span style=\"width:" + d[2] + "%\"></span></div></td>" +
+        "<td class=\"num\">" + fmtMoney(d[1]) + "</td><td class=\"num\">" + fmtPct(d[2]) + "</td><td class=\"num\">" + fmtInt(d[3]) + "</td></tr>";
+    });
+    h += "</tbody></table></div>";
+    if(f.notaDinero) h += "<p class=\"gmf-ficha-note\">" + esc(f.notaDinero) + "</p>";
+    h += "<h3>Evolución mensual</h3>";
+    h += "<div class=\"gmf-table-wrap\"><table class=\"gmf-dinero\"><thead><tr><th>Mes</th><th class=\"num\">Promesas</th><th class=\"num\">% cumplidas</th><th class=\"num\">% equipo</th><th class=\"num\">Pagado</th></tr></thead><tbody>";
+    f.mensual.forEach(function(m){
+      h += "<tr><td>" + esc(m[0]) + "</td><td class=\"num\">" + fmtInt(m[1]) + "</td>" +
+        "<td class=\"num\">" + (m[2] === null ? "—" : fmtPct(m[2])) + "</td>" +
+        "<td class=\"num\">" + (m[3] === null ? "—" : fmtPct(m[3])) + "</td>" +
+        "<td class=\"num\">" + fmtMoney(m[4]) + "</td></tr>";
+    });
+    h += "</tbody></table></div>";
+    h += "<p class=\"gmf-ficha-note\">" + esc(f.notaSuma) + " Percentiles contra 28 gestores con 10+ promesas (percentil 100 = mejor del equipo).</p>";
+  } else {
+    h += "<h3>Detalle — pestaña Gestores</h3>";
+    h += "<dl class=\"gmf-kv\">" +
+      "<dt>Velocidad de pago</dt><dd>" + sindato() + "</dd>" +
+      "<dt>% de parciales</dt><dd>" + sindato() + "</dd>" +
+      "<dt>Ticket promedio</dt><dd>" + sindato() + "</dd>" +
+      "<dt>Recuperación del monto</dt><dd>" + sindato() + "</dd>" +
+      "<dt>Parciales</dt><dd>" + sindato() + "</dd>" +
+      "<dt>Vigentes</dt><dd>" + sindato() + "</dd>" +
+      "<dt>Evolución mensual</dt><dd>" + sindato() + "</dd>" +
+      "</dl>";
+    h += "<p class=\"gmf-ficha-note\">Solo se han leído las fichas de muestra de 43460, 53251 y 58928. Los campos de la pestaña Gestores de este gestor aún no se han leído.</p>";
+  }
+  fichaBody.innerHTML = h;
+  fichaClose.hidden = false;
+  document.querySelectorAll(".gmf-station").forEach(function(n){
+    n.classList.toggle("gmf-station--selected", Number(n.getAttribute("data-rank")) === rank);
+  });
+  renderList();
+}
+function closeFicha(){
+  selectedRank = null;
+  fichaBody.innerHTML = "<p class=\"gmf-ficha-empty\">Selecciona un lugar del piso o una fila de la lista para ver la ficha del gestor.</p>";
+  fichaClose.hidden = true;
+  document.querySelectorAll(".gmf-station").forEach(function(n){ n.classList.remove("gmf-station--selected"); });
+  renderList();
+}
+fichaClose.addEventListener("click", closeFicha);
+
+/* ---------- Lista ---------- */
+var tbody = document.getElementById("gmf-tbody");
+var searchInput = document.getElementById("gmf-search");
+var sortSelect = document.getElementById("gmf-sort");
+var countEl = document.getElementById("gmf-count");
+function sortedList(){
+  var arr = GEST.slice();
+  var mode = sortSelect.value;
+  if(mode === "pagado-asc") arr.sort(function(a, b){ return a.pagado - b.pagado; });
+  else if(mode === "pct-desc") arr.sort(function(a, b){ return b.pct - a.pct || b.pagado - a.pagado; });
+  else if(mode === "promesas-desc") arr.sort(function(a, b){ return b.promesas - a.promesas; });
+  else if(mode === "nombre-asc") arr.sort(function(a, b){
+    return displayName(a).localeCompare(displayName(b), "es");
+  });
+  return arr;
+}
+function renderList(){
+  var q = searchInput.value.trim().toLowerCase();
+  var rows = sortedList().filter(function(g){
+    if(!q) return true;
+    return displayName(g).toLowerCase().indexOf(q) !== -1 ||
+      (g.id && g.id.indexOf(q) !== -1) ||
+      g.code.toLowerCase().indexOf(q) !== -1;
+  });
+  var html = "";
+  rows.forEach(function(g){
+    html += "<tr data-rank=\"" + g.rank + "\"" + (g.rank === selectedRank ? " class=\"gmf-row--selected\"" : "") + ">" +
+      "<td>" + g.code + "</td><td class=\"gmf-name-cell\">" + esc(displayName(g)) + "</td>" +
+      "<td>" + (g.id || "—") + "</td>" +
+      "<td class=\"num\">" + fmtInt(g.promesas) + "</td>" +
+      "<td class=\"num\">" + fmtMoney(g.prometido) + "</td>" +
+      "<td class=\"num\">" + fmtMoney(g.pagado) + "</td>" +
+      "<td class=\"num\">" + fmtMoney(g.vencido) + "</td>" +
+      "<td class=\"num\">" + fmtPct(g.pct) + "</td>" +
+      "<td><span class=\"gmf-dot gmf-dot--" + g.sem.key + "\"></span>" + g.sem.label + "</td>" +
+      "<td class=\"num\">" + fmtPct(g.part) + "</td>" +
+      "<td class=\"num\">" + fmtPct(g.acum) + "</td></tr>";
+  });
+  tbody.innerHTML = html;
+  countEl.textContent = rows.length + " de 38 gestores";
+  tbody.querySelectorAll("tr").forEach(function(tr){
+    tr.addEventListener("click", function(){
+      openFicha(Number(tr.getAttribute("data-rank")));
+      if(window.innerWidth < 980){
+        document.querySelector(".gmf-ficha").scrollIntoView({behavior:"smooth", block:"nearest"});
+      }
+    });
+  });
+}
+searchInput.addEventListener("input", renderList);
+sortSelect.addEventListener("change", renderList);
+
+/* ---------- Arranque y hooks de verificación ---------- */
+renderList();
+openFicha(1);
+window.__gmf = {
+  gestores: GEST,
+  stations: stations,
+  perZone: function(){
+    var out = {};
+    ZONES.forEach(function(z){
+      out[z.key] = GEST.filter(function(g){ return g.zone === z; }).length;
+    });
+    return out;
+  },
+  counts: function(){
+    return {verde: GEST.filter(function(g){ return g.sem.key === "verde"; }).length,
+      amarillo: GEST.filter(function(g){ return g.sem.key === "amarillo"; }).length,
+      rojo: GEST.filter(function(g){ return g.sem.key === "rojo"; }).length};
+  },
+  selectGestor: openFicha,
+  listCount: function(){ return tbody.querySelectorAll("tr").length; },
+  fichaTexto: function(){ return fichaBody.textContent; },
+  fichaAbierta: function(){ return selectedRank !== null; },
+  selectedRank: function(){ return selectedRank; }
+};
+</script>
+</body>
+</html>
