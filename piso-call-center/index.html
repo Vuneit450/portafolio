@@ -1931,7 +1931,7 @@ var FICHAS_ASESOR = {
     actividad: [["Ocupación", "44,7 %"]]
   },
   "LUIS ANGELES RODRIGUEZ": {
-    fcr: "s/d", transf: "4,1 %", ocupacion: "40,7 %",
+    fcr: "sin dato", transf: "4,1 %", ocupacion: "40,7 %",
     percentiles: [
     ["Atendidas", "P89", "—"],
     ["TMO", "P90", "mediana equipo 9:28"],
@@ -1957,7 +1957,7 @@ var FICHAS_ASESOR = {
     actividad: [["Ocupación", "40,7 %"]]
   },
   "DAYLAN SAJID SANCHEZ MOHEDANO": {
-    fcr: "s/d", transf: "0,0 %", ocupacion: "50,0 %",
+    fcr: "sin dato", transf: "0,0 %", ocupacion: "50,0 %",
     percentiles: [
     ["Atendidas", "P87", "—"],
     ["TMO", "P71", "mediana equipo 9:28"],
@@ -2161,9 +2161,9 @@ function openFicha(n){
   var F = FICHAS_ASESOR[a.nombre];
   fichaBody.appendChild(kvGrid([
     ["Atendidas", fmtInt(a.at)], ["TMO", a.tmo], ["NPS", fmtNPS(a.nps)],
-    ["FCR", F ? F.fcr : "s/d"],
-    ["Transferencias", F ? F.transf : "s/d"],
-    ["Ocupación", F ? F.ocupacion : "s/d"]
+    ["FCR", F ? F.fcr : "sin dato"],
+    ["Transferencias", F ? F.transf : "sin dato"],
+    ["Ocupación", F ? F.ocupacion : "sin dato"]
   ]));
   if(a.nombre === "DAYLAN SAJID SANCHEZ MOHEDANO"){
     fichaBody.appendChild(p("NPS más bajo de los 77 asesores: −95,1. Prioridad de revisión.", "sup-muted"));
@@ -4745,9 +4745,9 @@ function openPersonFicha(st){
       "<dt>Atendidas</dt><dd>" + fmtInt(a.at) + "</dd>" +
       "<dt>TMO</dt><dd>" + a.tmo + "</dd>" +
       "<dt>NPS</dt><dd>" + (a.nps === null ? '<span class="camp-sin-dato">sin dato</span>' : fmtNps(a.nps)) + "</dd>" +
-      "<dt>FCR</dt><dd>" + (F && F.fcr !== null ? F.fcr : '<span class="camp-sin-dato">s/d</span>') + "</dd>" +
-      "<dt>Transferencias</dt><dd>" + (F && F.transf !== null ? F.transf : '<span class="camp-sin-dato">s/d</span>') + "</dd>" +
-      "<dt>Ocupación</dt><dd>" + (F && F.ocup !== null ? F.ocup : '<span class="camp-sin-dato">s/d</span>') + "</dd>" +
+      "<dt>FCR</dt><dd>" + (F && F.fcr !== null ? F.fcr : '<span class="camp-sin-dato">sin dato</span>') + "</dd>" +
+      "<dt>Transferencias</dt><dd>" + (F && F.transf !== null ? F.transf : '<span class="camp-sin-dato">sin dato</span>') + "</dd>" +
+      "<dt>Ocupación</dt><dd>" + (F && F.ocup !== null ? F.ocup : '<span class="camp-sin-dato">sin dato</span>') + "</dd>" +
       "<dt>Recibidas</dt><dd><span class=\"camp-sin-dato\">sin dato</span></dd>" +
       "<dt>Demoradas</dt><dd><span class=\"camp-sin-dato\">sin dato</span></dd>" +
       "<dt>NS</dt><dd><span class=\"camp-sin-dato\">sin dato</span></dd>" +
