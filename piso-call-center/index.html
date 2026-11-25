@@ -11,6 +11,29 @@
    pestañas de la consola. Paleta compartida: naranja #ff6900, verde #1a9e54,
    rojo #d93025, ámbar #e8a100, fondo #f4f6fa, tarjetas blancas, system-ui. */
 
+/* Skip link (mejora 8): primera parada de Tab; salta al selector de pestañas. */
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -60px;
+  z-index: 60;
+  background: #c2410c;
+  color: #ffffff;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  transition: top 0.15s;
+}
+.skip-link:focus {
+  top: 12px;
+  color: #ffffff;
+  outline: 3px solid #ff6900;
+  outline-offset: 2px;
+}
+
 .dir-header {
   box-sizing: border-box;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -55,6 +78,17 @@
   margin: 0;
 }
 
+/* Mejora 17: a ancho de escritorio los 9 KPI van en una sola fila (antes
+   7+2 a 1280 px). El hero ocupa más ancho para que su valor quepa. */
+@media (min-width: 1280px) {
+  .dir-kpis {
+    grid-template-columns: 1.6fr repeat(8, minmax(0, 1fr));
+  }
+  .dir-kpi--hero .dir-kpi-label {
+    white-space: nowrap;
+  }
+}
+
 .dir-kpi {
   background: #f4f6fa;
   border: 1px solid #e3e7ee;
@@ -86,6 +120,9 @@
 
 .dir-kpi--hero .dir-kpi-value {
   color: #c2410c;
+  /* Mejora 16: hero fluido — escala con el ancho (modo TV). A 1280 px
+     ≈ 38 px, a 1440 px ≈ 43 px, a 1920 px 48 px (tope). */
+  font-size: clamp(1.8rem, 3vw, 3rem);
 }
 
 .dir-kpi-sub {
@@ -161,7 +198,8 @@
 }
 
 .dir-ns-big {
-  font-size: 2.6rem;
+  /* Mejora 16: el NS grande del semáforo también escala con el ancho. */
+  font-size: clamp(2.2rem, 3.4vw, 3.4rem);
   font-weight: 800;
   line-height: 1.1;
   margin: 4px 0;
@@ -454,7 +492,8 @@
 .camp-cartera-group{display:inline-flex; gap:4px; align-items:center; flex-wrap:wrap;}
 .camp-legend{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
 .camp-legend .camp-item{display:inline-flex; align-items:center; gap:5px; white-space:nowrap;}
-.camp-dot{width:11px; height:11px; border-radius:50%; flex:none; border:1.5px solid rgba(0,0,0,.25);}
+.camp-dot{width:11px; height:11px; border-radius:50%; flex:none; border:1.5px solid rgba(0,0,0,.25);
+  display:inline-flex; align-items:center; justify-content:center; color:#fff; font-size:8px; font-weight:800; line-height:1;}
 .camp-heat-scale{display:inline-flex; align-items:center; gap:5px;}
 .camp-heat-scale .camp-bar{width:90px; height:10px; border-radius:3px;
   background:linear-gradient(90deg,#fef9c3,#fde047,#e8a100,#ff6900,#d93025);
@@ -481,6 +520,9 @@
 .camp-station:hover .camp-desk-top{stroke:#ff6900; stroke-width:2;}
 .camp-station text{pointer-events:auto;}
 .camp-st-id{font-size:10px; font-weight:700; fill:#334155; paint-order:stroke; stroke:#fff; stroke-width:2.5px;}
+/* Mejora 28: letra/símbolo de estado sobre el punto de color de cada
+   estación (el color ya no es el único canal). */
+.camp-state-letter{font-size:7px; font-weight:800; fill:#fff; pointer-events:none;}
 .camp-call-timer{display:none; font-size:6.5px; font-weight:800; fill:#1f2937;
   paint-order:stroke; stroke:#fff; stroke-width:2px;}
 .camp-screen-glyph text{font-size:10px; fill:#fff;}
@@ -492,6 +534,11 @@
 .camp-zone-platform{cursor:pointer;}
 .camp-zone-platform.camp-zone-hover{stroke:#ff6900; stroke-width:2.5;}
 .camp-zone-platform:focus{outline:none; stroke:#ff6900; stroke-width:2.5;}
+/* Mejora 15: mismo foco naranja que las zonas, sin el rectángulo negro por
+   defecto (que tapaba la píldora). El halo naranja rodea la estación. */
+.camp-station:focus, .camp-walker:focus, .camp-call-dot-click:focus,
+#camp-supervisor:focus{outline:none; filter:drop-shadow(0 0 3px #ff6900) drop-shadow(0 0 7px rgba(255,105,0,.55));}
+.camp-person:focus{outline:none;}
 .camp-zone-tip{position:absolute; z-index:6; width:240px; background:#fff;
   border:1px solid #e5e7eb; border-radius:10px; box-shadow:0 6px 24px rgba(15,23,42,.18);
   padding:10px 12px; font-size:12.5px; pointer-events:none;}
@@ -553,6 +600,8 @@
 .camp-table tbody tr{cursor:pointer;}
 .camp-table tbody tr:hover{background:#fff7ed;}
 .camp-table tbody tr.camp-row-active{background:#fff7ed;}
+/* Mejora 15: la fila enfocada tiene fondo de foco (antes solo hover). */
+.camp-table tbody tr:focus, .camp-table tbody tr.camp-row-active:focus{outline:none; background:#ffedd5; box-shadow:inset 3px 0 0 #ff6900;}
 .camp-table tfoot td{font-weight:700; background:#f4f6fa; border-top:2px solid #e5e7eb;}
 .camp-sin-dato{color:#92400e; font-weight:600;}
 .camp-ns-bajo{color:#d93025; font-weight:700;}
@@ -626,7 +675,7 @@
 #sup-tab .sup-cartera-group{display:inline-flex;gap:4px;align-items:center;flex-wrap:wrap}
 #sup-tab .sup-legend{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 #sup-tab .sup-legend .sup-item{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;font-size:12px}
-#sup-tab .sup-dot{width:11px;height:11px;border-radius:50%;flex:none;border:1.5px solid rgba(0,0,0,.25)}
+#sup-tab .sup-dot{width:11px;height:11px;border-radius:50%;flex:none;border:1.5px solid rgba(0,0,0,.25);display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:8px;font-weight:800;line-height:1}
 #sup-tab .sup-heat-scale{display:inline-flex;align-items:center;gap:5px;font-size:12px}
 #sup-tab .sup-heat-scale .sup-bar{width:90px;height:10px;border-radius:3px;background:linear-gradient(90deg,#fef9c3,#fde047,#f59e0b,#f97316,#dc2626);border:1px solid rgba(0,0,0,.2)}
 #sup-tab .sup-reduced-note{display:none;font-size:11px;color:#92400e;background:#fef3c7;border:1px solid #fcd34d;border-radius:6px;padding:3px 8px}
@@ -669,6 +718,8 @@
 #sup-tab .sup-station:hover .sup-desk-top{stroke:#0f766e;stroke-width:2}
 #sup-tab .sup-station text{pointer-events:auto}
 #sup-tab .sup-st-id{font-size:10px;font-weight:700;fill:#334155;paint-order:stroke;stroke:#fff;stroke-width:2.5px}
+/* Mejora 28: letra/símbolo de estado sobre el punto de color de cada estación. */
+#sup-tab .sup-state-letter{font-size:7px;font-weight:800;fill:#fff;pointer-events:none}
 #sup-tab .sup-call-timer{display:none;font-size:6.5px;font-weight:800;fill:#1f2937;paint-order:stroke;stroke:#fff;stroke-width:2px}
 #sup-tab .sup-screen-glyph text{font-size:10px;fill:#fff}
 #sup-tab .sup-call-dot{pointer-events:none}
@@ -679,6 +730,10 @@
 #sup-tab .sup-zone-platform{cursor:pointer}
 #sup-tab .sup-zone-platform.sup-zone-hover{stroke:#0f766e;stroke-width:2.5}
 #sup-tab .sup-zone-platform:focus{outline:none;stroke:#0f766e;stroke-width:2.5}
+/* Mejora 15: mismo foco (en teal, como las zonas de este piso) sin el
+   rectángulo negro por defecto. */
+#sup-tab .sup-station:focus,#sup-tab .sup-walker:focus,#sup-tab .sup-call-dot-click:focus,
+#sup-tab #sup-supervisor-walker:focus{outline:none;filter:drop-shadow(0 0 3px #0f766e) drop-shadow(0 0 7px rgba(15,118,110,.55))}
 #sup-tab .sup-zone-tip{position:absolute;z-index:6;width:230px;background:#fff;border:1px solid #e5e7eb;border-radius:10px;box-shadow:0 6px 24px rgba(15,23,42,.18);padding:10px 12px;font-size:12.5px;pointer-events:none}
 #sup-tab .sup-zone-tip[hidden]{display:none}
 #sup-tab .sup-zone-tip h3{font-size:13px;margin-bottom:4px}
@@ -718,6 +773,8 @@
 /* ---------- Asesores ---------- */
 #sup-tab .sup-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
 #sup-tab .sup-search{flex:1 1 220px;min-width:200px;border:1px solid #e5e7eb;border-radius:8px;padding:8px 10px;font-size:14px;font-family:inherit;background:#fff;color:#1f2937}
+/* Mejora 25: etiqueta visible de la búsqueda (antes solo placeholder). */
+#sup-tab .sup-search-label{font-size:13px;font-weight:700;color:#334155;white-space:nowrap}
 #sup-tab .sup-sort-group{display:inline-flex;gap:4px;flex-wrap:wrap}
 #sup-tab .sup-sort-btn{border:1px solid #e5e7eb;background:#f8fafc;border-radius:999px;padding:6px 11px;font-size:12.5px;font-weight:600;color:#1f2937;cursor:pointer}
 #sup-tab .sup-sort-btn[aria-pressed="true"]{background:#c2410c;color:#fff;border-color:#c2410c}
@@ -729,6 +786,8 @@
 #sup-tab .sup-table tbody tr{cursor:pointer}
 #sup-tab .sup-table tbody tr:hover{background:#fff7ed}
 #sup-tab .sup-table tbody tr.sup-selected{background:#ffedd5}
+/* Mejora 15: la fila enfocada tiene fondo de foco (antes solo hover). */
+#sup-tab .sup-table tbody tr:focus{outline:none;background:#ffedd5;box-shadow:inset 3px 0 0 #0f766e}
 #sup-tab .sup-table td.sup-num,#sup-tab .sup-table th.sup-num{text-align:right;font-variant-numeric:tabular-nums}
 #sup-tab .sup-table .sup-nps-neg{color:#d93025;font-weight:700}
 #sup-tab .sup-table .sup-nps-bajo{background:#fee2e2}
@@ -821,9 +880,10 @@ body { padding-top: 48px; }
 </style>
 </head>
 <body>
+<a class="skip-link" href="#tabs-principales">Saltar al contenido</a>
 <nav class="portafolio-nav" aria-label="Navegación del portafolio">
   <a class="portafolio-nav-btn portafolio-nav-btn--activo" data-nav-pagina="consola" href="https://vuneit450.github.io/portafolio/piso-call-center/" aria-current="page">Consola</a>
-  <a class="portafolio-nav-btn" data-nav-pagina="piso" href="https://vuneit450.github.io/portafolio/piso-call-center/#campanas">Piso</a>
+  <a class="portafolio-nav-btn" data-nav-pagina="piso" href="https://vuneit450.github.io/portafolio/piso-call-center/?tab=campanas">Piso</a>
   <a class="portafolio-nav-btn" data-nav-pagina="galeria" href="https://vuneit450.github.io/portafolio/galeria-lifefx/">Galería</a>
 </nav>
 <div class="console">
@@ -854,7 +914,7 @@ body { padding-top: 48px; }
       <dd class="dir-kpi-value">2.709</dd>
     </div>
     <div class="dir-kpi">
-      <dt class="dir-kpi-label">Abandono &gt;5 s</dt>
+      <dt class="dir-kpi-label">Abandono >5&nbsp;s</dt>
       <dd class="dir-kpi-value">4,5 %</dd>
     </div>
     <div class="dir-kpi">
@@ -877,7 +937,7 @@ body { padding-top: 48px; }
 </header>
 
 
-  <nav class="tabs" role="tablist" aria-label="Vistas de la consola">
+  <nav class="tabs" id="tabs-principales" tabindex="-1" role="tablist" aria-label="Vistas de la consola">
     <button class="tab-btn" role="tab" id="tab-direccion" data-tab="direccion" aria-selected="true" aria-controls="panel-direccion">Dirección</button>
     <button class="tab-btn" role="tab" id="tab-campanas" data-tab="campanas" aria-selected="false" aria-controls="panel-campanas" tabindex="-1">Campañas</button>
     <button class="tab-btn" role="tab" id="tab-supervisor" data-tab="supervisor" aria-selected="false" aria-controls="panel-supervisor" tabindex="-1">Supervisor</button>
@@ -892,7 +952,7 @@ body { padding-top: 48px; }
     <article class="dir-card dir-semaforo" id="dir-semaforo" aria-labelledby="dir-semaforo-titulo">
       <h3 class="dir-card-title" id="dir-semaforo-titulo">Semáforo de nivel de servicio</h3>
       <p class="dir-ns-big"><span class="dir-dot dir-dot--rojo" aria-hidden="true"></span>89,9 %</p>
-      <p class="dir-ns-estado">En rojo de meta — por debajo del 90 %</p>
+      <p class="dir-ns-estado">En rojo: por debajo de la meta</p>
       <ul class="dir-list">
         <li>Brecha vs meta: <strong>−0,1 pts</strong></li>
         <li>Faltan <strong>~18 llamadas</strong> contestadas a tiempo para llegar a 90 %</li>
@@ -965,7 +1025,7 @@ body { padding-top: 48px; }
       </thead>
       <tbody><!-- Se rellena con direccion.js desde DIR_NPS --></tbody>
     </table>
-    <p class="dir-nota">NPS del mes: <strong>+37,4</strong> (▼2,4). MODERNA: <strong>s/d</strong> (0 encuestas).</p>
+    <p class="dir-nota">NPS del mes: <strong>+37,4</strong> (variación sin base declarada en Tableau). MODERNA: <strong>s/d</strong> (0 encuestas).</p>
   </article>
 
   <!-- Pronóstico Holt -->
@@ -1017,7 +1077,7 @@ body { padding-top: 48px; }
         <strong class="dir-sim-resultado-valor" id="dir-sim-llamadas">+384 /mes</strong>
       </div>
     </div>
-    <p class="dir-nota">Ancla del tablero: con −30 % demoradas / −20 s TMO / −2 pts abandono → NS 93,1 %, 89 h/mes liberadas (≈ 0,6 FTE), +384 llamadas/mes. Cada control aporta +1,0 pt de NS a su valor de referencia; la interpolación es lineal.</p>
+    <p class="dir-nota">Ancla del tablero: con −30 % demoradas / −20 s TMO / −2 pts abandono → NS 93,1 %, 89 h/mes liberadas (≈ 0,6 FTE), +384 llamadas/mes. Cada control aporta +1,0 pt de NS a su valor de referencia; la interpolación es lineal. Las horas y llamadas se interpolan como el promedio de los 3 controles.</p>
   </article>
 
   <!-- Puente NS sep → oct -->
@@ -1037,6 +1097,18 @@ body { padding-top: 48px; }
       </tbody>
     </table>
     <p class="dir-nota">Los componentes suman −2,13 pts; la diferencia con −2,2 es redondeo del tablero.</p>
+  </article>
+
+  <!-- Octubre cerrado -->
+  <article class="dir-card" id="dir-octubre" aria-labelledby="dir-octubre-titulo">
+    <h3 class="dir-card-title" id="dir-octubre-titulo">Octubre cerrado — último mes completo</h3>
+    <ul class="dir-list">
+      <li>NS <strong>89,0 %</strong> (▼2,1 vs sep; brecha −1,0) · recibidas <strong>22.884</strong></li>
+      <li>Abandono &gt;5 s <strong>3,6 %</strong> (▲0,9) · <strong>3.610</strong> abandonadas · <strong>fuera de control</strong> en carta p′ (promedio 1,6 %, límites ~0–3,0 %)</li>
+      <li>NPS <strong>+34,7</strong> (▼1,7) · <strong>8.285</strong> encuestas · FCR <strong>61,7 %</strong></li>
+      <li>TMO <strong>9:13</strong></li>
+    </ul>
+    <p class="dir-nota">ASA por mes (s): dic 5 · ene 6 · feb 5 · mar 4 · abr 3 · may 4 · jun 4 · jul 4 · ago 9 · sep 17 · oct 21 · nov 10. Pico del mes: 23:00 h, ASA 20 s.</p>
   </article>
 
   <!-- Mapa de calor de espera nov -->
@@ -1114,10 +1186,10 @@ body { padding-top: 48px; }
     </span>
     <span class="camp-filter-count" id="camp-filterCount" aria-live="polite">77 / 77 lugares</span>
     <div class="camp-legend" aria-label="Leyenda de estados de estación">
-      <span class="camp-item"><span class="camp-dot" style="background:#1a9e54"></span>Disponible</span>
-      <span class="camp-item"><span class="camp-dot" style="background:#ff6900"></span>En llamada</span>
-      <span class="camp-item"><span class="camp-dot" style="background:#e8a100"></span>Post-llamada</span>
-      <span class="camp-item"><span class="camp-dot" style="background:#9ca3af"></span>Pausa</span>
+      <span class="camp-item"><span class="camp-dot" style="background:#1a9e54">✓</span>Disponible</span>
+      <span class="camp-item"><span class="camp-dot" style="background:#ff6900">☎</span>En llamada</span>
+      <span class="camp-item"><span class="camp-dot" style="background:#e8a100">◷</span>Post-llamada</span>
+      <span class="camp-item"><span class="camp-dot" style="background:#9ca3af">❚❚</span>Pausa</span>
       <span class="camp-item"><span class="camp-dot" style="background:#7c3aed"></span>Llamada en camino</span>
       <span class="camp-item"><span class="camp-dot" style="background:#0ea5e9;border-radius:2px"></span>Supervisor</span>
       <span class="camp-item camp-legend-sep">Camisa por cartera:</span>
@@ -1284,10 +1356,10 @@ body { padding-top: 48px; }
       </span>
       <span class="sup-filter-count" id="sup-filterCount" aria-live="polite">77 / 77 lugares</span>
       <div class="sup-legend" aria-label="Leyenda de estados de estación">
-        <span class="sup-item"><span class="sup-dot" style="background:#16a34a"></span>Disponible</span>
-        <span class="sup-item"><span class="sup-dot" style="background:#ea580c"></span>En llamada</span>
-        <span class="sup-item"><span class="sup-dot" style="background:#ca8a04"></span>Post-llamada</span>
-        <span class="sup-item"><span class="sup-dot" style="background:#9ca3af"></span>Pausa</span>
+        <span class="sup-item"><span class="sup-dot" style="background:#16a34a">✓</span>Disponible</span>
+        <span class="sup-item"><span class="sup-dot" style="background:#ea580c">☎</span>En llamada</span>
+        <span class="sup-item"><span class="sup-dot" style="background:#ca8a04">◷</span>Post-llamada</span>
+        <span class="sup-item"><span class="sup-dot" style="background:#9ca3af">❚❚</span>Pausa</span>
         <span class="sup-item"><span class="sup-dot" style="background:#7c3aed"></span>Llamada en camino</span>
         <span class="sup-item"><span class="sup-dot" style="background:#0ea5e9;border-radius:2px"></span>Supervisor</span>
         <span class="sup-item sup-legend-sep">Camisa por cartera:</span>
@@ -1394,7 +1466,8 @@ body { padding-top: 48px; }
       BRADESCARD ASISTENCIAS o COPPEL VIDA.
     </p>
     <div class="sup-tools">
-      <input class="sup-search" id="sup-search" type="search" placeholder="Buscar asesor por nombre o cartera…" aria-label="Buscar asesor por nombre o cartera">
+      <label class="sup-search-label" for="sup-search">Buscar asesor</label>
+      <input class="sup-search" id="sup-search" type="search" placeholder="Buscar asesor por nombre o cartera…">
       <span class="sup-sort-group" role="group" aria-label="Ordenar asesores">
         <button class="sup-sort-btn" id="sup-sort-at" aria-pressed="true">Atendidas ↓</button>
         <button class="sup-sort-btn" id="sup-sort-tmo" aria-pressed="false">TMO ↓</button>
@@ -1838,7 +1911,7 @@ function sortedList(){
       else if(b.nps === null) return -1;
       else d = a.nps - b.nps;
     }
-    if(d === 0) d = a.n - b.n; /* desempate estable: n.º original */
+    if(d === 0) return a.n - b.n; /* desempate estable: n.º original, siempre ascendente */
     return d * sortDir;
   });
   return list;
@@ -1846,7 +1919,7 @@ function sortedList(){
 function renderList(){
   var list = sortedList();
   tbody.textContent = "";
-  list.forEach(function(a){
+  list.forEach(function(a, ri){
     var tr = document.createElement("tr");
     tr.setAttribute("data-n", String(a.n));
     if(a.n === selectedN) tr.classList.add("sup-selected");
@@ -1870,7 +1943,9 @@ function renderList(){
     var c5 = document.createElement("td"); c5.className = "sup-num"; c5.textContent = fmtNPS(a.nps);
     if(a.nombre === "DAYLAN YOSHIMAR ALMAGUER ROCHA") c5.classList.add("sup-nps-neg", "sup-nps-bajo");
     tr.appendChild(c5);
-    tr.setAttribute("tabindex", "0");
+    /* Mejora 8: roving tabindex — solo la primera fila está en el orden
+       de Tab; las flechas mueven entre filas (ver tbody keydown abajo). */
+    tr.setAttribute("tabindex", ri === 0 ? "0" : "-1");
     tr.addEventListener("click", function(){ openFicha(a.n); });
     tr.addEventListener("keydown", function(ev){
       if(ev.key === "Enter" || ev.key === " "){
@@ -1882,6 +1957,24 @@ function renderList(){
   });
   countEl.textContent = list.length + " / 77 asesores";
 }
+/* Mejora 8: flechas arriba/abajo (y Home/End) mueven el foco entre las
+   filas de asesores, con roving tabindex. */
+tbody.addEventListener("keydown", function(ev){
+  if(!ev.target || ev.target.tagName !== "TR") return;
+  if(ev.key !== "ArrowDown" && ev.key !== "ArrowUp" && ev.key !== "Home" && ev.key !== "End") return;
+  var rows = Array.prototype.slice.call(tbody.querySelectorAll("tr"));
+  var cur = rows.indexOf(ev.target);
+  if(cur < 0) return;
+  ev.preventDefault();
+  var next = cur;
+  if(ev.key === "ArrowDown") next = Math.min(cur + 1, rows.length - 1);
+  else if(ev.key === "ArrowUp") next = Math.max(cur - 1, 0);
+  else if(ev.key === "Home") next = 0;
+  else if(ev.key === "End") next = rows.length - 1;
+  rows.forEach(function(r){ r.setAttribute("tabindex", "-1"); });
+  rows[next].setAttribute("tabindex", "0");
+  rows[next].focus();
+});
 function applySortButtons(){
   document.getElementById("sup-sort-at").setAttribute("aria-pressed", String(sortKey === "at"));
   document.getElementById("sup-sort-tmo").setAttribute("aria-pressed", String(sortKey === "tmo"));
@@ -2075,10 +2168,10 @@ var ZONES = [
 ];
 var TMO_GLOBAL = "8:43";
 var STATES = {
-  llamada:    {label:"En llamada",  color:"#ea580c"},
-  disponible: {label:"Disponible", color:"#16a34a"},
-  pausa:      {label:"Pausa",       color:"#9ca3af"},
-  post:       {label:"Post-llamada",color:"#ca8a04"}
+  llamada:    {label:"En llamada",  color:"#ea580c", simbolo:"☎"},
+  disponible: {label:"Disponible", color:"#16a34a", simbolo:"✓"},
+  pausa:      {label:"Pausa",       color:"#9ca3af", simbolo:"❚❚"},
+  post:       {label:"Post-llamada",color:"#ca8a04", simbolo:"◷"}
 };
 function heatColor(vol){
   if(vol>=7000) return "#dc2626";
@@ -2206,7 +2299,7 @@ ZONES.forEach(function(z){
       if(c < z.cols-1 && idx < z.n){ mamparas.push({u: u + du/2, v: v}); }
       var s = iso(u, v);
       var id = z.prefix + "-" + String(idx).padStart(2,"0");
-      var g = el("g", {"class":"sup-station", "data-station-id": id, "data-zone": z.key, tabindex:"0", role:"button",
+      var g = el("g", {"class":"sup-station", "data-station-id": id, "data-zone": z.key, tabindex:"-1", role:"button",
         "aria-label":"Estación "+id+", "+z.name}, stationLayer);
       el("ellipse", {cx:s.x, cy:s.y+12, rx:15, ry:5, fill:"rgba(15,23,42,.10)"}, g);
       el("ellipse", {cx:s.x-1, cy:s.y+9, rx:7, ry:4.5, fill:"#94a3b8", stroke:"#64748b", "stroke-width":.8}, g);
@@ -2237,6 +2330,10 @@ ZONES.forEach(function(z){
       timerEl.textContent = "00:00";
       var dot = el("circle", {cx:s.x+14, cy:s.y-16, r:5.5, fill:STATES.disponible.color,
         stroke:"#fff", "stroke-width":1.5, "class":"sup-state-dot"}, g);
+      /* Mejora 28: símbolo de estado sobre el punto de color (letra/símbolo
+         junto al color en cada estación). Se actualiza en setState. */
+      var letter = el("text", {x:s.x+14, y:s.y-13.5, "text-anchor":"middle", "class":"sup-state-letter"}, g);
+      letter.textContent = STATES.disponible.simbolo;
       if(stations.length % 3 === 0){
         el("rect", {x:s.x-14, y:s.y-8, width:5, height:6, rx:1, fill:"#ffffff", stroke:"#94a3b8", "stroke-width":.7}, g);
         el("path", {d:"M "+(s.x-9)+" "+(s.y-6)+" q 3.5 2 0 4", fill:"none", stroke:"#94a3b8", "stroke-width":.9}, g);
@@ -2244,7 +2341,7 @@ ZONES.forEach(function(z){
       var idT = el("text", {x:s.x+1, y:s.y+24, "text-anchor":"middle", "class":"sup-st-id",
         "data-station-id": id}, textLayer);
       idT.textContent = id;
-      stations.push({id:id, zone:z, g:g, dot:dot, screen:screen, sx:s.x, sy:s.y, u:u, v:v,
+      stations.push({id:id, zone:z, g:g, dot:dot, letter:letter, screen:screen, sx:s.x, sy:s.y, u:u, v:v,
         asesor:asesor, asesorReal:null, walking:false, idEl:idT,
         glyphs:{phone:glyphPhone, check:glyphCheck, clock:glyphClock, pause:glyphPause},
         timerEl:timerEl,
@@ -2400,9 +2497,12 @@ function startWalker(st){
   var dest = WALK_DESTS[Math.floor(Math.random()*WALK_DESTS.length)];
   var outPath = routePoints(st.u, st.v, dest.u, dest.v);
   var backPath = outPath.slice().reverse();
-  var g = el("g", {"class":"sup-walker", tabindex:"0", role:"button",
+  var g = el("g", {"class":"sup-walker", tabindex:"-1", role:"button",
     "data-n": String(st.asesorReal.n), "data-station-id": st.id,
     "aria-label":"Asesor " + st.asesorReal.nombre + " caminando por el pasillo"}, walkerLayer);
+  /* Mejora 21: el nombre aparece al pasar el cursor (tooltip nativo). */
+  var wt = el("title", {}, g);
+  wt.textContent = "Asesor " + st.asesorReal.nombre + " (" + st.zone.name + ") caminando";
   el("ellipse", {cx:4, cy:10, rx:12, ry:4, fill:"rgba(15,23,42,.12)"}, g);
   drawPerson(g, CARTERA_COLOR[st.zone.key], CARTERA_DARK[st.zone.key], true);
   var lab = el("text", {x:4, y:-43, "text-anchor":"middle", "class":"sup-walker-label"}, g);
@@ -2415,6 +2515,19 @@ function startWalker(st){
   g.setAttribute("transform", "translate("+w.pos.x.toFixed(1)+","+w.pos.y.toFixed(1)+")");
   walkers.push(w);
   return true;
+}
+/* Mejora 21: al seleccionar un caminante su etiqueta muestra su nombre
+   corto (dos primeras palabras); los demás vuelven a su id de estación. */
+function shortName(nombre){ var p = String(nombre).split(/\s+/); return p.slice(0, 2).join(" "); }
+function setWalkerLabel(w){
+  walkers.forEach(function(o){
+    var l = o.g.querySelector(".sup-walker-label");
+    if(l) l.textContent = o.st.id;
+  });
+  if(w){
+    var lab = w.g.querySelector(".sup-walker-label");
+    if(lab) lab.textContent = shortName(w.st.asesorReal.nombre);
+  }
 }
 function endWalker(w){
   var i = walkers.indexOf(w);
@@ -2586,6 +2699,7 @@ function refreshMonitorTimers(){
 function setState(st, state, callId){
   st.state = state;
   st.dot.setAttribute("fill", STATES[state].color);
+  if(st.letter) st.letter.textContent = STATES[state].simbolo;
   st.g.setAttribute("data-state", state);
   if(callId){ st.callId = callId; st.callStart = nowSim(); }
   if(state !== "llamada"){ st.callId = null; }
@@ -2604,6 +2718,33 @@ stations.forEach(function(st, i){
   if(s==="llamada"){ st.callEnd = nowSim() + (6000 + Math.random()*9000); }
 });
 
+/* ---------- Roving tabindex (mejora 8) ----------
+   Solo la primera estación visible está en el orden de Tab; las flechas
+   mueven el foco entre estaciones del piso (las ocultas por filtro se
+   saltan). Los caminantes y los puntos de llamada salen del orden de Tab:
+   el asesor se alcanza por su estación, por la búsqueda o por la tabla. */
+function focusStationVis(vi){
+  var vis = stations.filter(function(s){ return s.g.style.display !== "none"; });
+  if(!vis.length) return;
+  vi = Math.max(0, Math.min(vi, vis.length - 1));
+  stations.forEach(function(s){ s.g.setAttribute("tabindex", "-1"); });
+  vis[vi].g.setAttribute("tabindex", "0");
+  vis[vi].g.focus();
+}
+function moveStationFocus(g, key){
+  var vis = stations.filter(function(s){ return s.g.style.display !== "none"; });
+  var cur = -1;
+  for(var i=0; i<vis.length; i++){ if(vis[i].g === g) cur = i; }
+  if(cur < 0) return;
+  var next = cur;
+  if(key === "ArrowRight" || key === "ArrowDown") next = Math.min(cur + 1, vis.length - 1);
+  else if(key === "ArrowLeft" || key === "ArrowUp") next = Math.max(cur - 1, 0);
+  else if(key === "Home") next = 0;
+  else if(key === "End") next = vis.length - 1;
+  focusStationVis(next);
+}
+if(stations.length) stations[0].g.setAttribute("tabindex", "0");
+
 /* ---------- Simulación en vivo ---------- */
 var callLayer = el("g", {id:"sup-callLayer"}, svg);
 var activeCalls = [];
@@ -2619,7 +2760,7 @@ function spawnCall(){
   var ctrl = {x: (from.x+to.x)/2, y: Math.min(from.y, to.y) - 120};
   var callId = randCallId();
   var c = el("circle", {cx: from.x, cy: from.y, r:6, fill:"#7c3aed", stroke:"#fff",
-    "stroke-width":1.8, "class":"sup-call-dot sup-call-dot-click", tabindex:"0", role:"button",
+    "stroke-width":1.8, "class":"sup-call-dot sup-call-dot-click", tabindex:"-1", role:"button",
     "data-call-id": callId, "data-target": target.id,
     "aria-label":"Llamada "+callId+" en camino a la estación "+target.id}, callLayer);
   var title = el("title", {}, c);
@@ -2947,6 +3088,8 @@ svg.addEventListener("click", function(ev){
   var walker = ev.target.closest ? ev.target.closest(".sup-walker") : null;
   if(walker){
     var wn = +walker.getAttribute("data-n");
+    var ww = walkers.filter(function(o){ return o.st.asesorReal && o.st.asesorReal.n === wn; })[0];
+    if(ww) setWalkerLabel(ww);
     if(wn){ window.__sup.openFicha(wn); return; }
   }
   /* Etiqueta con el id de la estación (capa de texto, sobre la fila de
@@ -2979,10 +3122,19 @@ svg.addEventListener("click", function(ev){
   }
 });
 svg.addEventListener("keydown", function(ev){
+  /* Mejora 8: flechas dentro del piso (roving tabindex de estaciones). */
+  if(ev.target.classList && ev.target.classList.contains("sup-station") &&
+     (ev.key==="ArrowRight"||ev.key==="ArrowDown"||ev.key==="ArrowLeft"||ev.key==="ArrowUp"||ev.key==="Home"||ev.key==="End")){
+    ev.preventDefault();
+    moveStationFocus(ev.target, ev.key);
+    return;
+  }
   if(ev.key!=="Enter" && ev.key!==" "){ return; }
   if(ev.target.classList && ev.target.classList.contains("sup-walker")){
     ev.preventDefault();
     var wn = +ev.target.getAttribute("data-n");
+    var ww = walkers.filter(function(o){ return o.st.asesorReal && o.st.asesorReal.n === wn; })[0];
+    if(ww) setWalkerLabel(ww);
     if(wn) window.__sup.openFicha(wn);
   } else if(ev.target.classList && ev.target.classList.contains("sup-station")){
     ev.preventDefault();
@@ -3474,10 +3626,10 @@ function drawPerson(g, shirt, dark, standing){
 }
 
 var STATES = {
-  llamada:    {label:"En llamada",  color:"#ff6900"},
-  disponible: {label:"Disponible", color:"#1a9e54"},
-  pausa:      {label:"Pausa",       color:"#9ca3af"},
-  post:       {label:"Post-llamada",color:"#e8a100"}
+  llamada:    {label:"En llamada",  color:"#ff6900", simbolo:"☎"},
+  disponible: {label:"Disponible", color:"#1a9e54", simbolo:"✓"},
+  pausa:      {label:"Pausa",       color:"#9ca3af", simbolo:"❚❚"},
+  post:       {label:"Post-llamada",color:"#e8a100", simbolo:"◷"}
 };
 function heatColor(vol){
   if(vol>=7000) return "#d93025";
@@ -3598,7 +3750,7 @@ ZONES.forEach(function(z){
       if(c < z.cols-1 && idx < z.n){ mamparas.push({u: u + du/2, v: v}); }
       var s = iso(u, v);
       var id = z.prefix + "-" + String(idx).padStart(2,"0");
-      var g = el("g", {"class":"camp-station", "data-camp-station-id": id, "data-camp-zone": z.key, tabindex:"0", role:"button",
+      var g = el("g", {"class":"camp-station", "data-camp-station-id": id, "data-camp-zone": z.key, tabindex:"-1", role:"button",
         "aria-label":"Estación "+id+", "+z.name}, stationLayer);
       el("ellipse", {cx:s.x, cy:s.y+12, rx:15, ry:5, fill:"rgba(15,23,42,.10)"}, g);
       el("ellipse", {cx:s.x-1, cy:s.y+9, rx:7, ry:4.5, fill:"#94a3b8", stroke:"#64748b", "stroke-width":.8}, g);
@@ -3629,6 +3781,9 @@ ZONES.forEach(function(z){
       timerEl.textContent = "00:00";
       var dot = el("circle", {cx:s.x+14, cy:s.y-16, r:5.5, fill:STATES.disponible.color,
         stroke:"#fff", "stroke-width":1.5, "class":"camp-state-dot"}, g);
+      /* Mejora 28: símbolo de estado sobre el punto de color. Se actualiza en setState. */
+      var letter = el("text", {x:s.x+14, y:s.y-13.5, "text-anchor":"middle", "class":"camp-state-letter"}, g);
+      letter.textContent = STATES.disponible.simbolo;
       if(stations.length % 3 === 0){
         el("rect", {x:s.x-14, y:s.y-8, width:5, height:6, rx:1, fill:"#ffffff", stroke:"#94a3b8", "stroke-width":.7}, g);
         el("path", {d:"M "+(s.x-9)+" "+(s.y-6)+" q 3.5 2 0 4", fill:"none", stroke:"#94a3b8", "stroke-width":.9}, g);
@@ -3636,7 +3791,7 @@ ZONES.forEach(function(z){
       var idT = el("text", {x:s.x+1, y:s.y+24, "text-anchor":"middle", "class":"camp-st-id",
         "data-camp-station-id": id}, textLayer);
       idT.textContent = id;
-      stations.push({id:id, zone:z, g:g, dot:dot, screen:screen, sx:s.x, sy:s.y, u:u, v:v,
+      stations.push({id:id, zone:z, g:g, dot:dot, letter:letter, screen:screen, sx:s.x, sy:s.y, u:u, v:v,
         asesor:asesor, asesorReal:null, walking:false, idEl:idT, glyphs:{phone:glyphPhone, check:glyphCheck, clock:glyphClock, pause:glyphPause},
         timerEl:timerEl,
         state:"disponible", callId:null, callStart:0, callEnd:0});
@@ -3668,8 +3823,9 @@ ZONES.forEach(function(z){
     var a = list[i];
     st.asesorReal = a;
     st.asesor.setAttribute("data-camp-asesor-n", String(a.n));
-    st.asesor.setAttribute("tabindex", "0");
-    st.asesor.setAttribute("role", "button");
+    /* Mejora 8: la persona dentro de la estación no es parada de Tab
+       aparte; la estación misma es la entrada de teclado. */
+    st.asesor.setAttribute("tabindex", "-1");
     st.asesor.setAttribute("aria-label", "Asesor " + a.nombre + ", " + fmtInt(a.at) + " atendidas");
     st.g.setAttribute("aria-label", "Estación " + st.id + ", " + st.zone.name + ", " +
       a.nombre + ", " + fmtInt(a.at) + " atendidas");
@@ -3785,9 +3941,12 @@ function startWalker(st){
   var dest = WALK_DESTS[Math.floor(Math.random()*WALK_DESTS.length)];
   var outPath = routePoints(st.u, st.v, dest.u, dest.v);
   var backPath = outPath.slice().reverse();
-  var g = el("g", {"class":"camp-walker", tabindex:"0", role:"button",
+  var g = el("g", {"class":"camp-walker", tabindex:"-1", role:"button",
     "data-camp-asesor-n": String(st.asesorReal.n), "data-camp-station-id": st.id,
     "aria-label":"Asesor " + st.asesorReal.nombre + " caminando por el pasillo"}, walkerLayer);
+  /* Mejora 21: el nombre aparece al pasar el cursor (tooltip nativo). */
+  var wt = el("title", {}, g);
+  wt.textContent = "Asesor " + st.asesorReal.nombre + " (" + st.zone.name + ") caminando";
   el("ellipse", {cx:4, cy:10, rx:12, ry:4, fill:"rgba(15,23,42,.12)"}, g);
   drawPerson(g, CARTERA_COLOR[st.zone.key], CARTERA_DARK[st.zone.key], true);
   var lab = el("text", {x:4, y:-43, "text-anchor":"middle", "class":"camp-walker-label"}, g);
@@ -3800,6 +3959,19 @@ function startWalker(st){
   g.setAttribute("transform", "translate("+w.pos.x.toFixed(1)+","+w.pos.y.toFixed(1)+")");
   walkers.push(w);
   return true;
+}
+/* Mejora 21: al seleccionar un caminante su etiqueta muestra su nombre
+   corto (dos primeras palabras); los demás vuelven a su id de estación. */
+function shortName(nombre){ var p = String(nombre).split(/\s+/); return p.slice(0, 2).join(" "); }
+function setWalkerLabel(w){
+  walkers.forEach(function(o){
+    var l = o.g.querySelector(".camp-walker-label");
+    if(l) l.textContent = o.st.id;
+  });
+  if(w){
+    var lab = w.g.querySelector(".camp-walker-label");
+    if(lab) lab.textContent = shortName(w.st.asesorReal.nombre);
+  }
 }
 function endWalker(w){
   var i = walkers.indexOf(w);
@@ -3966,6 +4138,7 @@ function refreshMonitorTimers(){
 function setState(st, state, callId){
   st.state = state;
   st.dot.setAttribute("fill", STATES[state].color);
+  if(st.letter) st.letter.textContent = STATES[state].simbolo;
   st.g.setAttribute("data-state", state);
   st.g.setAttribute("aria-label", "Estación "+st.id+", "+st.zone.name+", "+STATES[state].label +
     (callId ? ", llamada "+callId : ""));
@@ -3984,6 +4157,33 @@ stations.forEach(function(st, i){
   if(s==="llamada"){ st.callEnd = nowSim() + (6000 + Math.random()*9000); }
 });
 
+/* ---------- Roving tabindex (mejora 8) ----------
+   Solo la primera estación visible está en el orden de Tab; las flechas
+   mueven el foco entre estaciones del piso (las ocultas por filtro se
+   saltan). Los caminantes y los puntos de llamada salen del orden de Tab:
+   el asesor se alcanza por su estación, por la búsqueda o por la tabla. */
+function focusStationVis(vi){
+  var vis = stations.filter(function(s){ return s.g.style.display !== "none"; });
+  if(!vis.length) return;
+  vi = Math.max(0, Math.min(vi, vis.length - 1));
+  stations.forEach(function(s){ s.g.setAttribute("tabindex", "-1"); });
+  vis[vi].g.setAttribute("tabindex", "0");
+  vis[vi].g.focus();
+}
+function moveStationFocus(g, key){
+  var vis = stations.filter(function(s){ return s.g.style.display !== "none"; });
+  var cur = -1;
+  for(var i=0; i<vis.length; i++){ if(vis[i].g === g) cur = i; }
+  if(cur < 0) return;
+  var next = cur;
+  if(key === "ArrowRight" || key === "ArrowDown") next = Math.min(cur + 1, vis.length - 1);
+  else if(key === "ArrowLeft" || key === "ArrowUp") next = Math.max(cur - 1, 0);
+  else if(key === "Home") next = 0;
+  else if(key === "End") next = vis.length - 1;
+  focusStationVis(next);
+}
+if(stations.length) stations[0].g.setAttribute("tabindex", "0");
+
 /* ---------- Simulación en vivo ---------- */
 var callLayer = el("g", {id:"camp-callLayer"}, svg);
 var activeCalls = [];
@@ -3999,7 +4199,7 @@ function spawnCall(){
   var ctrl = {x: (from.x+to.x)/2, y: Math.min(from.y, to.y) - 120};
   var callId = randCallId();
   var c = el("circle", {cx: from.x, cy: from.y, r:6, fill:"#7c3aed", stroke:"#fff",
-    "stroke-width":1.8, "class":"camp-call-dot camp-call-dot-click", tabindex:"0", role:"button",
+    "stroke-width":1.8, "class":"camp-call-dot camp-call-dot-click", tabindex:"-1", role:"button",
     "data-camp-call-id": callId, "data-camp-target": target.id,
     "aria-label":"Llamada "+callId+" en camino a la estación "+target.id}, callLayer);
   var title = el("title", {}, c);
@@ -4436,7 +4636,11 @@ svg.addEventListener("click", function(ev){
   var walker = ev.target.closest ? ev.target.closest(".camp-walker") : null;
   if(walker){
     var wst = stationById(walker.getAttribute("data-camp-station-id"));
-    if(wst){ openPersonFicha(wst); return; }
+    if(wst){
+      var ww = walkers.filter(function(o){ return o.st === wst; })[0];
+      if(ww) setWalkerLabel(ww);
+      openPersonFicha(wst); return;
+    }
   }
   /* Etiqueta con el id de la estación (capa de texto, sobre la fila de
      abajo): abre la ficha de SU asesor, no la de la estación que queda
@@ -4465,10 +4669,22 @@ svg.addEventListener("click", function(ev){
   if(ev.target===svg){ closeFicha(); }
 });
 svg.addEventListener("keydown", function(ev){
+  /* Mejora 8: flechas dentro del piso (roving tabindex de estaciones). */
+  if(ev.target.classList && ev.target.classList.contains("camp-station") &&
+     (ev.key==="ArrowRight"||ev.key==="ArrowDown"||ev.key==="ArrowLeft"||ev.key==="ArrowUp"||ev.key==="Home"||ev.key==="End")){
+    ev.preventDefault();
+    moveStationFocus(ev.target, ev.key);
+    return;
+  }
   if(ev.key!=="Enter" && ev.key!==" "){ return; }
   if(ev.target.classList && ev.target.classList.contains("camp-walker")){
     ev.preventDefault();
-    openPersonFicha(stationById(ev.target.getAttribute("data-camp-station-id")));
+    var wst = stationById(ev.target.getAttribute("data-camp-station-id"));
+    if(wst){
+      var ww = walkers.filter(function(o){ return o.st === wst; })[0];
+      if(ww) setWalkerLabel(ww);
+      openPersonFicha(wst);
+    }
   } else if(ev.target.classList && ev.target.classList.contains("camp-person")){
     ev.preventDefault();
     openPersonFicha(stationById(ev.target.getAttribute("data-camp-station-id")));
@@ -4827,7 +5043,7 @@ window.__camp = {
     Object.keys(panels).forEach(function (k) {
       if (panels[k]) panels[k].hidden = (k !== id);
     });
-    /* Barra del portafolio + deep link #campanas (2026-11-25): la pestaña
+    /* Barra del portafolio + deep link (2026-11-25): la pestaña
        Campañas es el "Piso"; el resto es la "Consola". replaceState no
        crea entradas de historial ni desplaza la página. */
     document.querySelectorAll('.portafolio-nav-btn').forEach(function (b) {
@@ -4837,25 +5053,61 @@ window.__camp = {
     });
     try { history.replaceState(null, '', id === 'campanas' ? '#campanas' : location.pathname + location.search); } catch (e) {}
   }
-  /* Deep link: #campanas abre directo en Campañas (el piso). Se lee al
-     cargar y en cada cambio de hash (p. ej. el dashboard de Tableau que
-     incrusta la consola con #campanas, o ir/venir con el navegador). */
+  /* Selección de pestaña al cargar: primero el parámetro ?tab=
+     (el ancla #campanas no se activa dentro del iframe del objeto web
+     de Tableau, verificado en navegador real 2026-11-25; el parámetro
+     sí viaja en la URL del objeto web y además rompe su caché).
+     Valores: direccion / campanas / supervisor (sin acento; se
+     normalizan diacríticos por si llega "campañas"). Un valor
+     desconocido cae a Dirección y el ancla ya no lo cambia.
+     Sin parámetro manda el ancla #campanas / #direccion / #supervisor,
+     que se sigue leyendo en cada cambio de hash. */
+  function tabDesdeParametro() {
+    var q = null;
+    try { q = new URLSearchParams(location.search).get('tab'); } catch (e) { q = null; }
+    if (q === null || q === undefined) return null;
+    var v = String(q).toLowerCase();
+    try { v = v.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); } catch (e) {}
+    v = v.replace(/^\s+|\s+$/g, '');
+    if (v === 'direccion' || v === 'campanas' || v === 'supervisor') return v;
+    return 'desconocido';
+  }
+  var tabPorParametro = tabDesdeParametro();
+  /* Si el usuario ya cambió de pestaña a mano, la relectura diferida
+     del ancla no lo devuelve atrás. */
+  var usuarioCambioTab = false;
   function abrirDesdeHash() {
     var h = (location.hash || '').toLowerCase();
     if (h === '#campanas') select('campanas', false);
+    else if (h === '#supervisor') select('supervisor', false);
     else if (h === '' || h === '#direccion') select('direccion', false);
   }
+  function seleccionarInicial() {
+    if (tabPorParametro === 'direccion' || tabPorParametro === 'campanas' ||
+        tabPorParametro === 'supervisor') select(tabPorParametro, false);
+    else if (tabPorParametro === 'desconocido') select('direccion', false);
+    else abrirDesdeHash();
+  }
+  /* Relectura del ancla tras la carga: el iframe del objeto web puede
+     aplicar el hash tarde. Solo cuando no hubo parámetro ?tab= (el
+     parámetro manda) y el usuario aún no cambió de pestaña. */
+  function releerHashTardio() {
+    if (tabPorParametro !== null || usuarioCambioTab) return;
+    abrirDesdeHash();
+  }
+  window.addEventListener('load', releerHashTardio);
+  setTimeout(releerHashTardio, 500);
   window.addEventListener('hashchange', abrirDesdeHash);
-  abrirDesdeHash();
+  seleccionarInicial();
   tabs.forEach(function (t, i) {
-    t.addEventListener('click', function () { select(t.getAttribute('data-tab'), false); });
+    t.addEventListener('click', function () { usuarioCambioTab = true; select(t.getAttribute('data-tab'), false); });
     t.addEventListener('keydown', function (ev) {
       var n = null;
       if (ev.key === 'ArrowRight') n = (i + 1) % tabs.length;
       else if (ev.key === 'ArrowLeft') n = (i - 1 + tabs.length) % tabs.length;
       else if (ev.key === 'Home') n = 0;
       else if (ev.key === 'End') n = tabs.length - 1;
-      if (n !== null) { ev.preventDefault(); select(tabs[n].getAttribute('data-tab'), true); }
+      if (n !== null) { ev.preventDefault(); usuarioCambioTab = true; select(tabs[n].getAttribute('data-tab'), true); }
     });
   });
   window.__consola = { select: select };
@@ -4976,7 +5228,7 @@ window.__camp = {
       var valor = k.querySelector('.dir-kpi-value');
       var sub = k.querySelector('.dir-kpi-sub');
       if (!etiqueta || !valor) return;
-      var t = etiqueta.textContent.trim();
+      var t = etiqueta.textContent.trim().replace(/\u00a0/g, ' ');
       if (t === 'Nivel de servicio') valor.textContent = fmtPct(ns);
       else if (t === 'Recibidas') valor.textContent = fmtInt(rec);
       else if (t === 'Atendidas') { valor.textContent = fmtInt(ate); if (sub) sub.textContent = fmtPct(nivel); }
@@ -4998,7 +5250,7 @@ window.__camp = {
       var cls = ns >= 95 ? 'dir-dot--verde' : ns >= 90 ? 'dir-dot--amarillo' : 'dir-dot--rojo';
       if (big) big.innerHTML = '<span class="dir-dot ' + cls + '" aria-hidden="true"></span>' + fmtPct(ns);
       var estado = sem.querySelector('.dir-ns-estado');
-      if (estado) estado.textContent = ns < 90 ? 'En rojo de meta — por debajo del 90 %' :
+      if (estado) estado.textContent = ns < 90 ? 'En rojo: por debajo de la meta' :
         ns >= 95 ? 'En verde de meta — 95 % o más' : 'En amarillo de meta — en el 90 % o más';
       var items = sem.querySelectorAll('.dir-list li');
       if (items[0]) items[0].innerHTML = 'Brecha vs meta: <strong>' + signo(ns - 90, 1) + ' pts</strong>';
@@ -5050,7 +5302,9 @@ window.__camp = {
       var sinDato = d.por_cartera.filter(function (r) { return r.encuestas === 0; }).map(function (r) {
         return r.cartera + ': <strong>s/d</strong> (0 encuestas)';
       }).join('. ');
-      var deltaTxt = deltaNps === null ? '' : ' (' + (deltaNps < 0 ? '\u25bc' : '\u25b2') + fmtDec1(Math.abs(deltaNps)) + ')';
+      /* Mejora 27: la variación de NPS declara su base (mes anterior de
+         la serie del extracto); sin mes previo no se muestra flecha. */
+      var deltaTxt = (deltaNps === null || !prev) ? '' : ' (' + (deltaNps < 0 ? '\u25bc' : '\u25b2') + fmtDec1(Math.abs(deltaNps)) + ' vs ' + mesCorto(prev.mes) + ')';
       npsNota.innerHTML = 'NPS del mes: <strong>' + npsTxt + '</strong>' + deltaTxt + '. ' + sinDato + '.';
     }
 
