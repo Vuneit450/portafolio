@@ -121,7 +121,7 @@
   }
   .donut-arc-main {
     stroke: #ff6900;
-    stroke-dashoffset: 26.14;
+    stroke-dashoffset: 25.38;
   }
   .donut-number {
     position: absolute;
@@ -303,12 +303,12 @@
       <!-- 5. Layer1 (donut) -->
       <div class="layer1">
         <div class="donut-wrap">
-          <svg width="120" height="120" viewBox="0 0 100 100" role="img" aria-label="Nivel de servicio 89,6 por ciento, meta 90 por ciento">
+          <svg width="120" height="120" viewBox="0 0 100 100" role="img" aria-label="Nivel de servicio 89,9 por ciento, meta 90 por ciento">
             <circle class="donut-base" cx="50" cy="50" r="40"></circle>
             <circle class="donut-arc donut-arc-secondary" id="arcSecondary" cx="50" cy="50" r="40"></circle>
             <circle class="donut-arc donut-arc-main" cx="50" cy="50" r="40"></circle>
           </svg>
-          <div class="donut-number" id="donutNumber">89,6&nbsp;%</div>
+          <div class="donut-number" id="donutNumber">89,9&nbsp;%</div>
         </div>
       </div>
 
@@ -318,19 +318,19 @@
           <span class="chip-dot" aria-hidden="true"></span>
           <div>
             <div class="chip-title">Nivel de servicio &middot; nov 2026</div>
-            <div class="chip-sub">15.618 recibidas &middot; 12.963 atendidas</div>
+            <div class="chip-sub">16.060 recibidas &middot; 13.351 atendidas</div>
           </div>
         </div>
       </div>
 
       <!-- 6. Layer4 (6 píldoras) -->
       <div class="layer4" aria-hidden="true">
-        <div class="pill pill-1"><span class="pill-dot" style="background:#ff6900"></span>ASISTENCIAS 87,8&nbsp;%</div>
-        <div class="pill pill-2"><span class="pill-dot" style="background:#ff6900"></span>COPPEL VIDA 86,8&nbsp;%</div>
-        <div class="pill pill-3"><span class="pill-dot" style="background:#ff6900"></span>CREDIAUTO 98,5&nbsp;%</div>
-        <div class="pill pill-4"><span class="pill-dot" style="background:#f54900"></span>BRAD SEG 88,7&nbsp;%</div>
+        <div class="pill pill-1"><span class="pill-dot" style="background:#ff6900"></span>ASISTENCIAS 88,1&nbsp;%</div>
+        <div class="pill pill-2"><span class="pill-dot" style="background:#ff6900"></span>COPPEL VIDA 87,1&nbsp;%</div>
+        <div class="pill pill-3"><span class="pill-dot" style="background:#ff6900"></span>CREDIAUTO 98,6&nbsp;%</div>
+        <div class="pill pill-4"><span class="pill-dot" style="background:#f54900"></span>BRAD SEG 88,9&nbsp;%</div>
         <div class="pill pill-5"><span class="pill-dot" style="background:#f54900"></span>EMPLEADOS 97,7&nbsp;%</div>
-        <div class="pill pill-6"><span class="pill-dot" style="background:#f54900"></span>LIVERPOOL 96,7&nbsp;%</div>
+        <div class="pill pill-6"><span class="pill-dot" style="background:#f54900"></span>LIVERPOOL 96,2&nbsp;%</div>
       </div>
 
       <!-- 7. Overlay de hover -->
@@ -346,7 +346,7 @@
           <text class="curve-text"><textPath id="curveTextPath" href="#curvePath" startOffset="0"></textPath></text>
         </svg>
       </div>
-      <p>89,6&nbsp;% de llamadas atendidas en &le;20&nbsp;s &middot; meta 90&nbsp;% &middot; nov 2026</p>
+      <p>89,9&nbsp;% de llamadas atendidas en &le;20&nbsp;s &middot; meta 90&nbsp;% &middot; nov 2026</p>
     </div>
   </div>
 
@@ -378,7 +378,7 @@
     if (timer !== null) { clearTimeout(timer); timer = null; }
     card.classList.remove('hover');
     arcSecondary.style.strokeDashoffset = OFFSET_ZERO;
-    donutNumber.textContent = '89,6 %';
+    donutNumber.textContent = '89,9 %';
   }
 
   overlay.addEventListener('mouseenter', enterHover);
