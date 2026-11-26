@@ -36,10 +36,9 @@ a { color: #c2410c; }
 .gmf-dot--rojo { background: #d93025; }
 .gmf-note { font-size: 0.85rem; color: #5f6368; margin: 0; }
 
-/* ---------- Layout piso + ficha ---------- */
-.gmf-layout { display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 16px; align-items: start; margin-bottom: 16px; }
+/* ---------- Layout piso ---------- */
+.gmf-layout { margin-bottom: 16px; }
 .gmf-layout > * { min-width: 0; }
-@media (max-width: 980px) { .gmf-layout { grid-template-columns: 1fr; } }
 .gmf-card { background: #ffffff; border: 1px solid #dfe3ea; border-radius: 12px; padding: 18px 20px; }
 .gmf-card-title { font-size: 1.05rem; margin: 0 0 4px; }
 .gmf-card-sub { font-size: 0.88rem; color: #5f6368; margin: 0 0 12px; }
@@ -63,9 +62,17 @@ a { color: #c2410c; }
 .gmf-station--selected .gmf-station-ring { stroke: #ff6900; stroke-width: 2.5; }
 .gmf-station-ring { fill: none; stroke: transparent; stroke-width: 2; }
 
-/* ---------- Ficha ---------- */
-.gmf-ficha { position: sticky; top: 12px; }
-@media (max-width: 980px) { .gmf-ficha { position: static; } }
+/* ---------- Ficha emergente (popover anclado al lugar) ----------
+   La ficha ya no vive en un panel lateral: es una tarjeta flotante con
+   position: fixed que se abre junto al lugar (o fila) que se picó, así el
+   usuario ve los datos ahí mismo sin que la página se mueva (scrollY no
+   cambia). El panel lateral se eliminó: una sola ficha, sin duplicar datos.
+   El contenido largo (fichas de muestra) hace scroll DENTRO del popover. */
+.gmf-popover { position: fixed; z-index: 50; width: 380px; max-width: calc(100vw - 16px); max-height: calc(100vh - 16px); overflow-y: auto; background: #ffffff; border: 1px solid #dfe3ea; border-radius: 12px; box-shadow: 0 12px 32px rgba(15, 23, 42, .22); padding: 18px 20px; }
+.gmf-popover[hidden] { display: none; }
+@media (max-width: 640px) { .gmf-popover { max-height: 72vh; } }
+.gmf-popover-bar { position: sticky; top: 0; z-index: 1; margin: 0 0 8px; padding: 2px 0 8px; background: #ffffff; text-align: right; }
+.gmf-popover .gmf-close { float: none; }
 .gmf-ficha-name { font-size: 1.2rem; line-height: 1.25; margin: 0 0 2px; }
 .gmf-ficha-sub { font-size: 0.88rem; color: #5f6368; margin: 0 0 12px; }
 .gmf-pill { display: inline-block; font-size: 0.85rem; font-weight: 700; border-radius: 999px; padding: 3px 12px; margin: 0 0 12px; }
@@ -77,8 +84,8 @@ a { color: #c2410c; }
 .gmf-metric-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: #5f6368; margin: 0 0 3px; }
 .gmf-metric-value { font-size: 1.1rem; font-weight: 700; margin: 0; }
 .gmf-metric-sub { font-size: 0.8rem; color: #5f6368; margin: 3px 0 0; }
-.gmf-ficha h3 { font-size: 0.98rem; margin: 16px 0 8px; color: #1a1d21; }
-.gmf-ficha h3:first-of-type { margin-top: 4px; }
+.gmf-popover h3 { font-size: 0.98rem; margin: 16px 0 8px; color: #1a1d21; }
+.gmf-popover h3:first-of-type { margin-top: 4px; }
 .gmf-kv { margin: 0; font-size: 0.92rem; line-height: 1.55; }
 .gmf-kv dt { display: inline; font-weight: 700; }
 .gmf-kv dt::after { content: ": "; font-weight: 700; }
@@ -93,8 +100,7 @@ a { color: #c2410c; }
 .gmf-bar > span { display: block; height: 100%; background: #ff6900; }
 .gmf-ficha-note { font-size: 0.84rem; color: #5f6368; line-height: 1.5; margin: 12px 0 0; }
 .gmf-plan { background: #fff7ed; border: 1px solid #fdba74; border-radius: 10px; padding: 10px 12px; font-size: 0.92rem; line-height: 1.5; margin: 0; }
-.gmf-close { float: right; border: 1px solid #dfe3ea; background: #fff; border-radius: 8px; padding: 4px 10px; cursor: pointer; font-size: 0.85rem; }
-.gmf-ficha-empty { color: #5f6368; font-size: 0.95rem; line-height: 1.5; margin: 0; }
+.gmf-close { border: 1px solid #dfe3ea; background: #fff; border-radius: 8px; padding: 4px 10px; cursor: pointer; font-size: 0.85rem; }
 
 /* ---------- Lista ---------- */
 .gmf-tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; max-width: 1360px; margin: 0 auto 12px; }
@@ -159,17 +165,17 @@ table.gmf-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
 <div class="gmf-layout">
   <section class="gmf-card" aria-label="Piso de cobranza GMF">
     <h2 class="gmf-card-title" id="gmf-floor-title">El piso: 38 lugares en 3 zonas Pareto</h2>
-    <p class="gmf-card-sub" id="gmf-floor-sub">Toca un lugar para ver la ficha del gestor. Zona A: los 9 primeros por pagado acumulan el 80,1% del cobro · Zona B: los 9 siguientes llegan al 95,6% · Zona C: los 20 restantes, 4,4%.</p>
+    <p class="gmf-card-sub" id="gmf-floor-sub">Toca un lugar: su ficha aparece ahí mismo, junto al lugar. Zona A: los 9 primeros por pagado acumulan el 80,1% del cobro · Zona B: los 9 siguientes llegan al 95,6% · Zona C: los 20 restantes, 4,4%.</p>
     <div class="gmf-floor-wrap">
       <svg id="gmf-floor" viewBox="0 0 1000 470" role="group" aria-label="Piso isométrico GMF con 38 lugares"></svg>
     </div>
     <div class="gmf-zone-cards" id="gmf-zoneCards"></div>
   </section>
+</div>
 
-  <aside class="gmf-card gmf-ficha" aria-label="Ficha del gestor">
-    <button class="gmf-close" id="gmf-fichaClose" type="button" hidden>Cerrar ✕</button>
-    <div id="gmf-fichaBody"></div>
-  </aside>
+<div id="gmf-popover" class="gmf-popover" role="dialog" aria-label="Ficha del gestor" hidden>
+  <div class="gmf-popover-bar"><button class="gmf-close" id="gmf-fichaClose" type="button">Cerrar ✕</button></div>
+  <div id="gmf-fichaBody"></div>
 </div>
 
 <section class="gmf-card" aria-label="Lista de gestores">
@@ -495,9 +501,19 @@ function dibujarPiso(){
       var shortName = g.nombre ? g.nombre.split(" ")[0] : (g.id ? "Gestor " + g.id : "Sin ID");
       var nm = el("text", {x:s.x, y:s.y + 36, "text-anchor":"middle", "class":"gmf-station-name"}, grp);
       nm.textContent = shortName.length > 14 ? shortName.slice(0, 13) + "…" : shortName;
-      grp.addEventListener("click", function(ev){ openFicha(Number(ev.currentTarget.getAttribute("data-rank"))); });
+      grp.addEventListener("click", function(ev){
+        ev.stopPropagation();
+        var rank = Number(ev.currentTarget.getAttribute("data-rank"));
+        if(selectedRank === rank && popoverAbierto()){ closeFicha(); }
+        else { openFicha(rank, ev.currentTarget); }
+      });
       grp.addEventListener("keydown", function(ev){
-        if(ev.key === "Enter" || ev.key === " "){ ev.preventDefault(); openFicha(Number(ev.currentTarget.getAttribute("data-rank"))); }
+        if(ev.key === "Enter" || ev.key === " "){
+          ev.preventDefault();
+          var rank = Number(ev.currentTarget.getAttribute("data-rank"));
+          if(selectedRank === rank && popoverAbierto()){ closeFicha(); }
+          else { openFicha(rank, ev.currentTarget); }
+        }
       });
       stations.push({rank: g.rank, code: g.code, el: grp});
     }
@@ -525,13 +541,56 @@ function dibujarTarjetasZona(){
   });
 }
 
-/* ---------- Ficha ---------- */
+/* ---------- Ficha emergente (popover) ----------
+   openFicha(rank, ancla) pinta la ficha del gestor en el popover y lo
+   coloca junto al elemento anclado (lugar del piso o fila de la tabla).
+   El popover es position: fixed y nunca mueve la página: no hay
+   scrollIntoView ni cambios de scrollY. Si el ancla no cabe en la vista,
+   el popover se cierra. Al refrescar los datos en vivo se reabre el mismo
+   gestor anclado a su lugar. Al cargar, la ficha empieza cerrada: el
+   popover solo se abre al picar. */
 var fichaBody = document.getElementById("gmf-fichaBody");
 var fichaClose = document.getElementById("gmf-fichaClose");
+var popover = document.getElementById("gmf-popover");
+var anclaActual = null;
 var selectedRank = null;
+function popoverAbierto(){ return popover && !popover.hidden; }
+function anclaDeRango(rank){
+  return document.querySelector('.gmf-station[data-rank="' + rank + '"]');
+}
+/* Coloca el popover junto al ancla: primero a la derecha, si no cabe a la
+   izquierda, si no cabe a ningún lado abajo o arriba (con el ancho
+   disponible). Siempre dentro del viewport (margen 8 px) y con scroll
+   interno si el contenido es más alto que la pantalla. Devuelve false si
+   el ancla está fuera de la vista. */
+function posicionarPopover(ancla){
+  if(!ancla) return false;
+  var r = ancla.getBoundingClientRect();
+  var vw = window.innerWidth, vh = window.innerHeight;
+  if(r.bottom < 0 || r.top > vh || r.right < 0 || r.left > vw) return false;
+  popover.style.width = "";
+  var pw = popover.offsetWidth, ph = popover.offsetHeight;
+  var margen = 8, gap = 10, left, top;
+  if(r.right + gap + pw <= vw - margen){
+    left = r.right + gap; top = r.top + r.height / 2 - ph / 2;
+  } else if(r.left - gap - pw >= margen){
+    left = r.left - gap - pw; top = r.top + r.height / 2 - ph / 2;
+  } else {
+    popover.style.width = Math.min(380, vw - margen * 2) + "px";
+    pw = popover.offsetWidth; ph = popover.offsetHeight;
+    left = r.left + r.width / 2 - pw / 2;
+    if(r.bottom + gap + ph <= vh - margen){ top = r.bottom + gap; }
+    else { top = r.top - gap - ph; }
+  }
+  top = Math.max(margen, Math.min(top, vh - ph - margen));
+  left = Math.max(margen, Math.min(left, vw - pw - margen));
+  popover.style.left = Math.round(left) + "px";
+  popover.style.top = Math.round(top) + "px";
+  return true;
+}
 function esc(s){ return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
 function sindato(){ return "<span class=\"gmf-sindato\">sin dato</span>"; }
-function openFicha(rank){
+function openFicha(rank, ancla){
   var g = byRank(rank);
   if(!g) return;
   selectedRank = rank;
@@ -603,7 +662,11 @@ function openFicha(rank){
     h += "<p class=\"gmf-ficha-note\">Solo se han leído las fichas de muestra de 43460, 53251 y 58928. Los campos de la pestaña Gestores de este gestor aún no se han leído.</p>";
   }
   fichaBody.innerHTML = h;
-  fichaClose.hidden = false;
+  anclaActual = ancla || anclaDeRango(rank);
+  popover.hidden = false;
+  popover.style.visibility = "hidden";
+  if(!posicionarPopover(anclaActual)){ closeFicha(); return; }
+  popover.style.visibility = "";
   document.querySelectorAll(".gmf-station").forEach(function(n){
     n.classList.toggle("gmf-station--selected", Number(n.getAttribute("data-rank")) === rank);
   });
@@ -611,12 +674,34 @@ function openFicha(rank){
 }
 function closeFicha(){
   selectedRank = null;
-  fichaBody.innerHTML = "<p class=\"gmf-ficha-empty\">Selecciona un lugar del piso o una fila de la lista para ver la ficha del gestor.</p>";
-  fichaClose.hidden = true;
+  anclaActual = null;
+  popover.hidden = true;
   document.querySelectorAll(".gmf-station").forEach(function(n){ n.classList.remove("gmf-station--selected"); });
   renderList();
 }
 fichaClose.addEventListener("click", closeFicha);
+/* Cerrar: picar fuera, Esc, y reposicionar (o cerrar) si el ancla se mueve
+   fuera de la vista al hacer scroll o cambiar el tamaño. */
+document.addEventListener("click", function(ev){
+  if(!popoverAbierto()) return;
+  var t = ev.target;
+  if(t && t.closest && (t.closest(".gmf-popover") || t.closest(".gmf-station") || t.closest("#gmf-tbody tr"))) return;
+  closeFicha();
+});
+document.addEventListener("keydown", function(ev){
+  if(ev.key === "Escape" && popoverAbierto()){
+    var rank = selectedRank;
+    closeFicha();
+    var st = rank ? anclaDeRango(rank) : null;
+    if(st && st.focus) st.focus();
+  }
+});
+function reacomodarPopover(){
+  if(!popoverAbierto() || !anclaActual) return;
+  if(!posicionarPopover(anclaActual)) closeFicha();
+}
+window.addEventListener("resize", reacomodarPopover);
+window.addEventListener("scroll", reacomodarPopover, true);
 
 /* ---------- Lista ---------- */
 var tbody = document.getElementById("gmf-tbody");
@@ -659,11 +744,11 @@ function renderList(){
   tbody.innerHTML = html;
   countEl.textContent = rows.length + " de " + GEST.length + " gestores";
   tbody.querySelectorAll("tr").forEach(function(tr){
-    tr.addEventListener("click", function(){
-      openFicha(Number(tr.getAttribute("data-rank")));
-      if(window.innerWidth < 980){
-        document.querySelector(".gmf-ficha").scrollIntoView({behavior:"smooth", block:"nearest"});
-      }
+    tr.addEventListener("click", function(ev){
+      ev.stopPropagation();
+      var rank = Number(tr.getAttribute("data-rank"));
+      if(selectedRank === rank && popoverAbierto()){ closeFicha(); }
+      else { openFicha(rank, tr); }
     });
   });
 }
@@ -690,15 +775,15 @@ function actualizarEncabezado(totales){
   var suma = function(arr){ return arr.reduce(function(a, g){ return a + g.pagado; }, 0); };
   var pagA = suma(zA), pagB = suma(zB), pagC = suma(zC);
   var tot = totales.pagado || 1;
-  txt("gmf-floor-sub", "Toca un lugar para ver la ficha del gestor. Zona A: los " + zA.length +
+  txt("gmf-floor-sub", "Toca un lugar: su ficha aparece ahí mismo, junto al lugar. Zona A: los " + zA.length +
     " primeros por pagado acumulan el " + fmtPct(pagA / tot * 100) + " del cobro · Zona B: los " + zB.length +
     " siguientes llegan al " + fmtPct((pagA + pagB) / tot * 100) + " · Zona C: los " + zC.length +
     " restantes, " + fmtPct(pagC / tot * 100) + ".");
 }
 /* Repinta todo con filas crudas + totales. Reabre la ficha abierta por id
    (por rango solo si el gestor no tiene id); si el gestor salió del piso,
-   abre la #1; si la ficha estaba cerrada, queda cerrada. */
-var primeraVez = true;
+   abre la #1; si la ficha estaba cerrada, queda cerrada. Al cargar, la
+   ficha empieza cerrada: el popover solo se abre al picar. */
 function aplicarDatos(filas, totales){
   var gSel = selectedRank ? byRank(selectedRank) : null;
   var idSel = gSel ? gSel.id : null;
@@ -720,11 +805,9 @@ function aplicarDatos(filas, totales){
     openFicha(rangoSel); reabierto = true;
   }
   if(!reabierto){
-    if(primeraVez){ openFicha(1); }
-    else if(fichaAbierta){ openFicha(1); }
+    if(fichaAbierta){ openFicha(1); }
     else { renderList(); }
   }
-  primeraVez = false;
 }
 
 /* ---------- Arranque y hooks de verificación ---------- */
@@ -746,6 +829,14 @@ window.__gmf = {
       rojo: GEST.filter(function(g){ return g.sem.key === "rojo"; }).length};
   },
   selectGestor: openFicha,
+  cerrarFicha: closeFicha,
+  popoverAbierto: popoverAbierto,
+  popoverRect: function(){
+    if(!popoverAbierto()) return null;
+    var b = popover.getBoundingClientRect();
+    return { x: Math.round(b.x), y: Math.round(b.y), w: Math.round(b.width), h: Math.round(b.height),
+      top: Math.round(b.top), bottom: Math.round(b.bottom), left: Math.round(b.left), right: Math.round(b.right) };
+  },
   listCount: function(){ return tbody.querySelectorAll("tr").length; },
   fichaTexto: function(){ return fichaBody.textContent; },
   fichaAbierta: function(){ return selectedRank !== null; },
